@@ -2,8 +2,20 @@ Y# This "input" configures a global authorization rule to enable public access t
 # all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
 input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
 
-type Todo @model {
+type Knowledge @model {
   id: ID!
-  name: String!
-  description: String
+  title: String!
+  contents: String
+  cat_1: Number
+  cat_2: Number
+  cat_3: Number
+  ref_file_path: String
+  ref_file_name: String
+  ref_redmine_url: String
+  ref_link: String
+  note: String
+  created_at: AWSDateTime
+  created_by: Number
+  updated_at: AWSDateTime
+  updated_by: Number
 }
