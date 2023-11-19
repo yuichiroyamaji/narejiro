@@ -8,27 +8,54 @@ type GeneratedQuery<InputType, OutputType> = string & {
   __generatedQueryOutput: OutputType;
 };
 
-export const getTodo = /* GraphQL */ `query GetTodo($id: ID!) {
-  getTodo(id: $id) {
+export const getKnowledge = /* GraphQL */ `query GetKnowledge($id: ID!) {
+  getKnowledge(id: $id) {
     id
-    name
-    description
+    title
+    contents
+    cat_1
+    cat_2
+    cat_3
+    ref_file_path
+    ref_file_name
+    ref_redmine_url
+    ref_link
+    note
+    created_at
+    created_by
+    updated_at
+    updated_by
     createdAt
     updatedAt
     __typename
   }
 }
-` as GeneratedQuery<APITypes.GetTodoQueryVariables, APITypes.GetTodoQuery>;
-export const listTodos = /* GraphQL */ `query ListTodos(
-  $filter: ModelTodoFilterInput
+` as GeneratedQuery<
+  APITypes.GetKnowledgeQueryVariables,
+  APITypes.GetKnowledgeQuery
+>;
+export const listKnowledges = /* GraphQL */ `query ListKnowledges(
+  $filter: ModelKnowledgeFilterInput
   $limit: Int
   $nextToken: String
 ) {
-  listTodos(filter: $filter, limit: $limit, nextToken: $nextToken) {
+  listKnowledges(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       id
-      name
-      description
+      title
+      contents
+      cat_1
+      cat_2
+      cat_3
+      ref_file_path
+      ref_file_name
+      ref_redmine_url
+      ref_link
+      note
+      created_at
+      created_by
+      updated_at
+      updated_by
       createdAt
       updatedAt
       __typename
@@ -37,4 +64,7 @@ export const listTodos = /* GraphQL */ `query ListTodos(
     __typename
   }
 }
-` as GeneratedQuery<APITypes.ListTodosQueryVariables, APITypes.ListTodosQuery>;
+` as GeneratedQuery<
+  APITypes.ListKnowledgesQueryVariables,
+  APITypes.ListKnowledgesQuery
+>;

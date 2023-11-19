@@ -8,54 +8,90 @@ type GeneratedMutation<InputType, OutputType> = string & {
   __generatedMutationOutput: OutputType;
 };
 
-export const createTodo = /* GraphQL */ `mutation CreateTodo(
-  $input: CreateTodoInput!
-  $condition: ModelTodoConditionInput
+export const createKnowledge = /* GraphQL */ `mutation CreateKnowledge(
+  $input: CreateKnowledgeInput!
+  $condition: ModelKnowledgeConditionInput
 ) {
-  createTodo(input: $input, condition: $condition) {
+  createKnowledge(input: $input, condition: $condition) {
     id
-    name
-    description
+    title
+    contents
+    cat_1
+    cat_2
+    cat_3
+    ref_file_path
+    ref_file_name
+    ref_redmine_url
+    ref_link
+    note
+    created_at
+    created_by
+    updated_at
+    updated_by
     createdAt
     updatedAt
     __typename
   }
 }
 ` as GeneratedMutation<
-  APITypes.CreateTodoMutationVariables,
-  APITypes.CreateTodoMutation
+  APITypes.CreateKnowledgeMutationVariables,
+  APITypes.CreateKnowledgeMutation
 >;
-export const updateTodo = /* GraphQL */ `mutation UpdateTodo(
-  $input: UpdateTodoInput!
-  $condition: ModelTodoConditionInput
+export const updateKnowledge = /* GraphQL */ `mutation UpdateKnowledge(
+  $input: UpdateKnowledgeInput!
+  $condition: ModelKnowledgeConditionInput
 ) {
-  updateTodo(input: $input, condition: $condition) {
+  updateKnowledge(input: $input, condition: $condition) {
     id
-    name
-    description
+    title
+    contents
+    cat_1
+    cat_2
+    cat_3
+    ref_file_path
+    ref_file_name
+    ref_redmine_url
+    ref_link
+    note
+    created_at
+    created_by
+    updated_at
+    updated_by
     createdAt
     updatedAt
     __typename
   }
 }
 ` as GeneratedMutation<
-  APITypes.UpdateTodoMutationVariables,
-  APITypes.UpdateTodoMutation
+  APITypes.UpdateKnowledgeMutationVariables,
+  APITypes.UpdateKnowledgeMutation
 >;
-export const deleteTodo = /* GraphQL */ `mutation DeleteTodo(
-  $input: DeleteTodoInput!
-  $condition: ModelTodoConditionInput
+export const deleteKnowledge = /* GraphQL */ `mutation DeleteKnowledge(
+  $input: DeleteKnowledgeInput!
+  $condition: ModelKnowledgeConditionInput
 ) {
-  deleteTodo(input: $input, condition: $condition) {
+  deleteKnowledge(input: $input, condition: $condition) {
     id
-    name
-    description
+    title
+    contents
+    cat_1
+    cat_2
+    cat_3
+    ref_file_path
+    ref_file_name
+    ref_redmine_url
+    ref_link
+    note
+    created_at
+    created_by
+    updated_at
+    updated_by
     createdAt
     updatedAt
     __typename
   }
 }
 ` as GeneratedMutation<
-  APITypes.DeleteTodoMutationVariables,
-  APITypes.DeleteTodoMutation
+  APITypes.DeleteKnowledgeMutationVariables,
+  APITypes.DeleteKnowledgeMutation
 >;

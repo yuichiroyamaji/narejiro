@@ -8,45 +8,81 @@ type GeneratedSubscription<InputType, OutputType> = string & {
   __generatedSubscriptionOutput: OutputType;
 };
 
-export const onCreateTodo = /* GraphQL */ `subscription OnCreateTodo($filter: ModelSubscriptionTodoFilterInput) {
-  onCreateTodo(filter: $filter) {
+export const onCreateKnowledge = /* GraphQL */ `subscription OnCreateKnowledge($filter: ModelSubscriptionKnowledgeFilterInput) {
+  onCreateKnowledge(filter: $filter) {
     id
-    name
-    description
+    title
+    contents
+    cat_1
+    cat_2
+    cat_3
+    ref_file_path
+    ref_file_name
+    ref_redmine_url
+    ref_link
+    note
+    created_at
+    created_by
+    updated_at
+    updated_by
     createdAt
     updatedAt
     __typename
   }
 }
 ` as GeneratedSubscription<
-  APITypes.OnCreateTodoSubscriptionVariables,
-  APITypes.OnCreateTodoSubscription
+  APITypes.OnCreateKnowledgeSubscriptionVariables,
+  APITypes.OnCreateKnowledgeSubscription
 >;
-export const onUpdateTodo = /* GraphQL */ `subscription OnUpdateTodo($filter: ModelSubscriptionTodoFilterInput) {
-  onUpdateTodo(filter: $filter) {
+export const onUpdateKnowledge = /* GraphQL */ `subscription OnUpdateKnowledge($filter: ModelSubscriptionKnowledgeFilterInput) {
+  onUpdateKnowledge(filter: $filter) {
     id
-    name
-    description
+    title
+    contents
+    cat_1
+    cat_2
+    cat_3
+    ref_file_path
+    ref_file_name
+    ref_redmine_url
+    ref_link
+    note
+    created_at
+    created_by
+    updated_at
+    updated_by
     createdAt
     updatedAt
     __typename
   }
 }
 ` as GeneratedSubscription<
-  APITypes.OnUpdateTodoSubscriptionVariables,
-  APITypes.OnUpdateTodoSubscription
+  APITypes.OnUpdateKnowledgeSubscriptionVariables,
+  APITypes.OnUpdateKnowledgeSubscription
 >;
-export const onDeleteTodo = /* GraphQL */ `subscription OnDeleteTodo($filter: ModelSubscriptionTodoFilterInput) {
-  onDeleteTodo(filter: $filter) {
+export const onDeleteKnowledge = /* GraphQL */ `subscription OnDeleteKnowledge($filter: ModelSubscriptionKnowledgeFilterInput) {
+  onDeleteKnowledge(filter: $filter) {
     id
-    name
-    description
+    title
+    contents
+    cat_1
+    cat_2
+    cat_3
+    ref_file_path
+    ref_file_name
+    ref_redmine_url
+    ref_link
+    note
+    created_at
+    created_by
+    updated_at
+    updated_by
     createdAt
     updatedAt
     __typename
   }
 }
 ` as GeneratedSubscription<
-  APITypes.OnDeleteTodoSubscriptionVariables,
-  APITypes.OnDeleteTodoSubscription
+  APITypes.OnDeleteKnowledgeSubscriptionVariables,
+  APITypes.OnDeleteKnowledgeSubscription
 >;
