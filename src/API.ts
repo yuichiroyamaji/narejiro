@@ -2,42 +2,18 @@
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
-export type CreateKnowledgeInput = {
+export type CreateTodoInput = {
   id?: string | null,
-  title: string,
-  contents?: string | null,
-  cat_1?: number | null,
-  cat_2?: number | null,
-  cat_3?: number | null,
-  ref_file_path?: string | null,
-  ref_file_name?: string | null,
-  ref_redmine_url?: string | null,
-  ref_link?: string | null,
-  note?: string | null,
-  created_at?: string | null,
-  created_by?: number | null,
-  updated_at?: string | null,
-  updated_by?: number | null,
+  name: string,
+  description?: string | null,
 };
 
-export type ModelKnowledgeConditionInput = {
-  title?: ModelStringInput | null,
-  contents?: ModelStringInput | null,
-  cat_1?: ModelIntInput | null,
-  cat_2?: ModelIntInput | null,
-  cat_3?: ModelIntInput | null,
-  ref_file_path?: ModelStringInput | null,
-  ref_file_name?: ModelStringInput | null,
-  ref_redmine_url?: ModelStringInput | null,
-  ref_link?: ModelStringInput | null,
-  note?: ModelStringInput | null,
-  created_at?: ModelStringInput | null,
-  created_by?: ModelIntInput | null,
-  updated_at?: ModelStringInput | null,
-  updated_by?: ModelIntInput | null,
-  and?: Array< ModelKnowledgeConditionInput | null > | null,
-  or?: Array< ModelKnowledgeConditionInput | null > | null,
-  not?: ModelKnowledgeConditionInput | null,
+export type ModelTodoConditionInput = {
+  name?: ModelStringInput | null,
+  description?: ModelStringInput | null,
+  and?: Array< ModelTodoConditionInput | null > | null,
+  or?: Array< ModelTodoConditionInput | null > | null,
+  not?: ModelTodoConditionInput | null,
 };
 
 export type ModelStringInput = {
@@ -80,80 +56,32 @@ export type ModelSizeInput = {
   between?: Array< number | null > | null,
 };
 
-export type ModelIntInput = {
-  ne?: number | null,
-  eq?: number | null,
-  le?: number | null,
-  lt?: number | null,
-  ge?: number | null,
-  gt?: number | null,
-  between?: Array< number | null > | null,
-  attributeExists?: boolean | null,
-  attributeType?: ModelAttributeTypes | null,
-};
-
-export type Knowledge = {
-  __typename: "Knowledge",
+export type Todo = {
+  __typename: "Todo",
   id: string,
-  title: string,
-  contents?: string | null,
-  cat_1?: number | null,
-  cat_2?: number | null,
-  cat_3?: number | null,
-  ref_file_path?: string | null,
-  ref_file_name?: string | null,
-  ref_redmine_url?: string | null,
-  ref_link?: string | null,
-  note?: string | null,
-  created_at?: string | null,
-  created_by?: number | null,
-  updated_at?: string | null,
-  updated_by?: number | null,
+  name: string,
+  description?: string | null,
   createdAt: string,
   updatedAt: string,
 };
 
-export type UpdateKnowledgeInput = {
+export type UpdateTodoInput = {
   id: string,
-  title?: string | null,
-  contents?: string | null,
-  cat_1?: number | null,
-  cat_2?: number | null,
-  cat_3?: number | null,
-  ref_file_path?: string | null,
-  ref_file_name?: string | null,
-  ref_redmine_url?: string | null,
-  ref_link?: string | null,
-  note?: string | null,
-  created_at?: string | null,
-  created_by?: number | null,
-  updated_at?: string | null,
-  updated_by?: number | null,
+  name?: string | null,
+  description?: string | null,
 };
 
-export type DeleteKnowledgeInput = {
+export type DeleteTodoInput = {
   id: string,
 };
 
-export type ModelKnowledgeFilterInput = {
+export type ModelTodoFilterInput = {
   id?: ModelIDInput | null,
-  title?: ModelStringInput | null,
-  contents?: ModelStringInput | null,
-  cat_1?: ModelIntInput | null,
-  cat_2?: ModelIntInput | null,
-  cat_3?: ModelIntInput | null,
-  ref_file_path?: ModelStringInput | null,
-  ref_file_name?: ModelStringInput | null,
-  ref_redmine_url?: ModelStringInput | null,
-  ref_link?: ModelStringInput | null,
-  note?: ModelStringInput | null,
-  created_at?: ModelStringInput | null,
-  created_by?: ModelIntInput | null,
-  updated_at?: ModelStringInput | null,
-  updated_by?: ModelIntInput | null,
-  and?: Array< ModelKnowledgeFilterInput | null > | null,
-  or?: Array< ModelKnowledgeFilterInput | null > | null,
-  not?: ModelKnowledgeFilterInput | null,
+  name?: ModelStringInput | null,
+  description?: ModelStringInput | null,
+  and?: Array< ModelTodoFilterInput | null > | null,
+  or?: Array< ModelTodoFilterInput | null > | null,
+  not?: ModelTodoFilterInput | null,
 };
 
 export type ModelIDInput = {
@@ -172,211 +100,89 @@ export type ModelIDInput = {
   size?: ModelSizeInput | null,
 };
 
-export type ModelKnowledgeConnection = {
-  __typename: "ModelKnowledgeConnection",
-  items:  Array<Knowledge | null >,
+export type ModelTodoConnection = {
+  __typename: "ModelTodoConnection",
+  items:  Array<Todo | null >,
   nextToken?: string | null,
 };
 
-export type ModelSubscriptionKnowledgeFilterInput = {
-  id?: ModelSubscriptionIDInput | null,
-  title?: ModelSubscriptionStringInput | null,
-  contents?: ModelSubscriptionStringInput | null,
-  cat_1?: ModelSubscriptionIntInput | null,
-  cat_2?: ModelSubscriptionIntInput | null,
-  cat_3?: ModelSubscriptionIntInput | null,
-  ref_file_path?: ModelSubscriptionStringInput | null,
-  ref_file_name?: ModelSubscriptionStringInput | null,
-  ref_redmine_url?: ModelSubscriptionStringInput | null,
-  ref_link?: ModelSubscriptionStringInput | null,
-  note?: ModelSubscriptionStringInput | null,
-  created_at?: ModelSubscriptionStringInput | null,
-  created_by?: ModelSubscriptionIntInput | null,
-  updated_at?: ModelSubscriptionStringInput | null,
-  updated_by?: ModelSubscriptionIntInput | null,
-  and?: Array< ModelSubscriptionKnowledgeFilterInput | null > | null,
-  or?: Array< ModelSubscriptionKnowledgeFilterInput | null > | null,
+export type CreateTodoMutationVariables = {
+  input: CreateTodoInput,
+  condition?: ModelTodoConditionInput | null,
 };
 
-export type ModelSubscriptionIDInput = {
-  ne?: string | null,
-  eq?: string | null,
-  le?: string | null,
-  lt?: string | null,
-  ge?: string | null,
-  gt?: string | null,
-  contains?: string | null,
-  notContains?: string | null,
-  between?: Array< string | null > | null,
-  beginsWith?: string | null,
-  in?: Array< string | null > | null,
-  notIn?: Array< string | null > | null,
-};
-
-export type ModelSubscriptionStringInput = {
-  ne?: string | null,
-  eq?: string | null,
-  le?: string | null,
-  lt?: string | null,
-  ge?: string | null,
-  gt?: string | null,
-  contains?: string | null,
-  notContains?: string | null,
-  between?: Array< string | null > | null,
-  beginsWith?: string | null,
-  in?: Array< string | null > | null,
-  notIn?: Array< string | null > | null,
-};
-
-export type ModelSubscriptionIntInput = {
-  ne?: number | null,
-  eq?: number | null,
-  le?: number | null,
-  lt?: number | null,
-  ge?: number | null,
-  gt?: number | null,
-  between?: Array< number | null > | null,
-  in?: Array< number | null > | null,
-  notIn?: Array< number | null > | null,
-};
-
-export type CreateKnowledgeMutationVariables = {
-  input: CreateKnowledgeInput,
-  condition?: ModelKnowledgeConditionInput | null,
-};
-
-export type CreateKnowledgeMutation = {
-  createKnowledge?:  {
-    __typename: "Knowledge",
+export type CreateTodoMutation = {
+  createTodo?:  {
+    __typename: "Todo",
     id: string,
-    title: string,
-    contents?: string | null,
-    cat_1?: number | null,
-    cat_2?: number | null,
-    cat_3?: number | null,
-    ref_file_path?: string | null,
-    ref_file_name?: string | null,
-    ref_redmine_url?: string | null,
-    ref_link?: string | null,
-    note?: string | null,
-    created_at?: string | null,
-    created_by?: number | null,
-    updated_at?: string | null,
-    updated_by?: number | null,
+    name: string,
+    description?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
 };
 
-export type UpdateKnowledgeMutationVariables = {
-  input: UpdateKnowledgeInput,
-  condition?: ModelKnowledgeConditionInput | null,
+export type UpdateTodoMutationVariables = {
+  input: UpdateTodoInput,
+  condition?: ModelTodoConditionInput | null,
 };
 
-export type UpdateKnowledgeMutation = {
-  updateKnowledge?:  {
-    __typename: "Knowledge",
+export type UpdateTodoMutation = {
+  updateTodo?:  {
+    __typename: "Todo",
     id: string,
-    title: string,
-    contents?: string | null,
-    cat_1?: number | null,
-    cat_2?: number | null,
-    cat_3?: number | null,
-    ref_file_path?: string | null,
-    ref_file_name?: string | null,
-    ref_redmine_url?: string | null,
-    ref_link?: string | null,
-    note?: string | null,
-    created_at?: string | null,
-    created_by?: number | null,
-    updated_at?: string | null,
-    updated_by?: number | null,
+    name: string,
+    description?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
 };
 
-export type DeleteKnowledgeMutationVariables = {
-  input: DeleteKnowledgeInput,
-  condition?: ModelKnowledgeConditionInput | null,
+export type DeleteTodoMutationVariables = {
+  input: DeleteTodoInput,
+  condition?: ModelTodoConditionInput | null,
 };
 
-export type DeleteKnowledgeMutation = {
-  deleteKnowledge?:  {
-    __typename: "Knowledge",
+export type DeleteTodoMutation = {
+  deleteTodo?:  {
+    __typename: "Todo",
     id: string,
-    title: string,
-    contents?: string | null,
-    cat_1?: number | null,
-    cat_2?: number | null,
-    cat_3?: number | null,
-    ref_file_path?: string | null,
-    ref_file_name?: string | null,
-    ref_redmine_url?: string | null,
-    ref_link?: string | null,
-    note?: string | null,
-    created_at?: string | null,
-    created_by?: number | null,
-    updated_at?: string | null,
-    updated_by?: number | null,
+    name: string,
+    description?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
 };
 
-export type GetKnowledgeQueryVariables = {
+export type GetTodoQueryVariables = {
   id: string,
 };
 
-export type GetKnowledgeQuery = {
-  getKnowledge?:  {
-    __typename: "Knowledge",
+export type GetTodoQuery = {
+  getTodo?:  {
+    __typename: "Todo",
     id: string,
-    title: string,
-    contents?: string | null,
-    cat_1?: number | null,
-    cat_2?: number | null,
-    cat_3?: number | null,
-    ref_file_path?: string | null,
-    ref_file_name?: string | null,
-    ref_redmine_url?: string | null,
-    ref_link?: string | null,
-    note?: string | null,
-    created_at?: string | null,
-    created_by?: number | null,
-    updated_at?: string | null,
-    updated_by?: number | null,
+    name: string,
+    description?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
 };
 
-export type ListKnowledgesQueryVariables = {
-  filter?: ModelKnowledgeFilterInput | null,
+export type ListTodosQueryVariables = {
+  filter?: ModelTodoFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
 };
 
-export type ListKnowledgesQuery = {
-  listKnowledges?:  {
-    __typename: "ModelKnowledgeConnection",
+export type ListTodosQuery = {
+  listTodos?:  {
+    __typename: "ModelTodoConnection",
     items:  Array< {
-      __typename: "Knowledge",
+      __typename: "Todo",
       id: string,
-      title: string,
-      contents?: string | null,
-      cat_1?: number | null,
-      cat_2?: number | null,
-      cat_3?: number | null,
-      ref_file_path?: string | null,
-      ref_file_name?: string | null,
-      ref_redmine_url?: string | null,
-      ref_link?: string | null,
-      note?: string | null,
-      created_at?: string | null,
-      created_by?: number | null,
-      updated_at?: string | null,
-      updated_by?: number | null,
+      name: string,
+      description?: string | null,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -384,82 +190,34 @@ export type ListKnowledgesQuery = {
   } | null,
 };
 
-export type OnCreateKnowledgeSubscriptionVariables = {
-  filter?: ModelSubscriptionKnowledgeFilterInput | null,
-};
-
-export type OnCreateKnowledgeSubscription = {
-  onCreateKnowledge?:  {
-    __typename: "Knowledge",
+export type OnCreateTodoSubscription = {
+  onCreateTodo?:  {
+    __typename: "Todo",
     id: string,
-    title: string,
-    contents?: string | null,
-    cat_1?: number | null,
-    cat_2?: number | null,
-    cat_3?: number | null,
-    ref_file_path?: string | null,
-    ref_file_name?: string | null,
-    ref_redmine_url?: string | null,
-    ref_link?: string | null,
-    note?: string | null,
-    created_at?: string | null,
-    created_by?: number | null,
-    updated_at?: string | null,
-    updated_by?: number | null,
+    name: string,
+    description?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
 };
 
-export type OnUpdateKnowledgeSubscriptionVariables = {
-  filter?: ModelSubscriptionKnowledgeFilterInput | null,
-};
-
-export type OnUpdateKnowledgeSubscription = {
-  onUpdateKnowledge?:  {
-    __typename: "Knowledge",
+export type OnUpdateTodoSubscription = {
+  onUpdateTodo?:  {
+    __typename: "Todo",
     id: string,
-    title: string,
-    contents?: string | null,
-    cat_1?: number | null,
-    cat_2?: number | null,
-    cat_3?: number | null,
-    ref_file_path?: string | null,
-    ref_file_name?: string | null,
-    ref_redmine_url?: string | null,
-    ref_link?: string | null,
-    note?: string | null,
-    created_at?: string | null,
-    created_by?: number | null,
-    updated_at?: string | null,
-    updated_by?: number | null,
+    name: string,
+    description?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
 };
 
-export type OnDeleteKnowledgeSubscriptionVariables = {
-  filter?: ModelSubscriptionKnowledgeFilterInput | null,
-};
-
-export type OnDeleteKnowledgeSubscription = {
-  onDeleteKnowledge?:  {
-    __typename: "Knowledge",
+export type OnDeleteTodoSubscription = {
+  onDeleteTodo?:  {
+    __typename: "Todo",
     id: string,
-    title: string,
-    contents?: string | null,
-    cat_1?: number | null,
-    cat_2?: number | null,
-    cat_3?: number | null,
-    ref_file_path?: string | null,
-    ref_file_name?: string | null,
-    ref_redmine_url?: string | null,
-    ref_link?: string | null,
-    note?: string | null,
-    created_at?: string | null,
-    created_by?: number | null,
-    updated_at?: string | null,
-    updated_by?: number | null,
+    name: string,
+    description?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,

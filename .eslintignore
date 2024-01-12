@@ -1,1 +1,4 @@
-amplify-codegen-temp/models/models
+# .estlintignore file
+dist
+build
+node_modules/
