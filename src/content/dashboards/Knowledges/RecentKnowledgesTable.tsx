@@ -1,6 +1,4 @@
 import { FC, ChangeEvent, useState } from 'react';
-import { format } from 'date-fns';
-import numeral from 'numeral';
 import PropTypes from 'prop-types';
 import {
   Tooltip,
@@ -22,7 +20,7 @@ import {
   MenuItem,
   Typography,
   useTheme,
-  CardHeader
+  CardHeader,
 } from '@mui/material';
 
 import Label from 'src/components/Label';
@@ -30,6 +28,11 @@ import { KnowledgeData, KnowledgeDataStatus } from 'src/models/knowledges';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import BulkActions from './BulkActions';
+
+import EditDialog from './EditKnowledgeModal';
+import DeleteDialog from './DeleteKnowledgeModal';
+
+const emails = ['username@gmail.com', 'user02@gmail.com'];
 
 interface RecentKnowledgesTableProps {
   className?: string;
@@ -88,6 +91,9 @@ const RecentKnowledgesTable: FC<RecentKnowledgesTableProps> = ({ KnowledgeDatas 
   const [selectedKnowledgeDatas, setSelectedKnowledgeDatas] = useState<number[]>(
     []
   );
+  const [editOpen, setEditOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [selectedValue, setSelectedValue] = useState(emails[1]);
   const selectedBulkActions = selectedKnowledgeDatas.length > 0;
   const [page, setPage] = useState<number>(0);
   const [limit, setLimit] = useState<number>(5);
@@ -113,6 +119,19 @@ const RecentKnowledgesTable: FC<RecentKnowledgesTableProps> = ({ KnowledgeDatas 
       name: 'Failed'
     }
   ];
+
+  const handleClickEditOpen = () => {
+    setEditOpen(true);
+  };
+
+  const handleClickDeleteOpen = () => {
+    setDeleteOpen(true);
+  };
+
+  const handleClose = () => {
+    setEditOpen(false);
+    setDeleteOpen(false);
+  };
 
   const handleStatusChange = (e: ChangeEvent<HTMLInputElement>): void => {
     let value = null;
@@ -363,6 +382,7 @@ const RecentKnowledgesTable: FC<RecentKnowledgesTableProps> = ({ KnowledgeDatas 
                         }}
                         color="inherit"
                         size="small"
+                        onClick={handleClickEditOpen}
                       >
                         <EditTwoToneIcon fontSize="small" />
                       </IconButton>
@@ -375,6 +395,7 @@ const RecentKnowledgesTable: FC<RecentKnowledgesTableProps> = ({ KnowledgeDatas 
                         }}
                         color="inherit"
                         size="small"
+                        onClick={handleClickDeleteOpen}
                       >
                         <DeleteTwoToneIcon fontSize="small" />
                       </IconButton>
@@ -386,6 +407,16 @@ const RecentKnowledgesTable: FC<RecentKnowledgesTableProps> = ({ KnowledgeDatas 
           </TableBody>
         </Table>
       </TableContainer>
+      <EditDialog
+        selectedValue={selectedValue}
+        open={editOpen}
+        onClose={handleClose}
+      />
+      <DeleteDialog
+        selectedValue={selectedValue}
+        open={deleteOpen}
+        onClose={handleClose}
+      />
       <Box p={2}>
         <TablePagination
           component="div"
