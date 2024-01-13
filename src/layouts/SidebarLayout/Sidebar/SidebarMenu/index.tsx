@@ -302,10 +302,10 @@ function SidebarMenu() {
                   disableRipple
                   component={RouterLink}
                   onClick={closeSidebar}
-                  to="/dashboards"
+                  to="/management/transactions"
                   startIcon={<TableChartTwoToneIcon />}
                 >
-                  OMS操作
+                  Transactions
                 </Button>
               </ListItem>
               <ListItem component="div">
@@ -313,27 +313,27 @@ function SidebarMenu() {
                   disableRipple
                   component={RouterLink}
                   onClick={closeSidebar}
-                  to="/dashboards"
-                  startIcon={<DisplaySettingsTwoToneIcon />}
-                >
-                  モール連携
-                </Button>
-              </ListItem>
-              <ListItem component="div">
-                <Button
-                  disableRipple
-                  component={RouterLink}
-                  onClick={closeSidebar}
-                  to="/dashboards"
+                  to="/dashboards/messenger"
                   startIcon={<AccountCircleTwoToneIcon />}
                 >
-                  周辺システム
+                  Messenger
+                </Button>
+              </ListItem>
+              <ListItem component="div">
+                <Button
+                  disableRipple
+                  component={RouterLink}
+                  onClick={closeSidebar}
+                  to="/dashboards/crypto"
+                  startIcon={<AccountCircleTwoToneIcon />}
+                >
+                  Crypto
                 </Button>
               </ListItem>
             </List>
           </SubMenuWrapper>
         </List>
-        {/* <List
+        <List
           component="div"
           subheader={
             <ListSubheader component="div" disableSticky>
@@ -536,7 +536,7 @@ function SidebarMenu() {
               </ListItem>
             </List>
           </SubMenuWrapper>
-        </List> */}
+        </List>
       </MenuWrapper>
     </>
   );
