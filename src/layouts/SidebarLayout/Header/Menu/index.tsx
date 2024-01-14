@@ -76,7 +76,7 @@ function HeaderMenu() {
 
   return (
     <>
-      <ListWrapper
+      {/* <ListWrapper
         sx={{
           display: {
             xs: 'none',
@@ -126,7 +126,7 @@ function HeaderMenu() {
             />
           </ListItem>
         </List>
-      </ListWrapper>
+      </ListWrapper> */}
       <Menu anchorEl={ref.current} onClose={handleClose} open={isOpen}>
         <MenuItem sx={{ px: 3 }} component={NavLink} to="/overview">
           Overview

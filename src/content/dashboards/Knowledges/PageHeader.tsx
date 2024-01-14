@@ -102,10 +102,11 @@ function PageHeader() {
     <Grid container justifyContent="space-between" alignItems="center">
       <Grid item>
         <Typography variant="h3" component="h3" gutterBottom>
-          なれっじ一覧
+          なれじろうWEB版
         </Typography>
         <Typography variant="subtitle2">
-          {user.name}, these are your recent knowledges
+          {/* {user.name}, these are your recent knowledges */}
+          ECHub OMSに関する知見を中心としたなれっじ共有ツール
         </Typography>
       </Grid>
       <Grid item>

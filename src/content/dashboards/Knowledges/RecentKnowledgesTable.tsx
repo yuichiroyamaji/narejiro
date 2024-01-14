@@ -29,8 +29,8 @@ import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import BulkActions from './BulkActions';
 
-import EditDialog from './EditKnowledgeModal';
-import DeleteDialog from './DeleteKnowledgeModal';
+import EditDialog from './Dialog/EditKnowledgeDialog';
+import DeleteDialog from './Dialog/DeleteKnowledgeDialog';
 
 const emails = ['username@gmail.com', 'user02@gmail.com'];
 
@@ -93,7 +93,7 @@ const RecentKnowledgesTable: FC<RecentKnowledgesTableProps> = ({ KnowledgeDatas 
   );
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
-  const [selectedValue, setSelectedValue] = useState(emails[1]);
+  const [knowledgeId, setknowledgeId] = useState(emails[1]);
   const selectedBulkActions = selectedKnowledgeDatas.length > 0;
   const [page, setPage] = useState<number>(0);
   const [limit, setLimit] = useState<number>(5);
@@ -124,8 +124,9 @@ const RecentKnowledgesTable: FC<RecentKnowledgesTableProps> = ({ KnowledgeDatas 
     setEditOpen(true);
   };
 
-  const handleClickDeleteOpen = () => {
+  const handleClickDeleteOpen = (knowledgeId) => {
     setDeleteOpen(true);
+    setknowledgeId(knowledgeId);
   };
 
   const handleClose = () => {
@@ -221,7 +222,7 @@ const RecentKnowledgesTable: FC<RecentKnowledgesTableProps> = ({ KnowledgeDatas 
               </FormControl>
             </Box>
           }
-          title="Recent Orders"
+          title="なれっじ一覧"
         />
       )}
       <Divider />
@@ -372,7 +373,7 @@ const RecentKnowledgesTable: FC<RecentKnowledgesTableProps> = ({ KnowledgeDatas 
                     </Typography>
                   </TableCell>
                   <TableCell align="right">
-                    <Tooltip title="Edit Order" arrow>
+                    <Tooltip title="Edit なれっじ" arrow>
                       <IconButton
                         sx={{
                           '&:hover': {
@@ -387,7 +388,7 @@ const RecentKnowledgesTable: FC<RecentKnowledgesTableProps> = ({ KnowledgeDatas 
                         <EditTwoToneIcon fontSize="small" />
                       </IconButton>
                     </Tooltip>
-                    <Tooltip title="Delete Order" arrow>
+                    <Tooltip title="Delete なれっじ" arrow>
                       <IconButton
                         sx={{
                           '&:hover': { background: theme.colors.error.lighter },
@@ -395,7 +396,7 @@ const RecentKnowledgesTable: FC<RecentKnowledgesTableProps> = ({ KnowledgeDatas 
                         }}
                         color="inherit"
                         size="small"
-                        onClick={handleClickDeleteOpen}
+                        onClick={() => handleClickDeleteOpen(KnowledgeData.SK)}
                       >
                         <DeleteTwoToneIcon fontSize="small" />
                       </IconButton>
@@ -408,12 +409,12 @@ const RecentKnowledgesTable: FC<RecentKnowledgesTableProps> = ({ KnowledgeDatas 
         </Table>
       </TableContainer>
       <EditDialog
-        selectedValue={selectedValue}
+        knowledgeId={knowledgeId}
         open={editOpen}
         onClose={handleClose}
       />
       <DeleteDialog
-        selectedValue={selectedValue}
+        knowledgeId={knowledgeId}
         open={deleteOpen}
         onClose={handleClose}
       />
