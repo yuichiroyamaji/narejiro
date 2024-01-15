@@ -120,8 +120,9 @@ const RecentKnowledgesTable: FC<RecentKnowledgesTableProps> = ({ KnowledgeDatas 
     }
   ];
 
-  const handleClickEditOpen = () => {
+  const handleClickEditOpen = (knowledgeId) => {
     setEditOpen(true);
+    setknowledgeId(knowledgeId);
   };
 
   const handleClickDeleteOpen = (knowledgeId) => {
@@ -383,7 +384,7 @@ const RecentKnowledgesTable: FC<RecentKnowledgesTableProps> = ({ KnowledgeDatas 
                         }}
                         color="inherit"
                         size="small"
-                        onClick={handleClickEditOpen}
+                        onClick={() => handleClickEditOpen(KnowledgeData.SK)}
                       >
                         <EditTwoToneIcon fontSize="small" />
                       </IconButton>
