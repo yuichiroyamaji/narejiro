@@ -29,8 +29,9 @@ import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import BulkActions from './BulkActions';
 
-import EditDialog from './Dialog/EditKnowledgeDialog';
-import DeleteDialog from './Dialog/DeleteKnowledgeDialog';
+import EditKnowledgeDialog from './Dialog/EditKnowledgeDialog';
+import DeleteKnowledgeDialog from './Dialog/DeleteKnowledgeDialog';
+import DisplayKnowledgeDialog from './Dialog/DisplayKnowledgeDialog';
 
 const emails = ['username@gmail.com', 'user02@gmail.com'];
 
@@ -93,6 +94,7 @@ const RecentKnowledgesTable: FC<RecentKnowledgesTableProps> = ({ KnowledgeDatas 
   );
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [displayOpen, setDisplayOpen] = useState(false);
   const [knowledgeId, setknowledgeId] = useState(emails[1]);
   const selectedBulkActions = selectedKnowledgeDatas.length > 0;
   const [page, setPage] = useState<number>(0);
@@ -127,6 +129,11 @@ const RecentKnowledgesTable: FC<RecentKnowledgesTableProps> = ({ KnowledgeDatas 
 
   const handleClickDeleteOpen = (knowledgeId) => {
     setDeleteOpen(true);
+    setknowledgeId(knowledgeId);
+  };
+
+  const handleClickDisplayOpen = (knowledgeId) => {
+    setDisplayOpen(true);
     setknowledgeId(knowledgeId);
   };
 
@@ -336,11 +343,15 @@ const RecentKnowledgesTable: FC<RecentKnowledgesTableProps> = ({ KnowledgeDatas 
                       color="text.primary"
                       gutterBottom
                       noWrap
+                      sx={{
+                        '&:hover': {
+                          background: theme.colors.primary.lighter
+                        },
+                        color: theme.palette.primary.main
+                      }}
+                      onClick={() => handleClickDisplayOpen(KnowledgeData.SK)}
                     >
                       {KnowledgeData.title}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary" noWrap>
-                      {KnowledgeData.content}
                     </Typography>
                   </TableCell>
                   {/* <TableCell align="right">
@@ -366,11 +377,19 @@ const RecentKnowledgesTable: FC<RecentKnowledgesTableProps> = ({ KnowledgeDatas 
                   <TableCell>
                     <Typography variant="body2" color="text.secondary" noWrap>
                       {/* {format(KnowledgeData.created_at, 'MMMM dd yyyy')} */}
+                      2024/1/1
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary" noWrap>
+                      {KnowledgeData.created_by}
                     </Typography>
                   </TableCell>
                   <TableCell>
                     <Typography variant="body2" color="text.secondary" noWrap>
+                      2024/2/1
                       {/* {format(KnowledgeData.updated_at, 'MMMM dd yyyy')} */}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary" noWrap>
+                      {KnowledgeData.updated_by}
                     </Typography>
                   </TableCell>
                   <TableCell align="right">
@@ -409,12 +428,17 @@ const RecentKnowledgesTable: FC<RecentKnowledgesTableProps> = ({ KnowledgeDatas 
           </TableBody>
         </Table>
       </TableContainer>
-      <EditDialog
+      <DisplayKnowledgeDialog
+        knowledgeId={knowledgeId}
+        open={displayOpen}
+        onClose={handleClose}
+      />
+      <EditKnowledgeDialog
         knowledgeId={knowledgeId}
         open={editOpen}
         onClose={handleClose}
       />
-      <DeleteDialog
+      <DeleteKnowledgeDialog
         knowledgeId={knowledgeId}
         open={deleteOpen}
         onClose={handleClose}

@@ -26,6 +26,7 @@ import AddIcon from '@mui/icons-material/Add';
 import Typography from '@mui/material/Typography';
 import { blue } from '@mui/material/colors';
 import Footer from 'src/components/Footer';
+import CreateKnowledgeDialog from './Dialog/CreateKnowledgeDialog';
 
 const emails = ['username@gmail.com', 'user02@gmail.com'];
 
@@ -83,14 +84,14 @@ SimpleDialog.propTypes = {
 };
 
 function PageHeader() {
-  const [open, setOpen] = useState(false);
+  const [createOpen, setCreateOpen] = useState(false);
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const handleClickCreateOpen = () => {
+    setCreateOpen(true);
   };
 
   const handleClose = (value) => {
-    setOpen(false);
+    setCreateOpen(false);
   };
 
   const user = {
@@ -114,15 +115,19 @@ function PageHeader() {
           sx={{ mt: { xs: 2, md: 0 } }}
           variant="contained"
           startIcon={<AddTwoToneIcon fontSize="small" />}
-          onClick={handleClickOpen}
+          onClick={() => handleClickCreateOpen()}
         >
           Create なれっじ
         </Button>
         <SimpleDialog
-          open={open}
+          open={createOpen}
           onClose={handleClose}
         />
       </Grid>
+      <CreateKnowledgeDialog
+        open={createOpen}
+        onClose={handleClose}
+      />
     </Grid>
   );
 }

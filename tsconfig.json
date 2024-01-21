@@ -18,5 +18,5 @@
     "jsx": "react-jsx",
     "types": ["marked"]
   },
-  "include": ["src"]
+  "include": ["src", "@types/marked/lib/marked.d.ts"]
 }

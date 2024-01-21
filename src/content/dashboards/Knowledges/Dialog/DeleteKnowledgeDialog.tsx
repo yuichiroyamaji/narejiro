@@ -4,6 +4,9 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
+import {
+  useTheme
+} from '@mui/material';
 
 import Dialog from '@mui/material/Dialog';
 import {
@@ -16,8 +19,9 @@ import {
   CardContent
 } from '@mui/material';
 
-function DeleteDialog(props) {
+function DeleteKnowledgeDialog(props) {
     const { onClose, knowledgeId, open } = props;
+    const theme = useTheme();
 
     const handleClose = () => {
         onClose(knowledgeId);
@@ -34,17 +38,17 @@ function DeleteDialog(props) {
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
         >
-        <DialogTitle id="alert-dialog-title">
-            なれっじID : {knowledgeId}
+        <DialogTitle id="alert-dialog-title" sx={{color: theme.palette.primary.main, fontWeight: "bold"}}>
+            なれっじ削除
         </DialogTitle>
         <DialogContent dividers>
           <DialogContentText id="alert-dialog-description">
-            なれっじを削除します。よろしいですか？
+            【なれっじID : {knowledgeId} 】を削除します。よろしいですか？
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose} autoFocus>
+          <Button variant="outlined" onClick={handleClose}>Cancel</Button>
+          <Button variant="outlined" onClick={handleClose} autoFocus>
             OK
           </Button>
         </DialogActions>
@@ -52,10 +56,10 @@ function DeleteDialog(props) {
     );
 }
 
-DeleteDialog.propTypes = {
+DeleteKnowledgeDialog.propTypes = {
     onClose: PropTypes.func.isRequired,
     open: PropTypes.bool.isRequired,
     knowledgeId: PropTypes.string.isRequired
 };
 
-export default DeleteDialog;
+export default DeleteKnowledgeDialog;

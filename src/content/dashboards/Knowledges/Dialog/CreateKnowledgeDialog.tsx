@@ -33,7 +33,7 @@ import DOMPurify from 'dompurify';
 import highlightjs from 'highlight.js';
 // import 'highlight.js/styles/atelier-lakeside-dark.css'
 
-function EditKnowledgeDialog(props) {
+function CreateKnowledgeDialog(props) {
     const { onClose, knowledgeId, open } = props;
     const [markdownValue, setMarkdownValue] = useState<string>('hello');
     const [cat1, setCat1] = useState();
@@ -87,7 +87,7 @@ function EditKnowledgeDialog(props) {
     const onChange = (value: string) => {
       setMarkdownValue(value);
     };
-    
+
     // const PlusIcon = createSvgIcon(
     //   // credit: plus icon from https://heroicons.com/
     //   <svg
@@ -119,7 +119,7 @@ function EditKnowledgeDialog(props) {
         >
             <Grid container>
                 <Grid item xs={6}>
-                    <DialogTitle sx={{color: theme.palette.primary.main, fontWeight: "bold"}}>なれっじ編集</DialogTitle>
+                    <DialogTitle sx={{color: theme.palette.primary.main, fontWeight: "bold"}}>なれっじ作成</DialogTitle>
                     <DialogContent dividers>
                         <Stack direction="row">
                             <Box
@@ -131,20 +131,6 @@ function EditKnowledgeDialog(props) {
                                 noValidate
                                 autoComplete="off"
                             >
-                                <Box>
-                                    <TextField
-                                        required
-                                        id="standard-required"
-                                        label="なれっじID"
-                                        variant="filled"
-                                        value={knowledgeId}
-                                        InputProps={{
-                                            readOnly: true
-                                        }}
-                                        // sx={{bgcolor: 'gray'}}
-                                        disabled
-                                    />
-                                </Box>
                                 <Box>
                                     <TextField
                                         id="outlined-select-currency"
@@ -203,7 +189,7 @@ function EditKnowledgeDialog(props) {
                                         <InputLabel htmlFor="outlined-adornment-amount">タイトル</InputLabel>
                                         <OutlinedInput
                                             id="outlined-adornment-amount"
-                                            startAdornment={<InputAdornment position="start">Shopify APIのアクセス制限について</InputAdornment>}
+                                            startAdornment={<InputAdornment position="start"></InputAdornment>}
                                             label="タイトル"
                                         />
                                     </FormControl>
@@ -239,10 +225,10 @@ function EditKnowledgeDialog(props) {
     );
 }
 
-EditKnowledgeDialog.propTypes = {
+CreateKnowledgeDialog.propTypes = {
     onClose: PropTypes.func.isRequired,
     open: PropTypes.bool.isRequired,
     knowledgeId: PropTypes.string.isRequired
 };
 
-export default EditKnowledgeDialog;
+export default CreateKnowledgeDialog;
