@@ -1,5 +1,12 @@
 import { FC, ChangeEvent, useState } from 'react';
 import PropTypes from 'prop-types';
+import BulkActions from './BulkActions';
+import Label from 'src/components/Label';
+import { KnowledgeData, KnowledgeDataStatus } from 'src/models/knowledges';
+import EditKnowledgeDialog from './Dialog/EditKnowledgeDialog';
+import DeleteKnowledgeDialog from './Dialog/DeleteKnowledgeDialog';
+import DisplayKnowledgeDialog from './Dialog/DisplayKnowledgeDialog';
+
 import {
   Tooltip,
   Divider,
@@ -22,18 +29,8 @@ import {
   useTheme,
   CardHeader,
 } from '@mui/material';
-
-import Label from 'src/components/Label';
-import { KnowledgeData, KnowledgeDataStatus } from 'src/models/knowledges';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
-import BulkActions from './BulkActions';
-
-import EditKnowledgeDialog from './Dialog/EditKnowledgeDialog';
-import DeleteKnowledgeDialog from './Dialog/DeleteKnowledgeDialog';
-import DisplayKnowledgeDialog from './Dialog/DisplayKnowledgeDialog';
-
-const emails = ['username@gmail.com', 'user02@gmail.com'];
 
 interface RecentKnowledgesTableProps {
   className?: string;
@@ -95,7 +92,7 @@ const RecentKnowledgesTable: FC<RecentKnowledgesTableProps> = ({ KnowledgeDatas 
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [displayOpen, setDisplayOpen] = useState(false);
-  const [knowledgeId, setknowledgeId] = useState(emails[1]);
+  const [knowledgeId, setknowledgeId] = useState(0);
   const selectedBulkActions = selectedKnowledgeDatas.length > 0;
   const [page, setPage] = useState<number>(0);
   const [limit, setLimit] = useState<number>(5);
@@ -140,6 +137,7 @@ const RecentKnowledgesTable: FC<RecentKnowledgesTableProps> = ({ KnowledgeDatas 
   const handleClose = () => {
     setEditOpen(false);
     setDeleteOpen(false);
+    setDisplayOpen(false);
   };
 
   const handleStatusChange = (e: ChangeEvent<HTMLInputElement>): void => {
@@ -322,20 +320,6 @@ const RecentKnowledgesTable: FC<RecentKnowledgesTableProps> = ({ KnowledgeDatas 
                       {KnowledgeData.cat3}
                     </Typography>
                   </TableCell>
-                  {/* <TableCell>
-                    <Typography
-                      variant="body1"
-                      fontWeight="bold"
-                      color="text.primary"
-                      gutterBottom
-                      noWrap
-                    >
-                      {KnowledgeData.orderDetails}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary" noWrap>
-                      {format(KnowledgeData.orderDate, 'MMMM dd yyyy')}
-                    </Typography>
-                  </TableCell> */}
                   <TableCell>
                     <Typography
                       variant="body1"
@@ -347,33 +331,14 @@ const RecentKnowledgesTable: FC<RecentKnowledgesTableProps> = ({ KnowledgeDatas 
                         '&:hover': {
                           background: theme.colors.primary.lighter
                         },
-                        color: theme.palette.primary.main
+                        color: theme.palette.primary.main,
+                        textDecoration: 'underline'
                       }}
                       onClick={() => handleClickDisplayOpen(KnowledgeData.SK)}
                     >
                       {KnowledgeData.title}
                     </Typography>
                   </TableCell>
-                  {/* <TableCell align="right">
-                    <Typography
-                      variant="body1"
-                      fontWeight="bold"
-                      color="text.primary"
-                      gutterBottom
-                      noWrap
-                    >
-                      {KnowledgeData.amountCrypto}
-                      {KnowledgeData.cryptoCurrency}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary" noWrap>
-                      {numeral(KnowledgeData.amount).format(
-                        `${KnowledgeData.currency}0,0.00`
-                      )}
-                    </Typography>
-                  </TableCell> */}
-                  {/* <TableCell align="right">
-                    {getStatusLabel(KnowledgeData.status)}
-                  </TableCell> */}
                   <TableCell>
                     <Typography variant="body2" color="text.secondary" noWrap>
                       {/* {format(KnowledgeData.created_at, 'MMMM dd yyyy')} */}

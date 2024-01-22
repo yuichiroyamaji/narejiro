@@ -1,41 +1,33 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Divider,
   Box,
-  Card,
-  CardHeader,
-  Container,
   Grid,
-  CardContent,
   Stack,
   Button,
   useTheme
 } from '@mui/material';
-import IconButton from '@mui/material/IconButton';
 
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
 
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormControl from '@mui/material/FormControl';
-// import { createSvgIcon } from '@mui/material/utils';
 
 import SimpleMde from 'react-simplemde-editor';
 import 'easymde/dist/easymde.min.css';
 import markdownit from 'markdown-it';
 import DOMPurify from 'dompurify';
-import highlightjs from 'highlight.js';
-// import 'highlight.js/styles/atelier-lakeside-dark.css'
 
 function CreateKnowledgeDialog(props) {
     const { onClose, knowledgeId, open } = props;
-    const [markdownValue, setMarkdownValue] = useState<string>('hello');
+    const [markdownValue, setMarkdownValue] = useState<string>("### sample content");
     const [cat1, setCat1] = useState();
     const [cat2, setCat2] = useState();
     const [cat3, setCat3] = useState();
@@ -87,20 +79,6 @@ function CreateKnowledgeDialog(props) {
     const onChange = (value: string) => {
       setMarkdownValue(value);
     };
-
-    // const PlusIcon = createSvgIcon(
-    //   // credit: plus icon from https://heroicons.com/
-    //   <svg
-    //     xmlns="http://www.w3.org/2000/svg"
-    //     fill="none"
-    //     viewBox="0 0 24 24"
-    //     strokeWidth={1.5}
-    //     stroke="currentColor"
-    //   >
-    //     <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-    //   </svg>,
-    //   'Plus',
-    // );
   
     useEffect(() => {
       const preview = document.getElementById('preview');
@@ -111,7 +89,6 @@ function CreateKnowledgeDialog(props) {
 
     return (
         <Dialog
-            // sx={{ '& .MuiDialog-paper': { width: '80%', maxHeight: 435 } }}
             fullWidth
             maxWidth="lg"
             onClose={handleClose} 
@@ -194,26 +171,16 @@ function CreateKnowledgeDialog(props) {
                                         />
                                     </FormControl>
                                 </Box>
-                                {/* <Box>
-                                    <FormControl fullWidth sx={{ m: 1 }}>
-                                        <InputLabel htmlFor="outlined-adornment-amount">内容</InputLabel>
-                                        <OutlinedInput
-                                            id="outlined-adornment-amount"
-                                            startAdornment={<InputAdornment position="start">Shopify APIのアクセス制限について</InputAdornment>}
-                                            label="内容"
-                                            multiline
-                                            rows={4}
-                                        />
-                                    </FormControl>
-                                </Box> */}
-                                {/* <p>内容</p> */}
                                 <Box sx={{ mt: 1, mb: 1, ml: 1 }}>
                                     <SimpleMde value={markdownValue} onChange={onChange}/>
                                 </Box>
-                            {/* <SimpleMde value={markdownValue} onChange={onChange} options={autoUploadImage}/> */}
                             </Box>
                         </Stack>
                     </DialogContent>
+                    <DialogActions>
+                        <Button variant="outlined" onClick={handleClose}>Cancel</Button>
+                        <Button variant="outlined" onClick={handleClose} autoFocus>OK</Button>
+                    </DialogActions>
                 </Grid>
                 <Grid item xs={6} sx={{borderLeft: 1, borderColor: "#ccc"}}>
                     <FormControl fullWidth sx={{ p: 3 }}>
@@ -228,7 +195,7 @@ function CreateKnowledgeDialog(props) {
 CreateKnowledgeDialog.propTypes = {
     onClose: PropTypes.func.isRequired,
     open: PropTypes.bool.isRequired,
-    knowledgeId: PropTypes.string.isRequired
+    knowledgeId: PropTypes.number.isRequired
 };
 
 export default CreateKnowledgeDialog;

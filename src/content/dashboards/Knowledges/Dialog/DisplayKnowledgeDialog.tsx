@@ -1,35 +1,21 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import SimpleMde from 'react-simplemde-editor';
+import 'easymde/dist/easymde.min.css';
+import markdownit from 'markdown-it';
+import DOMPurify from 'dompurify';
+
 import {
   Box,
   Grid,
   useTheme
 } from '@mui/material';
-import IconButton from '@mui/material/IconButton';
-
-import TextField from '@mui/material/TextField';
-import MenuItem from '@mui/material/MenuItem';
-import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
-import InputAdornment from '@mui/material/InputAdornment';
 import FormControl from '@mui/material/FormControl';
-
-import SimpleMde from 'react-simplemde-editor';
-import 'easymde/dist/easymde.min.css';
-import markdownit from 'markdown-it';
-import DOMPurify from 'dompurify';
-import highlightjs from 'highlight.js';
 
 function DisplayKnowledgeDialog(props) {
     const { onClose, knowledgeId, open } = props;
-    const [markdownValue, setMarkdownValue] = useState<string>('hello');
-    const [cat1, setCat1] = useState();
-    const [cat2, setCat2] = useState();
-    const [cat3, setCat3] = useState();
+    const [markdownValue, setMarkdownValue] = useState<string>("###  ShopifyのAPI呼出し回数制限 ```Shopify: 4/sec | ShopifyPlus: 20/sec```  ");
     const theme = useTheme();
 
     const cat1s = [
@@ -100,7 +86,7 @@ function DisplayKnowledgeDialog(props) {
 DisplayKnowledgeDialog.propTypes = {
     onClose: PropTypes.func.isRequired,
     open: PropTypes.bool.isRequired,
-    knowledgeId: PropTypes.string.isRequired
+    knowledgeId: PropTypes.number.isRequired
 };
 
 export default DisplayKnowledgeDialog;

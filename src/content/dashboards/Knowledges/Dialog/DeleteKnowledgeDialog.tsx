@@ -9,15 +9,6 @@ import {
 } from '@mui/material';
 
 import Dialog from '@mui/material/Dialog';
-import {
-  Divider,
-  Box,
-  Card,
-  CardHeader,
-  Container,
-  Grid,
-  CardContent
-} from '@mui/material';
 
 function DeleteKnowledgeDialog(props) {
     const { onClose, knowledgeId, open } = props;
@@ -25,10 +16,6 @@ function DeleteKnowledgeDialog(props) {
 
     const handleClose = () => {
         onClose(knowledgeId);
-    };
-
-    const handleListItemClick = (value) => {
-        onClose(value);
     };
 
     return (
@@ -59,7 +46,7 @@ function DeleteKnowledgeDialog(props) {
 DeleteKnowledgeDialog.propTypes = {
     onClose: PropTypes.func.isRequired,
     open: PropTypes.bool.isRequired,
-    knowledgeId: PropTypes.string.isRequired
+    knowledgeId: PropTypes.number.isRequired
 };
 
 export default DeleteKnowledgeDialog;
