@@ -8,35 +8,29 @@ import axios from 'axios';
 function RecentKnowledges() {
   const [data, setData] = useState();
   useEffect(() => {
-    const API_URL = "https://wrfsrnb3mbdcpozxhklwonjaf4.appsync-api.ap-northeast-1.amazonaws.com/graphql"; //process.env.API_URL as string;
-    const API_KEY = "da2-kxj5lbhbwrfnncqkueuaemayqe"; //process.env.API_KEY as string;
-    const listKnowledges = async() => {
+    // const API_URL = "https://wrfsrnb3mbdcpozxhklwonjaf4.appsync-api.ap-northeast-1.amazonaws.com/graphql"; //process.env.API_URL as string;
+    // const API_KEY = "da2-kxj5lbhbwrfnncqkueuaemayqe"; //process.env.API_KEY as string;
+    const API_URL = "https://4js3hfxbu5eqfh3mj3wqoyzosy.appsync-api.ap-northeast-1.amazonaws.com/graphql"; //process.env.API_URL as string;
+    const API_KEY = "da2-a3wirkvc6ncmnp62bkcc4go37u"; //process.env.API_KEY as string;
+    const listNarejiroDevTables = async() => {
       const query = `
-      query listKnowledgeDatas {
-        listKnowledgeDatas {
+      query listNarejiroDevTables {
+        listNarejiroDevTables(filter: {PK: {eq: "KWL#data"}}) {
           items {
             PK
             SK
             cat1
             cat2
             cat3
-            created_at
-            created_by
-            scan_index
-            updated_at
-            updated_by
-            last_id
             title
             content
-            ref_mtrl_path
-            ref_mtrl_name
-            ref_red_url
-            ref_link_url
-            ref_attch_url
-            note
+            createdAt
+            createdBy
+            updatedAt
+            updatedBy
           }
         }
-      }      
+      }
       `;
       const res = await axios.post(
         API_URL,
@@ -49,10 +43,10 @@ function RecentKnowledges() {
           }
         }
       );
-      console.log(res.data.data.listKnowledgeDatas.items);
-      setData(res.data.data.listKnowledgeDatas.items);
+      console.log(res.data.data.listNarejiroDevTables.items);
+      setData(res.data.data.listNarejiroDevTables.items);
     }
-    listKnowledges();
+    listNarejiroDevTables();
   },[]);
   const KnowledgeDatas: KnowledgeData[] = data;
 

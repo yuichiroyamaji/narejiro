@@ -341,20 +341,22 @@ const RecentKnowledgesTable: FC<RecentKnowledgesTableProps> = ({ KnowledgeDatas 
                   </TableCell>
                   <TableCell>
                     <Typography variant="body2" color="text.secondary" noWrap>
-                      {/* {format(KnowledgeData.created_at, 'MMMM dd yyyy')} */}
-                      2024/1/1
+                      {KnowledgeData.createdAt}
+                      {/* {format(KnowledgeData.createdAt, 'MMMM dd yyyy')} */}
+                      {/* 2024/1/1 */}
                     </Typography>
                     <Typography variant="body2" color="text.secondary" noWrap>
-                      {KnowledgeData.created_by}
+                      {KnowledgeData.createdBy}
                     </Typography>
                   </TableCell>
                   <TableCell>
                     <Typography variant="body2" color="text.secondary" noWrap>
-                      2024/2/1
+                      {KnowledgeData.updatedAt}
                       {/* {format(KnowledgeData.updated_at, 'MMMM dd yyyy')} */}
+                      {/* 2024/2/1 */}
                     </Typography>
                     <Typography variant="body2" color="text.secondary" noWrap>
-                      {KnowledgeData.updated_by}
+                      {KnowledgeData.updatedBy}
                     </Typography>
                   </TableCell>
                   <TableCell align="right">
