@@ -279,8 +279,7 @@ const RecentKnowledgesTable: FC<RecentKnowledgesTableProps> = ({ KnowledgeDatas 
                   <TableCell>
                     <Typography
                       variant="body1"
-                      fontWeight="bold"
-                      color="text.primary"
+                      color="text.secondary"
                       gutterBottom
                       noWrap
                     >
@@ -290,8 +289,7 @@ const RecentKnowledgesTable: FC<RecentKnowledgesTableProps> = ({ KnowledgeDatas 
                   <TableCell>
                     <Typography
                       variant="body1"
-                      fontWeight="bold"
-                      color="text.primary"
+                      color="text.secondary"
                       gutterBottom
                       noWrap
                     >
@@ -301,8 +299,7 @@ const RecentKnowledgesTable: FC<RecentKnowledgesTableProps> = ({ KnowledgeDatas 
                   <TableCell>
                     <Typography
                       variant="body1"
-                      fontWeight="bold"
-                      color="text.primary"
+                      color="text.secondary"
                       gutterBottom
                       noWrap
                     >
@@ -312,8 +309,7 @@ const RecentKnowledgesTable: FC<RecentKnowledgesTableProps> = ({ KnowledgeDatas 
                   <TableCell>
                     <Typography
                       variant="body1"
-                      fontWeight="bold"
-                      color="text.primary"
+                      color="text.secondary"
                       gutterBottom
                       noWrap
                     >
@@ -342,8 +338,6 @@ const RecentKnowledgesTable: FC<RecentKnowledgesTableProps> = ({ KnowledgeDatas 
                   <TableCell>
                     <Typography variant="body2" color="text.secondary" noWrap>
                       {KnowledgeData.createdAt}
-                      {/* {format(KnowledgeData.createdAt, 'MMMM dd yyyy')} */}
-                      {/* 2024/1/1 */}
                     </Typography>
                     <Typography variant="body2" color="text.secondary" noWrap>
                       {KnowledgeData.createdBy}
@@ -352,8 +346,6 @@ const RecentKnowledgesTable: FC<RecentKnowledgesTableProps> = ({ KnowledgeDatas 
                   <TableCell>
                     <Typography variant="body2" color="text.secondary" noWrap>
                       {KnowledgeData.updatedAt}
-                      {/* {format(KnowledgeData.updated_at, 'MMMM dd yyyy')} */}
-                      {/* 2024/2/1 */}
                     </Typography>
                     <Typography variant="body2" color="text.secondary" noWrap>
                       {KnowledgeData.updatedBy}

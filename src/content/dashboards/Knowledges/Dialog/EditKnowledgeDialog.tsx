@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import SimpleMde from 'react-simplemde-editor';
 import 'easymde/dist/easymde.min.css';
@@ -10,7 +10,8 @@ import {
   Grid,
   Stack,
   Button,
-  useTheme
+  useTheme,
+  Hidden
 } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
@@ -23,9 +24,15 @@ import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormControl from '@mui/material/FormControl';
 
+const DEFAULT_TEXT = [
+  '## ShopifyのAPI呼び出し回数について',
+  '---',
+  'ShopifyのAPI（REST API）では、契約プランによって呼び出し回数の制限が異なる。',
+];
+
 function EditKnowledgeDialog(props) {
     const { onClose, knowledgeId, open } = props;
-    const [markdownValue, setMarkdownValue] = useState<string>("###  ShopifyのAPI呼出し回数制限 ```Shopify: 4/sec | ShopifyPlus: 20/sec```  ");
+    const [markdownValue, setMarkdownValue] = useState<string>(DEFAULT_TEXT.join('\n'));
     const [cat1, setCat1] = useState();
     const [cat2, setCat2] = useState();
     const [cat3, setCat3] = useState();
@@ -77,13 +84,47 @@ function EditKnowledgeDialog(props) {
     const onChange = (value: string) => {
       setMarkdownValue(value);
     };
+
+    // const imageUploadFunction = (file) => {
+    //     // 保存先の参照を作成
+    //     const storage = firebase.storage();
+    //     const storageRef = storage.ref(`images`);
+    //     const imagesRef = storageRef.child(file.name);
+    //     // 画像をアップロード
+    //     const upLoadTask = imagesRef.put(file);
+    //     // エラー処理や画像の保存が完了した後の処理
+    //     upLoadTask.on(
+    //       "state_changed",
+    //       (snapshot) => {
+    //         console.log("snapshot", snapshot);
+    //       },
+    //       (error) => {
+    //         console.log("エラーが発生しました", error);
+    //       },
+    //       () => {upLoadTask.snapshot.ref.getDownloadURL().then((downloadURL: string) => {
+    //           // アップロードしたURLを取得してマークダウンに埋め込む
+    //           setMarkdown((preMardown) => {
+    //             return preMardown + `![image](${downloadURL})`;
+    //             });
+    //           );
+    //         });
+    //       }
+    //     );
+    //   };
+
+    const autoUploadImage = useMemo(() => {
+     return {
+       uploadImage: true,
+    //    imageUploadFunction,
+     };
+   }, []);
   
-    useEffect(() => {
-      const preview = document.getElementById('preview');
-      if (preview) {
-        preview.innerHTML = DOMPurify.sanitize(markdownit().render(markdownValue));
-      }
-    }, [markdownValue]);
+    // useEffect(() => {
+    //   const preview = document.getElementById('preview');
+    //   if (preview) {
+    //     preview.innerHTML = DOMPurify.sanitize(markdownit().render(markdownValue));
+    //   }
+    // }, [markdownValue]);
 
     return (
         <Dialog
@@ -178,13 +219,14 @@ function EditKnowledgeDialog(props) {
                                         <InputLabel htmlFor="outlined-adornment-amount">タイトル</InputLabel>
                                         <OutlinedInput
                                             id="outlined-adornment-amount"
-                                            startAdornment={<InputAdornment position="start">Shopify APIのアクセス制限について</InputAdornment>}
+                                            color="info"
+                                            startAdornment={<InputAdornment position="start">ShopifyのAPI呼び出し回数について</InputAdornment>}
                                             label="タイトル"
                                         />
                                     </FormControl>
                                 </Box>
                                 <Box sx={{ mt: 1, mb: 1, ml: 1 }}>
-                                    <SimpleMde value={markdownValue} onChange={onChange}/>
+                                    <SimpleMde value={markdownValue} onChange={onChange} options={autoUploadImage}/>
                                 </Box>
                             </Box>
                         </Stack>
@@ -194,7 +236,7 @@ function EditKnowledgeDialog(props) {
                         <Button variant="outlined" onClick={handleClose} autoFocus>OK</Button>
                     </DialogActions>
                 </Grid>
-                <Grid item xs={6} sx={{borderLeft: 1, borderColor: "#ccc"}}>
+                <Grid item xs={6} sx={{borderLeft: 1, borderColor: "#ccc", overflowY: "scroll" }}>
                     <FormControl fullWidth sx={{ p: 3 }}>
                         <Box dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(markdownit().render(markdownValue))}}></Box>
                     </FormControl>
