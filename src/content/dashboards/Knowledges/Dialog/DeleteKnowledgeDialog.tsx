@@ -41,9 +41,7 @@ function DeleteKnowledgeDialog(props) {
         </DialogContent>
         <DialogActions>
           <Button variant="outlined" onClick={handleClose}>Cancel</Button>
-          <Button variant="outlined" onClick={handleClose} autoFocus>
-            OK
-          </Button>
+          <Button variant="outlined" onClick={handleClose} autoFocus>Delete</Button>
         </DialogActions>
         </Dialog>
     );

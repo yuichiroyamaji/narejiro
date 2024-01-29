@@ -166,7 +166,7 @@ function EditKnowledgeDialog(props) {
                                 <Box>
                                     <TextField
                                         required
-                                        id="standard-required"
+                                        id="editKnowledgeKnowledgeId"
                                         label="なれっじID"
                                         variant="filled"
                                         value={knowledgeId}
@@ -179,12 +179,11 @@ function EditKnowledgeDialog(props) {
                                 </Box>
                                 <Box>
                                     <TextField
-                                        id="outlined-select-currency"
+                                        id="editKnowledgeCat1"
                                         select
                                         label="カテゴリー(大)"
                                         value={cat1}
                                         onChange={handleCat1Change}
-                                        // helperText="Please select your currency"
                                     >
                                         {cat1s.map((option) => (
                                         <MenuItem key={option.value} value={option.value}>
@@ -193,12 +192,11 @@ function EditKnowledgeDialog(props) {
                                         ))}
                                     </TextField>
                                     <TextField
-                                        id="outlined-select-currency"
+                                        id="editKnowledgeCat2"
                                         select
                                         label="カテゴリー(中)"
                                         value={cat2}
                                         onChange={handleCat2Change}
-                                        // helperText="Please select your currency"
                                     >
                                         {cat1s.map((option) => (
                                         <MenuItem key={option.value} value={option.value}>
@@ -207,12 +205,11 @@ function EditKnowledgeDialog(props) {
                                         ))}
                                     </TextField>
                                     <TextField
-                                        id="outlined-select-currency"
+                                        id="editKnowledgeCat3"
                                         select
                                         label="カテゴリー(小)"
                                         value={cat3}
                                         onChange={handleCat3Change}
-                                        // helperText="Please select your currency"
                                     >
                                         {cat1s.map((option) => (
                                         <MenuItem key={option.value} value={option.value}>
@@ -226,14 +223,14 @@ function EditKnowledgeDialog(props) {
                                         sx={{mt: 3, ml: 1 }}
                                         onClick={() => handleCreateCatOpen()}
                                     >
-                                        Create カテゴリ
+                                        Create カテゴリー
                                     </Button>
                                 </Box>
                                 <Box>
                                     <FormControl fullWidth sx={{ m: 1 }}>
                                         <InputLabel htmlFor="outlined-adornment-amount">タイトル</InputLabel>
                                         <OutlinedInput
-                                            id="outlined-adornment-amount"
+                                            id="editKnowledgeTitle"
                                             color="info"
                                             startAdornment={<InputAdornment position="start">ShopifyのAPI呼び出し回数について</InputAdornment>}
                                             label="タイトル"
@@ -248,13 +245,13 @@ function EditKnowledgeDialog(props) {
                     </DialogContent>
                     <DialogActions>
                         <Button variant="outlined" onClick={handleClose}>Cancel</Button>
-                        <Button variant="outlined" onClick={handleClose} autoFocus>OK</Button>
+                        <Button variant="outlined" onClick={handleClose} autoFocus>Edit</Button>
                     </DialogActions>
                 </Grid>
-                <Grid item xs={6} sx={{borderLeft: 1, borderColor: "#ccc", overflow: "auto", overflowY: "scroll" }}>
-                    <FormControl fullWidth sx={{ p: 3 }}>
+                <Grid item xs={6} sx={{pl: 3, pt: 3, pr: 1, pb: 1, borderLeft: 1, borderColor: "#ccc" }}>
+                    <Box sx={{ height: 730, overflowY: "scroll" }}>
                         <div dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(markdownit().render(markdownValue))}}></div>
-                    </FormControl>
+                    </Box>
                 </Grid>
             </Grid>
             <CreateCategoryDialog

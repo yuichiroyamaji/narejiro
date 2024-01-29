@@ -27,13 +27,24 @@ type CreateCategoryDialogProps = {
 
 const CreateCategoryDialog = (props) => {
     const { onClose, open } = props;
+    const [catType, setCatType] = useState<number>(0);
+    const [existingCat, setExistingCat] = useState<number>(0);
     const [cat1, setCat1] = useState<number>(0);
     const [cat2, setCat2] = useState<number>(0);
     const [cat3, setCat3] = useState<number>(0);
+    const [catName, setCatName] = useState<string>();
     const theme = useTheme();
 
     const handleSubClose = () => {
         onClose();
+    };
+
+    const handleCatTypeChange = (event) => {
+        setCatType(event.target.value);
+    };
+
+    const handleExistingCatChange = (event) => {
+        setExistingCat(event.target.value);
     };
 
     const handleCat1Change = (event) => {
@@ -48,7 +59,22 @@ const CreateCategoryDialog = (props) => {
         setCat3(event.target.value);
     };
     
-    const cat1s = [
+    const catTypeSample = [
+        {
+          value: '1',
+          label: 'カテゴリー(大)'
+        },
+        {
+          value: '2',
+          label: 'カテゴリー(中)'
+        },
+        {
+          value: '3',
+          label: 'カテゴリー(小)'
+        }
+      ];
+    
+    const catSample = [
         {
           value: '1',
           label: 'Mall'
@@ -78,11 +104,11 @@ const CreateCategoryDialog = (props) => {
     return (
         <Dialog
             fullWidth
-            maxWidth="md"
+            maxWidth="sm"
             onClose={handleSubClose}
             open={open}
         >
-            <DialogTitle sx={{color: theme.palette.primary.main, fontWeight: "bold"}}>カテゴリ作成</DialogTitle>
+            <DialogTitle sx={{color: theme.palette.primary.main, fontWeight: "bold"}}>カテゴリー作成</DialogTitle>
             <DialogContent dividers>
                 <Stack direction="row">
                     <Box
@@ -96,54 +122,64 @@ const CreateCategoryDialog = (props) => {
                     >
                         <Box>
                             <TextField
-                                id="outlined-select-currency"
+                                id="createCatCatType"
                                 select
-                                label="カテゴリー(大)"
+                                label="カテゴリータイプ"
+                                value={catType}
+                                onChange={handleCatTypeChange}
+                            >
+                                {catTypeSample.map((option) => (
+                                <MenuItem key={option.value} value={option.value}>
+                                    {option.label}
+                                </MenuItem>
+                                ))}
+                            </TextField>
+                            <TextField
+                                id="createCatExistingCat"
+                                variant="filled"
+                                select
+                                label="既存カテゴリー確認"
+                                value={existingCat}
+                                // onChange={handleExistingCatChange}
+                                sx={{bgColor: "#ccc" }}
+                            >
+                                {catSample.map((option) => (
+                                <MenuItem key={option.value} value={option.value} disabled>
+                                    {option.label}
+                                </MenuItem>
+                                ))}
+                            </TextField>
+                        </Box>
+                        <Box>
+                            <TextField
+                                id="createCatParentCat"
+                                select
+                                label="親カテゴリー"
                                 value={cat1}
                                 onChange={handleCat1Change}
-                                // helperText="Please select your currency"
                             >
-                                {cat1s.map((option) => (
+                                {catSample.map((option) => (
                                 <MenuItem key={option.value} value={option.value}>
                                     {option.label}
                                 </MenuItem>
                                 ))}
                             </TextField>
-                            <TextField
-                                id="outlined-select-currency"
-                                select
-                                label="カテゴリー(中)"
-                                value={cat2}
-                                onChange={handleCat2Change}
-                                // helperText="Please select your currency"
-                            >
-                                {cat1s.map((option) => (
-                                <MenuItem key={option.value} value={option.value}>
-                                    {option.label}
-                                </MenuItem>
-                                ))}
-                            </TextField>
-                            <TextField
-                                id="outlined-select-currency"
-                                select
-                                label="カテゴリー(小)"
-                                value={cat3}
-                                onChange={handleCat3Change}
-                                // helperText="Please select your currency"
-                            >
-                                {cat1s.map((option) => (
-                                <MenuItem key={option.value} value={option.value}>
-                                    {option.label}
-                                </MenuItem>
-                                ))}
-                            </TextField>
+                            <FormControl sx={{ m: 1 }}>
+                                <InputLabel htmlFor="outlined-adornment-amount">カテゴリー名</InputLabel>
+                                <OutlinedInput
+                                    id="createCatCatName"
+                                    startAdornment={<InputAdornment position="start">出荷実績連携</InputAdornment>}
+                                    label="カテゴリー名"
+                                    color="primary"
+                                />
+                            </FormControl>
                         </Box>
                     </Box>
                 </Stack>
             </DialogContent>
             <DialogActions>
                 <Button variant="outlined" onClick={handleSubClose}>Cancel</Button>
-                <Button variant="outlined" onClick={handleSubClose} autoFocus>OK</Button>
+                <Button variant="outlined" onClick={handleSubClose} autoFocus>Create</Button>
             </DialogActions>
         </Dialog>
     );
