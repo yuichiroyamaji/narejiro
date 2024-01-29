@@ -32,14 +32,14 @@ import {
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 
-interface RecentKnowledgesTableProps {
+type RecentKnowledgesTableProps = {
   className?: string;
   KnowledgeDatas: KnowledgeData[];
-}
+};
 
-interface Filters {
+type Filters = {
   status?: KnowledgeDataStatus;
-}
+};
 
 const getStatusLabel = (KnowledgeDataStatus: KnowledgeDataStatus): JSX.Element => {
   const map = {
@@ -89,10 +89,10 @@ const RecentKnowledgesTable: FC<RecentKnowledgesTableProps> = ({ KnowledgeDatas 
   const [selectedKnowledgeDatas, setSelectedKnowledgeDatas] = useState<number[]>(
     []
   );
-  const [editOpen, setEditOpen] = useState(false);
-  const [deleteOpen, setDeleteOpen] = useState(false);
-  const [displayOpen, setDisplayOpen] = useState(false);
-  const [knowledgeId, setknowledgeId] = useState(0);
+  const [editOpen, setEditOpen] = useState<boolean>(false);
+  const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
+  const [displayOpen, setDisplayOpen] = useState<boolean>(false);
+  const [knowledgeId, setknowledgeId] = useState<number>(0);
   const selectedBulkActions = selectedKnowledgeDatas.length > 0;
   const [page, setPage] = useState<number>(0);
   const [limit, setLimit] = useState<number>(5);
@@ -119,17 +119,17 @@ const RecentKnowledgesTable: FC<RecentKnowledgesTableProps> = ({ KnowledgeDatas 
     }
   ];
 
-  const handleClickEditOpen = (knowledgeId) => {
+  const handleClickEditOpen = (knowledgeId: number) => {
     setEditOpen(true);
     setknowledgeId(knowledgeId);
   };
 
-  const handleClickDeleteOpen = (knowledgeId) => {
+  const handleClickDeleteOpen = (knowledgeId: number) => {
     setDeleteOpen(true);
     setknowledgeId(knowledgeId);
   };
 
-  const handleClickDisplayOpen = (knowledgeId) => {
+  const handleClickDisplayOpen = (knowledgeId: number) => {
     setDisplayOpen(true);
     setknowledgeId(knowledgeId);
   };

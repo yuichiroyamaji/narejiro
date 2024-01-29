@@ -10,12 +10,18 @@ import {
 
 import Dialog from '@mui/material/Dialog';
 
+type DeleteKnowledgeDialogProps = {
+    onClose: boolean;
+    knowledgeId: number;
+    open: boolean;
+};
+
 function DeleteKnowledgeDialog(props) {
     const { onClose, knowledgeId, open } = props;
     const theme = useTheme();
 
     const handleClose = () => {
-        onClose(knowledgeId);
+        onClose();
     };
 
     return (

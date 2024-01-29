@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import CreateCategoryDialog from './CreateCategoryDialog'
 import SimpleMde from 'react-simplemde-editor';
 import 'easymde/dist/easymde.min.css';
 import markdownit from 'markdown-it';
@@ -30,12 +31,19 @@ const DEFAULT_TEXT = [
   'ShopifyのAPI（REST API）では、契約プランによって呼び出し回数の制限が異なる。',
 ];
 
+type EditKnowledgeDialogProps = {
+    onClose: boolean;
+    knowledgeId: number;
+    open: boolean;
+};
+
 function EditKnowledgeDialog(props) {
     const { onClose, knowledgeId, open } = props;
+    const [createCatOpen, setCreateCatOpen] = useState<boolean>(false);
     const [markdownValue, setMarkdownValue] = useState<string>(DEFAULT_TEXT.join('\n'));
-    const [cat1, setCat1] = useState();
-    const [cat2, setCat2] = useState();
-    const [cat3, setCat3] = useState();
+    const [cat1, setCat1] = useState<number>(0);
+    const [cat2, setCat2] = useState<number>(0);
+    const [cat3, setCat3] = useState<number>(0);
     const theme = useTheme();
 
     const cat1s = [
@@ -66,7 +74,11 @@ function EditKnowledgeDialog(props) {
     ];
 
     const handleClose = () => {
-        onClose(knowledgeId);
+        onClose();
+    };
+
+    const handleSubClose = () => {
+        setCreateCatOpen(false);
     };
 
     const handleCat1Change = (event) => {
@@ -80,6 +92,10 @@ function EditKnowledgeDialog(props) {
     const handleCat3Change = (event) => {
         setCat3(event.target.value);
     };
+
+    const handleCreateCatOpen = () => {
+        setCreateCatOpen(true);
+    }
   
     const onChange = (value: string) => {
       setMarkdownValue(value);
@@ -207,12 +223,11 @@ function EditKnowledgeDialog(props) {
                                     <Button
                                         size="small"
                                         variant="contained"
-                                        // color="success"
                                         sx={{mt: 3, ml: 1 }}
+                                        onClick={() => handleCreateCatOpen()}
                                     >
                                         Create カテゴリ
                                     </Button>
-                                    {/* <PlusIcon color="secondary" /> */}
                                 </Box>
                                 <Box>
                                     <FormControl fullWidth sx={{ m: 1 }}>
@@ -236,12 +251,16 @@ function EditKnowledgeDialog(props) {
                         <Button variant="outlined" onClick={handleClose} autoFocus>OK</Button>
                     </DialogActions>
                 </Grid>
-                <Grid item xs={6} sx={{borderLeft: 1, borderColor: "#ccc", overflowY: "scroll" }}>
+                <Grid item xs={6} sx={{borderLeft: 1, borderColor: "#ccc", overflow: "auto", overflowY: "scroll" }}>
                     <FormControl fullWidth sx={{ p: 3 }}>
-                        <Box dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(markdownit().render(markdownValue))}}></Box>
+                        <div dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(markdownit().render(markdownValue))}}></div>
                     </FormControl>
                 </Grid>
             </Grid>
+            <CreateCategoryDialog
+                open={createCatOpen}
+                onClose={handleSubClose}
+            />
         </Dialog>
     );
 }

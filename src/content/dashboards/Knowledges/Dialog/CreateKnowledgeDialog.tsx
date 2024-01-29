@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import CreateCategoryDialog from './CreateCategoryDialog'
 import {
   Box,
   Grid,
@@ -51,12 +52,18 @@ const DEFAULT_TEXT = [
   '[Linkは大カッコで囲った文字が表示文字、その後のカッコ内の部分がURL、さらにダブルクオート内はホバー時の表示文字](http://google.com "Google Home")',
 ];
 
+type CreateKnowledgeDialogProps = {
+    onClose: boolean;
+    open: boolean;
+};
+
 function CreateKnowledgeDialog(props) {
-    const { onClose, knowledgeId, open } = props;
+    const { onClose, open } = props;
+    const [createCatOpen, setCreateCatOpen] = useState<boolean>(false);
     const [markdownValue, setMarkdownValue] = useState<string>(DEFAULT_TEXT.join('\n'));
-    const [cat1, setCat1] = useState();
-    const [cat2, setCat2] = useState();
-    const [cat3, setCat3] = useState();
+    const [cat1, setCat1] = useState<number>(0);
+    const [cat2, setCat2] = useState<number>(0);
+    const [cat3, setCat3] = useState<number>(0);
     const theme = useTheme();
 
     const cat1s = [
@@ -87,7 +94,11 @@ function CreateKnowledgeDialog(props) {
     ];
 
     const handleClose = () => {
-        onClose(knowledgeId);
+        onClose();
+    };
+
+    const handleSubClose = () => {
+        setCreateCatOpen(false);
     };
 
     const handleCat1Change = (event) => {
@@ -101,9 +112,13 @@ function CreateKnowledgeDialog(props) {
     const handleCat3Change = (event) => {
         setCat3(event.target.value);
     };
+
+    const handleCreateCatOpen = () => {
+        setCreateCatOpen(true);
+    }
   
     const onChange = (value: string) => {
-      setMarkdownValue(value);
+        setMarkdownValue(value);
     };
 
     return (
@@ -173,12 +188,11 @@ function CreateKnowledgeDialog(props) {
                                     <Button
                                         size="small"
                                         variant="contained"
-                                        // color="success"
                                         sx={{mt: 3, ml: 1 }}
+                                        onClick={() => handleCreateCatOpen()}
                                     >
                                         Create カテゴリ
                                     </Button>
-                                    {/* <PlusIcon color="secondary" /> */}
                                 </Box>
                                 <Box>
                                     <FormControl fullWidth sx={{ m: 1 }}>
@@ -202,11 +216,15 @@ function CreateKnowledgeDialog(props) {
                     </DialogActions>
                 </Grid>
                 <Grid item xs={6} sx={{borderLeft: 1, borderColor: "#ccc", overflowY: "scroll" }}>
-                    <FormControl fullWidth sx={{ p: 3 }}>
-                        <Box dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(markdownit().render(markdownValue))}}></Box>
-                    </FormControl>
+                    <Box sx={{ p: 3 }}>
+                        <div dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(markdownit().render(markdownValue))}}></div>
+                    </Box>
                 </Grid>
             </Grid>
+            <CreateCategoryDialog
+                open={createCatOpen}
+                onClose={handleSubClose}
+            />
         </Dialog>
     );
 }
