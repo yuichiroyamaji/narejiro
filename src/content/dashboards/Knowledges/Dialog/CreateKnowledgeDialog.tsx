@@ -1,30 +1,12 @@
 import { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import CreateCategoryDialog from './CreateCategoryDialog'
 import {
-  Box,
-  Grid,
-  Stack,
-  Button,
-  useTheme
-} from '@mui/material';
-
-import TextField from '@mui/material/TextField';
-import MenuItem from '@mui/material/MenuItem';
-import DialogTitle from '@mui/material/DialogTitle';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
-
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
-import InputAdornment from '@mui/material/InputAdornment';
-import FormControl from '@mui/material/FormControl';
-
-import SimpleMde from 'react-simplemde-editor';
+    Box, Grid, Stack, Button, useTheme,
+    FormControl, InputLabel, InputAdornment, OutlinedInput, TextField, MenuItem, IconButton, CloseIcon,
+    Dialog, DialogTitle, DialogContent, DialogActions,
+    SimpleMde, markdownit, DOMPurify,
+    CreateCategoryDialog
+} from '../index';
 import 'easymde/dist/easymde.min.css';
-import markdownit from 'markdown-it';
-import DOMPurify from 'dompurify';
 
 const DEFAULT_TEXT = [
   '# h1: 文頭に「シャープ + スペース」',
@@ -53,18 +35,17 @@ const DEFAULT_TEXT = [
 ];
 
 type CreateKnowledgeDialogProps = {
-    onClose: boolean;
     open: boolean;
+    onClose: (value: boolean) => void;
 };
 
-function CreateKnowledgeDialog(props) {
-    const { onClose, open } = props;
+const CreateKnowledgeDialog = ({ open, onClose }: CreateKnowledgeDialogProps) => {
+
     const [createCatOpen, setCreateCatOpen] = useState<boolean>(false);
     const [markdownValue, setMarkdownValue] = useState<string>(DEFAULT_TEXT.join('\n'));
     const [cat1, setCat1] = useState<number>(0);
     const [cat2, setCat2] = useState<number>(0);
     const [cat3, setCat3] = useState<number>(0);
-    const theme = useTheme();
 
     const cat1s = [
       {
@@ -93,8 +74,10 @@ function CreateKnowledgeDialog(props) {
       }
     ];
 
+    const theme = useTheme();
+
     const handleClose = () => {
-        onClose();
+        onClose(false);
     };
 
     const handleSubClose = () => {
@@ -117,7 +100,7 @@ function CreateKnowledgeDialog(props) {
         setCreateCatOpen(true);
     }
   
-    const onChange = (value: string) => {
+    const handleMarkdownValueChange = (value: string) => {
         setMarkdownValue(value);
     };
 
@@ -202,7 +185,19 @@ function CreateKnowledgeDialog(props) {
                                     </FormControl>
                                 </Box>
                                 <Box sx={{ mt: 1, mb: 1, ml: 1 }}>
-                                    <SimpleMde value={markdownValue} onChange={onChange}/>
+                                    <IconButton
+                                    aria-label="close"
+                                    onClick={handleClose}
+                                    sx={{
+                                        position: 'absolute',
+                                        right: 8,
+                                        top: 8,
+                                        color: (theme) => theme.palette.grey[500],
+                                    }}
+                                    >
+                                        <CloseIcon />
+                                    </IconButton>
+                                    <SimpleMde value={markdownValue} onChange={handleMarkdownValueChange}/>
                                 </Box>
                             </Box>
                         </Stack>
@@ -225,11 +220,5 @@ function CreateKnowledgeDialog(props) {
         </Dialog>
     );
 }
-
-CreateKnowledgeDialog.propTypes = {
-    onClose: PropTypes.func.isRequired,
-    open: PropTypes.bool.isRequired,
-    knowledgeId: PropTypes.number.isRequired
-};
 
 export default CreateKnowledgeDialog;

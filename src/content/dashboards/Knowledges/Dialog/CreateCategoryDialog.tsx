@@ -1,63 +1,23 @@
-import {useState, useEffect} from 'react';
-import PropTypes from 'prop-types';
+import { useState, useEffect } from 'react';
 import {
-  Box,
-  Grid,
-  Stack,
-  Button,
-  useTheme
-} from '@mui/material';
-
-import TextField from '@mui/material/TextField';
-import MenuItem from '@mui/material/MenuItem';
-import DialogTitle from '@mui/material/DialogTitle';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
-
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
-import InputAdornment from '@mui/material/InputAdornment';
-import FormControl from '@mui/material/FormControl';
-
+    Box, Stack, Button, useTheme,
+    FormControl, InputLabel, InputAdornment, OutlinedInput, TextField, MenuItem, IconButton, CloseIcon,
+    Dialog, DialogTitle, DialogContent, DialogActions,
+} from '../index';
 
 type CreateCategoryDialogProps = {
-
+    open: boolean;
+    onClose: () => void;
 };
 
-const CreateCategoryDialog = (props) => {
-    const { onClose, open } = props;
+const CreateCategoryDialog = ({ open, onClose }: CreateCategoryDialogProps) => {
+
     const [catType, setCatType] = useState<number>(0);
     const [existingCat, setExistingCat] = useState<number>(0);
     const [cat1, setCat1] = useState<number>(0);
     const [cat2, setCat2] = useState<number>(0);
     const [cat3, setCat3] = useState<number>(0);
     const [catName, setCatName] = useState<string>();
-    const theme = useTheme();
-
-    const handleSubClose = () => {
-        onClose();
-    };
-
-    const handleCatTypeChange = (event) => {
-        setCatType(event.target.value);
-    };
-
-    const handleExistingCatChange = (event) => {
-        setExistingCat(event.target.value);
-    };
-
-    const handleCat1Change = (event) => {
-        setCat1(event.target.value);
-    };
-
-    const handleCat2Change = (event) => {
-        setCat2(event.target.value);
-    };
-
-    const handleCat3Change = (event) => {
-        setCat3(event.target.value);
-    };
     
     const catTypeSample = [
         {
@@ -101,6 +61,32 @@ const CreateCategoryDialog = (props) => {
         }
       ];
 
+    const theme = useTheme();
+
+    const handleSubClose = () => {
+        onClose();
+    };
+
+    const handleCatTypeChange = (event) => {
+        setCatType(event.target.value);
+    };
+
+    const handleExistingCatChange = (event) => {
+        setExistingCat(event.target.value);
+    };
+
+    const handleCat1Change = (event) => {
+        setCat1(event.target.value);
+    };
+
+    const handleCat2Change = (event) => {
+        setCat2(event.target.value);
+    };
+
+    const handleCat3Change = (event) => {
+        setCat3(event.target.value);
+    };
+
     return (
         <Dialog
             fullWidth
@@ -109,6 +95,18 @@ const CreateCategoryDialog = (props) => {
             open={open}
         >
             <DialogTitle sx={{color: theme.palette.primary.main, fontWeight: "bold"}}>カテゴリー作成</DialogTitle>
+            <IconButton
+            aria-label="close"
+            onClick={handleSubClose}
+            sx={{
+                position: 'absolute',
+                right: 8,
+                top: 8,
+                color: (theme) => theme.palette.grey[500],
+            }}
+            >
+            <CloseIcon />
+            </IconButton>
             <DialogContent dividers>
                 <Stack direction="row">
                     <Box
@@ -183,7 +181,6 @@ const CreateCategoryDialog = (props) => {
             </DialogActions>
         </Dialog>
     );
-
 }
 
 export default CreateCategoryDialog;

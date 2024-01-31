@@ -1,17 +1,5 @@
 import { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import SimpleMde from 'react-simplemde-editor';
-import 'easymde/dist/easymde.min.css';
-import markdownit from 'markdown-it';
-import DOMPurify from 'dompurify';
-
-import {
-  Box,
-  Grid,
-  useTheme
-} from '@mui/material';
-import Dialog from '@mui/material/Dialog';
-import FormControl from '@mui/material/FormControl';
+import { Box, Grid, useTheme, IconButton, CloseIcon, Dialog, markdownit, DOMPurify } from '../index';
 
 const DEFAULT_TEXT = [
   '# h1: 文頭に「シャープ + スペース」',
@@ -39,13 +27,19 @@ const DEFAULT_TEXT = [
   '[Linkは大カッコで囲った文字が表示文字、その後のカッコ内の部分がURL、さらにダブルクオート内はホバー時の表示文字](http://google.com "Google Home")',
 ];
 
-function DisplayKnowledgeDialog(props) {
-    const { onClose, knowledgeId, open } = props;
+type DisplayKnowledgeDialogProps = {
+  open: boolean;
+  onClose: () => void;
+  knowledgeId: number;
+};
+
+const DisplayKnowledgeDialog = ({ open, onClose, knowledgeId }: DisplayKnowledgeDialogProps) => {
+
     const [markdownValue, setMarkdownValue] = useState<string>(DEFAULT_TEXT.join('\n'));
     const theme = useTheme();
 
     const handleClose = () => {
-        onClose(knowledgeId);
+        onClose();
     };
 
     return (
@@ -57,7 +51,19 @@ function DisplayKnowledgeDialog(props) {
         >
             <Grid container>
                 <Grid item>
-                    <Box sx={{ m: 3, height: 760, overflowY: "scroll", width: "100%" }}>
+                    <Box sx={{ m: 3, width: "100%" }}>
+                        <IconButton
+                        aria-label="close"
+                        onClick={handleClose}
+                        sx={{
+                            position: 'absolute',
+                            right: 8,
+                            top: 8,
+                            color: (theme) => theme.palette.grey[500],
+                        }}
+                        >
+                            <CloseIcon />
+                        </IconButton>
                         <div dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(markdownit().render(markdownValue))}}></div>
                     </Box>
                 </Grid>
@@ -65,11 +71,5 @@ function DisplayKnowledgeDialog(props) {
         </Dialog>
     );
 }
-
-DisplayKnowledgeDialog.propTypes = {
-    onClose: PropTypes.func.isRequired,
-    open: PropTypes.bool.isRequired,
-    knowledgeId: PropTypes.number.isRequired
-};
 
 export default DisplayKnowledgeDialog;

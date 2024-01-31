@@ -1,23 +1,18 @@
-import PropTypes from 'prop-types';
-import Button from '@mui/material/Button';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
+import { useState, useEffect } from 'react';
 import {
-  useTheme
-} from '@mui/material';
-
-import Dialog from '@mui/material/Dialog';
+    Button, useTheme,
+    IconButton, CloseIcon,
+    Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions
+} from '../index';
 
 type DeleteKnowledgeDialogProps = {
-    onClose: boolean;
-    knowledgeId: number;
     open: boolean;
+    onClose: () => void;
+    knowledgeId: number;
 };
 
-function DeleteKnowledgeDialog(props) {
-    const { onClose, knowledgeId, open } = props;
+const DeleteKnowledgeDialog = ({ open, onClose, knowledgeId }: DeleteKnowledgeDialogProps) => {
+
     const theme = useTheme();
 
     const handleClose = () => {
@@ -28,14 +23,24 @@ function DeleteKnowledgeDialog(props) {
         <Dialog 
             onClose={handleClose} 
             open={open}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
         >
-        <DialogTitle id="alert-dialog-title" sx={{color: theme.palette.primary.main, fontWeight: "bold"}}>
+        <DialogTitle sx={{color: theme.palette.primary.main, fontWeight: "bold"}}>
             なれっじ削除
         </DialogTitle>
+        <IconButton
+          aria-label="close"
+          onClick={handleClose}
+          sx={{
+              position: 'absolute',
+              right: 8,
+              top: 8,
+              color: (theme) => theme.palette.grey[500],
+          }}
+          >
+          <CloseIcon />
+        </IconButton>
         <DialogContent dividers>
-          <DialogContentText id="alert-dialog-description">
+          <DialogContentText>
             【なれっじID : {knowledgeId} 】を削除します。よろしいですか？
           </DialogContentText>
         </DialogContent>
@@ -46,11 +51,5 @@ function DeleteKnowledgeDialog(props) {
         </Dialog>
     );
 }
-
-DeleteKnowledgeDialog.propTypes = {
-    onClose: PropTypes.func.isRequired,
-    open: PropTypes.bool.isRequired,
-    knowledgeId: PropTypes.number.isRequired
-};
 
 export default DeleteKnowledgeDialog;
