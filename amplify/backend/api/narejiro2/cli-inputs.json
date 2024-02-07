@@ -1,7 +1,7 @@
 {
   "version": 1,
   "serviceConfiguration": {
-    "apiName": "narejiro",
+    "apiName": "narejiro2",
     "serviceName": "AppSync",
     "defaultAuthType": {
       "mode": "API_KEY",

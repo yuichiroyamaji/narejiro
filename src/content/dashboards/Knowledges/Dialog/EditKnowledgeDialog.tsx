@@ -1,12 +1,11 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, ChangeEvent } from 'react';
 import {
     Box, Grid, Stack, Button, useTheme,
     FormControl, InputLabel, InputAdornment, OutlinedInput, TextField, MenuItem, IconButton, CloseIcon,
     Dialog, DialogTitle, DialogContent, DialogActions,
-    SimpleMde, markdownit, DOMPurify,
+    markdownit, DOMPurify,
     CreateCategoryDialog
 } from '../index';
-import 'easymde/dist/easymde.min.css';
 
 const DEFAULT_TEXT = [
   '## ShopifyのAPI呼び出し回数について',
@@ -14,13 +13,13 @@ const DEFAULT_TEXT = [
   'ShopifyのAPI（REST API）では、契約プランによって呼び出し回数の制限が異なる。',
 ];
 
-type EditKnowledgeDialogProps = {
+interface EditKnowledgeDialogProps {
     open: boolean;
     onClose: () => void;
     knowledgeId: number;
-};
+}
 
-const EditKnowledgeDialog = ({ open, onClose, knowledgeId }: EditKnowledgeDialogProps) => {
+function EditKnowledgeDialog ({ open, onClose, knowledgeId }: EditKnowledgeDialogProps) {
 
     const [createCatOpen, setCreateCatOpen] = useState<boolean>(false);
     const [markdownValue, setMarkdownValue] = useState<string>(DEFAULT_TEXT.join('\n'));
@@ -80,8 +79,12 @@ const EditKnowledgeDialog = ({ open, onClose, knowledgeId }: EditKnowledgeDialog
         setCreateCatOpen(true);
     }
   
-    const handleMarkdownValueChange = (value: string) => {
-      setMarkdownValue(value);
+    // const handleMarkdownValueChange = (value: string) => {
+    //   setMarkdownValue(value);
+    // };
+    
+    const handleMarkdownValueChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+        setMarkdownValue(event.target.value);
     };
 
     // const imageUploadFunction = (file) => {
@@ -200,9 +203,9 @@ const EditKnowledgeDialog = ({ open, onClose, knowledgeId }: EditKnowledgeDialog
                                         ))}
                                     </TextField>
                                     <Button
-                                        size="small"
+                                        size="medium"
                                         variant="contained"
-                                        sx={{mt: 3, ml: 1 }}
+                                        sx={{mt: 2.3, ml: 1 }}
                                         onClick={() => handleCreateCatOpen()}
                                     >
                                         Create カテゴリー
@@ -219,15 +222,27 @@ const EditKnowledgeDialog = ({ open, onClose, knowledgeId }: EditKnowledgeDialog
                                         />
                                     </FormControl>
                                 </Box>
-                                <Box sx={{ mt: 1, mb: 1, ml: 1 }}>
-                                    <SimpleMde value={markdownValue} onChange={handleMarkdownValueChange} options={autoUploadImage}/>
+                                <Box>
+                                    <TextField
+                                        id="editKnowledgeContent"
+                                        label="コンテンツ"
+                                        placeholder="MultiLine with rows: 2 and rowsMax: 4"
+                                        variant="outlined"
+                                        multiline
+                                        rows={15}
+                                        maxRows={Infinity}
+                                        value={markdownValue}
+                                        onChange={handleMarkdownValueChange}
+                                        style = {{width: "100%"}}
+                                        fullWidth
+                                    />
                                 </Box>
                             </Box>
                         </Stack>
                     </DialogContent>
                     <DialogActions>
                         <Button variant="outlined" onClick={handleClose}>Cancel</Button>
-                        <Button variant="outlined" onClick={handleClose} autoFocus>Edit</Button>
+                        <Button variant="contained" onClick={handleClose} autoFocus>Edit</Button>
                     </DialogActions>
                 </Grid>
                 <Grid item xs={6} sx={{pl: 3, pt: 3, pr: 1, pb: 1, borderLeft: 1, borderColor: "#ccc" }}>

@@ -5,12 +5,12 @@ import {
     Dialog, DialogTitle, DialogContent, DialogActions,
 } from '../index';
 
-type CreateCategoryDialogProps = {
+interface CreateCategoryDialogProps {
     open: boolean;
     onClose: () => void;
-};
+}
 
-const CreateCategoryDialog = ({ open, onClose }: CreateCategoryDialogProps) => {
+function CreateCategoryDialog ({ open, onClose }: CreateCategoryDialogProps) {
 
     const [catType, setCatType] = useState<number>(0);
     const [existingCat, setExistingCat] = useState<number>(0);
@@ -177,7 +177,7 @@ const CreateCategoryDialog = ({ open, onClose }: CreateCategoryDialogProps) => {
             </DialogContent>
             <DialogActions>
                 <Button variant="outlined" onClick={handleSubClose}>Cancel</Button>
-                <Button variant="outlined" onClick={handleSubClose} autoFocus>Create</Button>
+                <Button variant="contained" onClick={handleSubClose} autoFocus>Create</Button>
             </DialogActions>
         </Dialog>
     );

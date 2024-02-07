@@ -5,13 +5,13 @@ import {
     Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions
 } from '../index';
 
-type DeleteKnowledgeDialogProps = {
+interface DeleteKnowledgeDialogProps {
     open: boolean;
     onClose: () => void;
     knowledgeId: number;
-};
+}
 
-const DeleteKnowledgeDialog = ({ open, onClose, knowledgeId }: DeleteKnowledgeDialogProps) => {
+function DeleteKnowledgeDialog ({ open, onClose, knowledgeId }: DeleteKnowledgeDialogProps) {
 
     const theme = useTheme();
 
@@ -46,7 +46,7 @@ const DeleteKnowledgeDialog = ({ open, onClose, knowledgeId }: DeleteKnowledgeDi
         </DialogContent>
         <DialogActions>
           <Button variant="outlined" onClick={handleClose}>Cancel</Button>
-          <Button variant="outlined" onClick={handleClose} autoFocus>Delete</Button>
+          <Button variant="contained" onClick={handleClose} autoFocus>Delete</Button>
         </DialogActions>
         </Dialog>
     );

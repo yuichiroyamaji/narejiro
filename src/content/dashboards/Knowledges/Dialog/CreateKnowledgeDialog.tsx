@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ChangeEvent } from 'react';
 import {
     Box, Grid, Stack, Button, useTheme,
     FormControl, InputLabel, InputAdornment, OutlinedInput, TextField, MenuItem, IconButton, CloseIcon,
@@ -34,12 +34,12 @@ const DEFAULT_TEXT = [
   '[Linkは大カッコで囲った文字が表示文字、その後のカッコ内の部分がURL、さらにダブルクオート内はホバー時の表示文字](http://google.com "Google Home")',
 ];
 
-type CreateKnowledgeDialogProps = {
+interface CreateKnowledgeDialogProps {
     open: boolean;
     onClose: (value: boolean) => void;
-};
+}
 
-const CreateKnowledgeDialog = ({ open, onClose }: CreateKnowledgeDialogProps) => {
+function CreateKnowledgeDialog ({ open, onClose }: CreateKnowledgeDialogProps) {
 
     const [createCatOpen, setCreateCatOpen] = useState<boolean>(false);
     const [markdownValue, setMarkdownValue] = useState<string>(DEFAULT_TEXT.join('\n'));
@@ -100,8 +100,12 @@ const CreateKnowledgeDialog = ({ open, onClose }: CreateKnowledgeDialogProps) =>
         setCreateCatOpen(true);
     }
   
-    const handleMarkdownValueChange = (value: string) => {
+    const handleMarkdownValueSMEChange = (value: string) => {
         setMarkdownValue(value);
+    };
+    
+    const handleMarkdownValueChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+        setMarkdownValue(event.target.value);
     };
 
     return (
@@ -166,9 +170,9 @@ const CreateKnowledgeDialog = ({ open, onClose }: CreateKnowledgeDialogProps) =>
                                         ))}
                                     </TextField>
                                     <Button
-                                        size="small"
+                                        size="medium"
                                         variant="contained"
-                                        sx={{mt: 3, ml: 1 }}
+                                        sx={{mt: 2.3, ml: 1 }}
                                         onClick={() => handleCreateCatOpen()}
                                     >
                                         Create カテゴリー
@@ -184,31 +188,44 @@ const CreateKnowledgeDialog = ({ open, onClose }: CreateKnowledgeDialogProps) =>
                                         />
                                     </FormControl>
                                 </Box>
-                                <Box sx={{ mt: 1, mb: 1, ml: 1 }}>
-                                    <IconButton
-                                    aria-label="close"
-                                    onClick={handleClose}
-                                    sx={{
-                                        position: 'absolute',
-                                        right: 8,
-                                        top: 8,
-                                        color: (theme) => theme.palette.grey[500],
-                                    }}
-                                    >
-                                        <CloseIcon />
-                                    </IconButton>
-                                    <SimpleMde value={markdownValue} onChange={handleMarkdownValueChange}/>
+                                <Box>
+                                    {/* <TextField
+                                        id="editKnowledgeContent"
+                                        label="コンテンツ"
+                                        placeholder="MultiLine with rows: 2 and rowsMax: 4"
+                                        variant="outlined"
+                                        multiline
+                                        rows={18}
+                                        maxRows={Infinity}
+                                        value={markdownValue}
+                                        onChange={handleMarkdownValueChange}
+                                        style = {{width: "100%"}}
+                                        fullWidth
+                                    /> */}
+                                    <SimpleMde value={markdownValue} onChange={handleMarkdownValueSMEChange}/>
                                 </Box>
                             </Box>
                         </Stack>
                     </DialogContent>
                     <DialogActions>
                         <Button variant="outlined" onClick={handleClose}>Cancel</Button>
-                        <Button variant="outlined" onClick={handleClose} autoFocus>Create</Button>
+                        <Button variant="contained" onClick={handleClose} autoFocus>Create</Button>
                     </DialogActions>
                 </Grid>
-                <Grid item xs={6} sx={{pl: 3, pt: 1, pr: 1, pb: 1, borderLeft: 1, borderColor: "#ccc" }}>
-                    <Box sx={{ height: 760, overflowY: "scroll" }}>
+                <Grid item xs={6} sx={{pl: 3, pt: 3, pr: 1, pb: 1, borderLeft: 1, borderColor: "#ccc" }}>
+                    <Box sx={{ height: 730, overflowY: "scroll" }}>
+                        <IconButton
+                        aria-label="close"
+                        onClick={handleClose}
+                        sx={{
+                            position: 'absolute',
+                            right: 8,
+                            top: 8,
+                            color: (theme) => theme.palette.grey[500],
+                        }}
+                        >
+                        <CloseIcon />
+                        </IconButton>
                         <div dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(markdownit().render(markdownValue))}}></div>
                     </Box>
                 </Grid>
