@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import {
+    API_URL, API_KEY, DEFAULT_TEXT,
     Box, Grid, Stack, Button, useTheme,
     FormControl, InputLabel, InputAdornment, OutlinedInput, TextField, MenuItem, IconButton, CloseIcon,
     Dialog, DialogTitle, DialogContent, DialogActions,
@@ -8,38 +9,12 @@ import {
 } from '../index';
 import 'easymde/dist/easymde.min.css';
 
-const DEFAULT_TEXT = [
-  '# h1: 文頭に「シャープ + スペース」',
-  '---',
-  '_【italic文字表記】文字列の前後にアンダースコアを記述する_',
-  '## h2: 文頭に「シャープx2 + スペース」',
-  '---',
-  '**【bold(太字)表記】文字列の前後にアスタリスクx2を記述する**',
-  '### h3: 文頭に「シャープx3 + スペース」',
-  '---',
-  '~~【取り消し線表記】文字列の前後に波じるしx2を記述する~~',
-  '#### h4: 文頭に「シャープx4 + スペース」',
-  '---',
-  '` 【引用ハイライト】文字列の前後にバッククオートを記述する `',
-  '##### h5: 文頭に「シャープx5 + スペース」',
-  '---',
-  '``` \n【引用ハイライト】複数行記述する時はバッククオートx3、\n及び「バックスラッシュ + n」を文全体の前後と、各行の最後に記述する\n ```',
-  '###### h6: 文頭に「シャープx6 + スペース」',
-  '---',
-  '- 【箇条書き（黒丸）】文頭にハイフン',
-  '- 【箇条書き（黒丸）】文頭にハイフン',
-  '1. 【箇条書き（数字）】文頭に「数字 + . + スペース」',
-  '1. 【箇条書き（数字）】文頭に「数字 + . + スペース」',
-  '---',
-  '[Linkは大カッコで囲った文字が表示文字、その後のカッコ内の部分がURL、さらにダブルクオート内はホバー時の表示文字](http://google.com "Google Home")',
-];
-
-type CreateKnowledgeDialogProps = {
+interface CreateKnowledgeDialogProps {
     open: boolean;
     onClose: (value: boolean) => void;
-};
+}
 
-const CreateKnowledgeDialog = ({ open, onClose }: CreateKnowledgeDialogProps) => {
+function CreateKnowledgeDialog ({ open, onClose }: CreateKnowledgeDialogProps) {
 
     const [createCatOpen, setCreateCatOpen] = useState<boolean>(false);
     const [markdownValue, setMarkdownValue] = useState<string>(DEFAULT_TEXT.join('\n'));
@@ -166,9 +141,8 @@ const CreateKnowledgeDialog = ({ open, onClose }: CreateKnowledgeDialogProps) =>
                                         ))}
                                     </TextField>
                                     <Button
-                                        size="small"
                                         variant="contained"
-                                        sx={{mt: 3, ml: 1 }}
+                                        sx={{mt: 2, ml: 1 }}
                                         onClick={() => handleCreateCatOpen()}
                                     >
                                         Create カテゴリー
@@ -204,7 +178,7 @@ const CreateKnowledgeDialog = ({ open, onClose }: CreateKnowledgeDialogProps) =>
                     </DialogContent>
                     <DialogActions>
                         <Button variant="outlined" onClick={handleClose}>Cancel</Button>
-                        <Button variant="outlined" onClick={handleClose} autoFocus>Create</Button>
+                        <Button variant="contained" onClick={handleClose} autoFocus>Create</Button>
                     </DialogActions>
                 </Grid>
                 <Grid item xs={6} sx={{pl: 3, pt: 1, pr: 1, pb: 1, borderLeft: 1, borderColor: "#ccc" }}>

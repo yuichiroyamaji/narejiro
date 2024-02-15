@@ -1,33 +1,20 @@
-/* tslint:disable */
-/* eslint-disable */
-// this is an auto generated file. This will be overwritten
 
-export const getTodo = /* GraphQL */ `
-  query GetTodo($id: ID!) {
-    getTodo(id: $id) {
-      id
-      name
-      description
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const listTodos = /* GraphQL */ `
-  query ListTodos(
-    $filter: ModelTodoFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listTodos(filter: $filter, limit: $limit, nextToken: $nextToken) {
+export const listKnowledges = /* GraphQL */ `
+query listNarejiroDevTables {
+    listNarejiroDevTables(filter: {PK: {eq: "KWL#data"}}) {
       items {
-        id
-        name
-        description
+        PK
+        SK
+        cat1
+        cat2
+        cat3
+        title
+        content
         createdAt
+        createdBy
         updatedAt
+        updatedBy
       }
-      nextToken
     }
   }
-`;
+  `

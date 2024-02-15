@@ -1,9 +1,5 @@
-/* tslint:disable */
-/* eslint-disable */
-// this is an auto generated file. This will be overwritten
-
 export const createTodo = /* GraphQL */ `
-  mutation CreateTodo(
+mutation CreateTodo(
     $input: CreateTodoInput!
     $condition: ModelTodoConditionInput
   ) {
@@ -13,34 +9,25 @@ export const createTodo = /* GraphQL */ `
       description
       createdAt
       updatedAt
+      __typename
     }
   }
 `;
-export const updateTodo = /* GraphQL */ `
-  mutation UpdateTodo(
-    $input: UpdateTodoInput!
-    $condition: ModelTodoConditionInput
-  ) {
-    updateTodo(input: $input, condition: $condition) {
-      id
-      name
-      description
+
+export const deleteKnowledge = (knowledgeId: number) => /* GraphQL */`
+mutation deleteNarejiro {
+    deleteNarejiroDevTable(input: {PK: "KWL#data", SK: ${knowledgeId}}) {
+      PK
+      SK
+      cat1
+      cat2
+      cat3
+      title
+      content
       createdAt
+      createdBy
       updatedAt
+      updatedBy
     }
   }
-`;
-export const deleteTodo = /* GraphQL */ `
-  mutation DeleteTodo(
-    $input: DeleteTodoInput!
-    $condition: ModelTodoConditionInput
-  ) {
-    deleteTodo(input: $input, condition: $condition) {
-      id
-      name
-      description
-      createdAt
-      updatedAt
-    }
-  }
-`;
+`

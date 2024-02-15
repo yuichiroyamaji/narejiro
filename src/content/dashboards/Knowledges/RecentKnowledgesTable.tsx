@@ -6,28 +6,10 @@ import { KnowledgeData, KnowledgeDataStatus } from 'src/models/knowledges';
 import EditKnowledgeDialog from './Dialog/EditKnowledgeDialog';
 import DeleteKnowledgeDialog from './Dialog/DeleteKnowledgeDialog';
 import DisplayKnowledgeDialog from './Dialog/DisplayKnowledgeDialog';
-
 import {
-  Tooltip,
-  Divider,
-  Box,
-  FormControl,
-  InputLabel,
-  Card,
-  Checkbox,
-  IconButton,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TablePagination,
-  TableRow,
-  TableContainer,
-  Select,
-  MenuItem,
-  Typography,
-  useTheme,
-  CardHeader,
+  Tooltip, Divider, Box,FormControl, InputLabel, Card, Checkbox, IconButton,
+  Table, TableBody, TableCell, TableHead, TablePagination, TableRow, TableContainer,
+  Select, MenuItem, Typography, useTheme, CardHeader,
 } from '@mui/material';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';

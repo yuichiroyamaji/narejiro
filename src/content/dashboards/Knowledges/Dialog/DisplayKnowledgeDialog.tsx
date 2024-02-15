@@ -27,13 +27,13 @@ const DEFAULT_TEXT = [
   '[Linkは大カッコで囲った文字が表示文字、その後のカッコ内の部分がURL、さらにダブルクオート内はホバー時の表示文字](http://google.com "Google Home")',
 ];
 
-type DisplayKnowledgeDialogProps = {
+interface DisplayKnowledgeDialogProps {
   open: boolean;
   onClose: () => void;
   knowledgeId: number;
-};
+}
 
-const DisplayKnowledgeDialog = ({ open, onClose, knowledgeId }: DisplayKnowledgeDialogProps) => {
+function DisplayKnowledgeDialog ({ open, onClose, knowledgeId }: DisplayKnowledgeDialogProps) {
 
     const [markdownValue, setMarkdownValue] = useState<string>(DEFAULT_TEXT.join('\n'));
     const theme = useTheme();

@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import {
+    API_URL, API_KEY, DEFAULT_TEXT,
     Box, Grid, Stack, Button, useTheme,
     FormControl, InputLabel, InputAdornment, OutlinedInput, TextField, MenuItem, IconButton, CloseIcon,
     Dialog, DialogTitle, DialogContent, DialogActions,
@@ -8,19 +9,13 @@ import {
 } from '../index';
 import 'easymde/dist/easymde.min.css';
 
-const DEFAULT_TEXT = [
-  '## ShopifyのAPI呼び出し回数について',
-  '---',
-  'ShopifyのAPI（REST API）では、契約プランによって呼び出し回数の制限が異なる。',
-];
-
-type EditKnowledgeDialogProps = {
+interface EditKnowledgeDialogProps {
     open: boolean;
     onClose: () => void;
     knowledgeId: number;
-};
+}
 
-const EditKnowledgeDialog = ({ open, onClose, knowledgeId }: EditKnowledgeDialogProps) => {
+function EditKnowledgeDialog ({ open, onClose, knowledgeId }: EditKnowledgeDialogProps) {
 
     const [createCatOpen, setCreateCatOpen] = useState<boolean>(false);
     const [markdownValue, setMarkdownValue] = useState<string>(DEFAULT_TEXT.join('\n'));
@@ -200,9 +195,8 @@ const EditKnowledgeDialog = ({ open, onClose, knowledgeId }: EditKnowledgeDialog
                                         ))}
                                     </TextField>
                                     <Button
-                                        size="small"
                                         variant="contained"
-                                        sx={{mt: 3, ml: 1 }}
+                                        sx={{mt: 2, ml: 1 }}
                                         onClick={() => handleCreateCatOpen()}
                                     >
                                         Create カテゴリー
@@ -227,7 +221,7 @@ const EditKnowledgeDialog = ({ open, onClose, knowledgeId }: EditKnowledgeDialog
                     </DialogContent>
                     <DialogActions>
                         <Button variant="outlined" onClick={handleClose}>Cancel</Button>
-                        <Button variant="outlined" onClick={handleClose} autoFocus>Edit</Button>
+                        <Button variant="contained" onClick={handleClose} autoFocus>Edit</Button>
                     </DialogActions>
                 </Grid>
                 <Grid item xs={6} sx={{pl: 3, pt: 3, pr: 1, pb: 1, borderLeft: 1, borderColor: "#ccc" }}>
