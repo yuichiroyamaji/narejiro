@@ -1,12 +1,8 @@
 import { useState, useEffect } from 'react';
 import {
-  API_URL, API_KEY,
-  Card, 
-  axios,
-  listKnowledges
+  API_URL, API_KEY, Card, axios,
+  RecentKnowledgesTable, KnowledgeData, listKnowledges
 } from './index';
-import { KnowledgeData } from 'src/models/knowledges';
-import RecentKnowledgesTable from './RecentKnowledgesTable';
 
 function RecentKnowledges() {
   const [data, setData] = useState<KnowledgeData[]>();

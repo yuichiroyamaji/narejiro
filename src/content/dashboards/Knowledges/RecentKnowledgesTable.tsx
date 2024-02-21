@@ -1,27 +1,11 @@
-import { FC, ChangeEvent, useState } from 'react';
-import PropTypes from 'prop-types';
-import BulkActions from './BulkActions';
-import Label from 'src/components/Label';
-import { KnowledgeData, KnowledgeDataStatus } from 'src/models/knowledges';
-import EditKnowledgeDialog from './Dialog/EditKnowledgeDialog';
-import DeleteKnowledgeDialog from './Dialog/DeleteKnowledgeDialog';
-import DisplayKnowledgeDialog from './Dialog/DisplayKnowledgeDialog';
+import { ChangeEvent, useState } from 'react';
 import {
+  PropTypes, BulkActions, Label, KnowledgeData, KnowledgeDataStatus,
+  EditKnowledgeDialog, DeleteKnowledgeDialog, DisplayKnowledgeDialog,
   Tooltip, Divider, Box,FormControl, InputLabel, Card, Checkbox, IconButton,
   Table, TableBody, TableCell, TableHead, TablePagination, TableRow, TableContainer,
-  Select, MenuItem, Typography, useTheme, CardHeader,
-} from '@mui/material';
-import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
-import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
-
-type RecentKnowledgesTableProps = {
-  className?: string;
-  KnowledgeDatas: KnowledgeData[];
-};
-
-type Filters = {
-  status?: KnowledgeDataStatus;
-};
+  Select, MenuItem, Typography, useTheme, CardHeader, EditTwoToneIcon, DeleteTwoToneIcon
+} from './index';
 
 const getStatusLabel = (KnowledgeDataStatus: KnowledgeDataStatus): JSX.Element => {
   const map = {
@@ -38,10 +22,12 @@ const getStatusLabel = (KnowledgeDataStatus: KnowledgeDataStatus): JSX.Element =
       color: 'warning'
     }
   };
-
   const { text, color }: any = map[KnowledgeDataStatus];
-
   return <Label color={color}>{text}</Label>;
+};
+
+type Filters = {
+  status?: KnowledgeDataStatus;
 };
 
 const applyFilters = (
@@ -67,10 +53,14 @@ const applyPagination = (
   return KnowledgeDatas.slice(page * limit, page * limit + limit);
 };
 
-const RecentKnowledgesTable: FC<RecentKnowledgesTableProps> = ({ KnowledgeDatas }) => {
-  const [selectedKnowledgeDatas, setSelectedKnowledgeDatas] = useState<number[]>(
-    []
-  );
+interface RecentKnowledgesTableProps {
+  className?: string;
+  KnowledgeDatas: KnowledgeData[];
+}
+
+function RecentKnowledgesTable ({ KnowledgeDatas } : RecentKnowledgesTableProps) {
+
+  const [selectedKnowledgeDatas, setSelectedKnowledgeDatas] = useState<number[]>([]);
   const [editOpen, setEditOpen] = useState<boolean>(false);
   const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
   const [displayOpen, setDisplayOpen] = useState<boolean>(false);
@@ -78,27 +68,21 @@ const RecentKnowledgesTable: FC<RecentKnowledgesTableProps> = ({ KnowledgeDatas 
   const selectedBulkActions = selectedKnowledgeDatas.length > 0;
   const [page, setPage] = useState<number>(0);
   const [limit, setLimit] = useState<number>(5);
-  const [filters, setFilters] = useState<Filters>({
-    status: null
-  });
+  const [filters, setFilters] = useState<Filters>({status: null});
 
+  const filteredKnowledgeDatas = applyFilters(KnowledgeDatas, filters);
+  const paginatedKnowledgeDatas = applyPagination(filteredKnowledgeDatas, page, limit);
+  const selectedSomeKnowledgeDatas =
+    selectedKnowledgeDatas.length > 0 &&
+    selectedKnowledgeDatas.length < KnowledgeDatas.length;
+  const selectedAllKnowledgeDatas =
+    selectedKnowledgeDatas.length === KnowledgeDatas.length;
+  const theme = useTheme();
   const statusOptions = [
-    {
-      id: 'all',
-      name: 'All'
-    },
-    {
-      id: 'completed',
-      name: 'Completed'
-    },
-    {
-      id: 'pending',
-      name: 'Pending'
-    },
-    {
-      id: 'failed',
-      name: 'Failed'
-    }
+    {id: 'all',name: 'All'},
+    {id: 'completed',name: 'Completed'},
+    {id: 'pending',name: 'Pending'},
+    {id: 'failed',name: 'Failed'}
   ];
 
   const handleClickEditOpen = (knowledgeId: number) => {
@@ -124,11 +108,9 @@ const RecentKnowledgesTable: FC<RecentKnowledgesTableProps> = ({ KnowledgeDatas 
 
   const handleStatusChange = (e: ChangeEvent<HTMLInputElement>): void => {
     let value = null;
-
     if (e.target.value !== 'all') {
       value = e.target.value;
     }
-
     setFilters((prevFilters) => ({
       ...prevFilters,
       status: value
@@ -168,19 +150,6 @@ const RecentKnowledgesTable: FC<RecentKnowledgesTableProps> = ({ KnowledgeDatas 
   const handleLimitChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setLimit(parseInt(event.target.value));
   };
-
-  const filteredKnowledgeDatas = applyFilters(KnowledgeDatas, filters);
-  const paginatedKnowledgeDatas = applyPagination(
-    filteredKnowledgeDatas,
-    page,
-    limit
-  );
-  const selectedSomeKnowledgeDatas =
-    selectedKnowledgeDatas.length > 0 &&
-    selectedKnowledgeDatas.length < KnowledgeDatas.length;
-  const selectedAllKnowledgeDatas =
-    selectedKnowledgeDatas.length === KnowledgeDatas.length;
-  const theme = useTheme();
 
   return (
     <Card>

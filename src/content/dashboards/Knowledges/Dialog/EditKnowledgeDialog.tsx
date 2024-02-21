@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, ChangeEvent } from 'react';
 import {
     API_URL, API_KEY, DEFAULT_TEXT,
     Box, Grid, Stack, Button, useTheme,
@@ -74,9 +74,9 @@ function EditKnowledgeDialog ({ open, onClose, knowledgeId }: EditKnowledgeDialo
     const handleCreateCatOpen = () => {
         setCreateCatOpen(true);
     }
-  
-    const handleMarkdownValueChange = (value: string) => {
-      setMarkdownValue(value);
+
+    const handleMarkdownValueChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+        setMarkdownValue(event.target.value);
     };
 
     // const imageUploadFunction = (file) => {
@@ -213,8 +213,20 @@ function EditKnowledgeDialog ({ open, onClose, knowledgeId }: EditKnowledgeDialo
                                         />
                                     </FormControl>
                                 </Box>
-                                <Box sx={{ mt: 1, mb: 1, ml: 1 }}>
-                                    <SimpleMde value={markdownValue} onChange={handleMarkdownValueChange} options={autoUploadImage}/>
+                                <Box>
+                                    <TextField
+                                        id="editKnowledgeContent"
+                                        label="コンテンツ"
+                                        placeholder="MultiLine with rows: 2 and rowsMax: 4"
+                                        variant="outlined"
+                                        multiline
+                                        rows={15}
+                                        maxRows={Infinity}
+                                        value={markdownValue}
+                                        onChange={handleMarkdownValueChange}
+                                        style = {{width: "100%"}}
+                                        fullWidth
+                                    />
                                 </Box>
                             </Box>
                         </Stack>
