@@ -1,17 +1,13 @@
 import { useState, useEffect, useMemo, ChangeEvent } from 'react';
 import {
+    API_URL, API_KEY, DEFAULT_TEXT,
     Box, Grid, Stack, Button, useTheme,
     FormControl, InputLabel, InputAdornment, OutlinedInput, TextField, MenuItem, IconButton, CloseIcon,
     Dialog, DialogTitle, DialogContent, DialogActions,
-    markdownit, DOMPurify,
+    SimpleMde, markdownit, DOMPurify,
     CreateCategoryDialog
 } from '../index';
-
-const DEFAULT_TEXT = [
-  '## ShopifyのAPI呼び出し回数について',
-  '---',
-  'ShopifyのAPI（REST API）では、契約プランによって呼び出し回数の制限が異なる。',
-];
+import 'easymde/dist/easymde.min.css';
 
 interface EditKnowledgeDialogProps {
     open: boolean;
@@ -78,11 +74,7 @@ function EditKnowledgeDialog ({ open, onClose, knowledgeId }: EditKnowledgeDialo
     const handleCreateCatOpen = () => {
         setCreateCatOpen(true);
     }
-  
-    // const handleMarkdownValueChange = (value: string) => {
-    //   setMarkdownValue(value);
-    // };
-    
+
     const handleMarkdownValueChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
         setMarkdownValue(event.target.value);
     };
@@ -203,9 +195,8 @@ function EditKnowledgeDialog ({ open, onClose, knowledgeId }: EditKnowledgeDialo
                                         ))}
                                     </TextField>
                                     <Button
-                                        size="medium"
                                         variant="contained"
-                                        sx={{mt: 2.3, ml: 1 }}
+                                        sx={{mt: 2, ml: 1 }}
                                         onClick={() => handleCreateCatOpen()}
                                     >
                                         Create カテゴリー

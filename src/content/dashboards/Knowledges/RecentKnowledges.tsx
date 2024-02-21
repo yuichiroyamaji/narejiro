@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+<<<<<<< HEAD
 import { Card } from '@mui/material';
 import { KnowledgeData } from 'src/models/knowledges';
 import RecentKnowledgesTable from './RecentKnowledgesTable';
@@ -56,6 +57,24 @@ function RecentKnowledges() {
     } catch (error) {
         console.error('Error fetching todos:', error);
     }
+=======
+import {
+  API_URL, API_KEY, Card, axios,
+  RecentKnowledgesTable, KnowledgeData, listKnowledges
+} from './index';
+
+function RecentKnowledges() {
+  const [data, setData] = useState<KnowledgeData[]>();
+  
+  const listNarejiroDevTables = async() => {
+    const res = await axios.post(
+      API_URL,
+      { query: listKnowledges },
+      { headers: {"x-api-key": API_KEY} }
+    );
+    console.log(res.data.data.listNarejiroDevTables.items);
+    setData(res.data.data.listNarejiroDevTables.items);
+>>>>>>> 68c61947c39eaa0882b0a6a5f59010378b7cf760
   };
 
   useEffect(() => {
@@ -71,3 +90,4 @@ function RecentKnowledges() {
 }
 
 export default RecentKnowledges;
+

@@ -1,5 +1,6 @@
-import { useState, useEffect, ChangeEvent } from 'react';
+import { useState, useEffect } from 'react';
 import {
+    API_URL, API_KEY, DEFAULT_TEXT,
     Box, Grid, Stack, Button, useTheme,
     FormControl, InputLabel, InputAdornment, OutlinedInput, TextField, MenuItem, IconButton, CloseIcon,
     Dialog, DialogTitle, DialogContent, DialogActions,
@@ -7,32 +8,6 @@ import {
     CreateCategoryDialog
 } from '../index';
 import 'easymde/dist/easymde.min.css';
-
-const DEFAULT_TEXT = [
-  '# h1: 文頭に「シャープ + スペース」',
-  '---',
-  '_【italic文字表記】文字列の前後にアンダースコアを記述する_',
-  '## h2: 文頭に「シャープx2 + スペース」',
-  '---',
-  '**【bold(太字)表記】文字列の前後にアスタリスクx2を記述する**',
-  '### h3: 文頭に「シャープx3 + スペース」',
-  '---',
-  '~~【取り消し線表記】文字列の前後に波じるしx2を記述する~~',
-  '#### h4: 文頭に「シャープx4 + スペース」',
-  '---',
-  '` 【引用ハイライト】文字列の前後にバッククオートを記述する `',
-  '##### h5: 文頭に「シャープx5 + スペース」',
-  '---',
-  '``` \n【引用ハイライト】複数行記述する時はバッククオートx3、\n及び「バックスラッシュ + n」を文全体の前後と、各行の最後に記述する\n ```',
-  '###### h6: 文頭に「シャープx6 + スペース」',
-  '---',
-  '- 【箇条書き（黒丸）】文頭にハイフン',
-  '- 【箇条書き（黒丸）】文頭にハイフン',
-  '1. 【箇条書き（数字）】文頭に「数字 + . + スペース」',
-  '1. 【箇条書き（数字）】文頭に「数字 + . + スペース」',
-  '---',
-  '[Linkは大カッコで囲った文字が表示文字、その後のカッコ内の部分がURL、さらにダブルクオート内はホバー時の表示文字](http://google.com "Google Home")',
-];
 
 interface CreateKnowledgeDialogProps {
     open: boolean;
@@ -100,12 +75,8 @@ function CreateKnowledgeDialog ({ open, onClose }: CreateKnowledgeDialogProps) {
         setCreateCatOpen(true);
     }
   
-    const handleMarkdownValueSMEChange = (value: string) => {
+    const handleMarkdownValueChange = (value: string) => {
         setMarkdownValue(value);
-    };
-    
-    const handleMarkdownValueChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-        setMarkdownValue(event.target.value);
     };
 
     return (
@@ -170,9 +141,8 @@ function CreateKnowledgeDialog ({ open, onClose }: CreateKnowledgeDialogProps) {
                                         ))}
                                     </TextField>
                                     <Button
-                                        size="medium"
                                         variant="contained"
-                                        sx={{mt: 2.3, ml: 1 }}
+                                        sx={{mt: 2, ml: 1 }}
                                         onClick={() => handleCreateCatOpen()}
                                     >
                                         Create カテゴリー
@@ -188,21 +158,20 @@ function CreateKnowledgeDialog ({ open, onClose }: CreateKnowledgeDialogProps) {
                                         />
                                     </FormControl>
                                 </Box>
-                                <Box>
-                                    {/* <TextField
-                                        id="editKnowledgeContent"
-                                        label="コンテンツ"
-                                        placeholder="MultiLine with rows: 2 and rowsMax: 4"
-                                        variant="outlined"
-                                        multiline
-                                        rows={18}
-                                        maxRows={Infinity}
-                                        value={markdownValue}
-                                        onChange={handleMarkdownValueChange}
-                                        style = {{width: "100%"}}
-                                        fullWidth
-                                    /> */}
-                                    <SimpleMde value={markdownValue} onChange={handleMarkdownValueSMEChange}/>
+                                <Box sx={{ mt: 1, mb: 1, ml: 1 }}>
+                                    <IconButton
+                                    aria-label="close"
+                                    onClick={handleClose}
+                                    sx={{
+                                        position: 'absolute',
+                                        right: 8,
+                                        top: 8,
+                                        color: (theme) => theme.palette.grey[500],
+                                    }}
+                                    >
+                                        <CloseIcon />
+                                    </IconButton>
+                                    <SimpleMde value={markdownValue} onChange={handleMarkdownValueChange}/>
                                 </Box>
                             </Box>
                         </Stack>
@@ -212,20 +181,8 @@ function CreateKnowledgeDialog ({ open, onClose }: CreateKnowledgeDialogProps) {
                         <Button variant="contained" onClick={handleClose} autoFocus>Create</Button>
                     </DialogActions>
                 </Grid>
-                <Grid item xs={6} sx={{pl: 3, pt: 3, pr: 1, pb: 1, borderLeft: 1, borderColor: "#ccc" }}>
-                    <Box sx={{ height: 730, overflowY: "scroll" }}>
-                        <IconButton
-                        aria-label="close"
-                        onClick={handleClose}
-                        sx={{
-                            position: 'absolute',
-                            right: 8,
-                            top: 8,
-                            color: (theme) => theme.palette.grey[500],
-                        }}
-                        >
-                        <CloseIcon />
-                        </IconButton>
+                <Grid item xs={6} sx={{pl: 3, pt: 1, pr: 1, pb: 1, borderLeft: 1, borderColor: "#ccc" }}>
+                    <Box sx={{ height: 760, overflowY: "scroll" }}>
                         <div dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(markdownit().render(markdownValue))}}></div>
                     </Box>
                 </Grid>
