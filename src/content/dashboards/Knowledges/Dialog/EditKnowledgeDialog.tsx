@@ -1,6 +1,6 @@
-import { useState, useEffect, useMemo, ChangeEvent } from 'react';
+import { useState, useEffect, useMemo, ChangeEvent, DragEvent } from 'react';
 import {
-    API_URL, API_KEY, DEFAULT_TEXT,
+    API_URL, API_KEY, DEFAULT_TEXT, KnowledgeData,
     Box, Grid, Stack, Button, useTheme,
     FormControl, InputLabel, InputAdornment, OutlinedInput, TextField, MenuItem, IconButton, CloseIcon,
     Dialog, DialogTitle, DialogContent, DialogActions,
@@ -8,17 +8,19 @@ import {
     CreateCategoryDialog
 } from '../index';
 import 'easymde/dist/easymde.min.css';
+// import { S3 } from 'aws-sdk';
 
 interface EditKnowledgeDialogProps {
     open: boolean;
     onClose: () => void;
-    knowledgeId: number;
+    knowledgeDataParam: KnowledgeData;
 }
 
-function EditKnowledgeDialog ({ open, onClose, knowledgeId }: EditKnowledgeDialogProps) {
+function EditKnowledgeDialog ({ open, onClose, knowledgeDataParam }: EditKnowledgeDialogProps) {
 
     const [createCatOpen, setCreateCatOpen] = useState<boolean>(false);
     const [markdownValue, setMarkdownValue] = useState<string>(DEFAULT_TEXT.join('\n'));
+    const [isDragActive, setIsDragActive] = useState<boolean>(false);
     const [cat1, setCat1] = useState<number>(0);
     const [cat2, setCat2] = useState<number>(0);
     const [cat3, setCat3] = useState<number>(0);
@@ -77,6 +79,29 @@ function EditKnowledgeDialog ({ open, onClose, knowledgeId }: EditKnowledgeDialo
 
     const handleMarkdownValueChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
         setMarkdownValue(event.target.value);
+    };
+
+    const onDragEnter = (e: DragEvent<HTMLDivElement>) => {
+      if (e.dataTransfer.items && e.dataTransfer.items.length > 0) {
+        setIsDragActive(true);
+      }
+    };
+
+    const onDragLeave = (e: DragEvent<HTMLDivElement>) => {
+      setIsDragActive(false);
+    };
+
+    const onDrop = (e: DragEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      setIsDragActive(false);
+      if (e.dataTransfer.files !== null && e.dataTransfer.files.length > 0) {
+        if (e.dataTransfer.files.length === 1) {
+          alert(e.dataTransfer.files[0].name);
+        } else {
+          alert("一度に貼り付け可能なファイル数は１つまでとなります");
+        }
+        e.dataTransfer.clearData();
+      }
     };
 
     // const imageUploadFunction = (file) => {
@@ -147,7 +172,7 @@ function EditKnowledgeDialog ({ open, onClose, knowledgeId }: EditKnowledgeDialo
                                         id="editKnowledgeKnowledgeId"
                                         label="なれっじID"
                                         variant="filled"
-                                        value={knowledgeId}
+                                        value={knowledgeDataParam.SK}
                                         InputProps={{
                                             readOnly: true
                                         }}
@@ -213,14 +238,19 @@ function EditKnowledgeDialog ({ open, onClose, knowledgeId }: EditKnowledgeDialo
                                         />
                                     </FormControl>
                                 </Box>
-                                <Box>
+                                <Box
+                                    onDragEnter={onDragEnter}
+                                    onDragLeave={onDragLeave}
+                                    onDragOver={(e) => e.preventDefault()}
+                                    onDrop={onDrop}
+                                >
                                     <TextField
                                         id="editKnowledgeContent"
                                         label="コンテンツ"
                                         placeholder="MultiLine with rows: 2 and rowsMax: 4"
                                         variant="outlined"
                                         multiline
-                                        rows={15}
+                                        rows={13}
                                         maxRows={Infinity}
                                         value={markdownValue}
                                         onChange={handleMarkdownValueChange}
@@ -237,7 +267,7 @@ function EditKnowledgeDialog ({ open, onClose, knowledgeId }: EditKnowledgeDialo
                     </DialogActions>
                 </Grid>
                 <Grid item xs={6} sx={{pl: 3, pt: 3, pr: 1, pb: 1, borderLeft: 1, borderColor: "#ccc" }}>
-                    <Box sx={{ height: 730, overflowY: "scroll" }}>
+                    <Box sx={{ height: 700, overflowY: "scroll" }}>
                         <IconButton
                         aria-label="close"
                         onClick={handleClose}

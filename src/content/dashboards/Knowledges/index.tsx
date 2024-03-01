@@ -1,5 +1,6 @@
 
 export type { KnowledgeData, KnowledgeDataStatus } from 'src/models/knowledges';
+export { KnowledgeDataDefault } from 'src/models/knowledges';
 export {listKnowledges} from 'src/graphql/queries';
 export {deleteKnowledge} from 'src/graphql/mutations';
 

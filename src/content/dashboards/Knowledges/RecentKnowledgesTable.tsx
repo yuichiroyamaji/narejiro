@@ -1,6 +1,6 @@
 import { ChangeEvent, useState } from 'react';
 import {
-  PropTypes, BulkActions, Label, KnowledgeData, KnowledgeDataStatus,
+  PropTypes, BulkActions, Label, KnowledgeData, KnowledgeDataStatus, KnowledgeDataDefault,
   EditKnowledgeDialog, DeleteKnowledgeDialog, DisplayKnowledgeDialog,
   Tooltip, Divider, Box,FormControl, InputLabel, Card, Checkbox, IconButton,
   Table, TableBody, TableCell, TableHead, TablePagination, TableRow, TableContainer,
@@ -65,6 +65,7 @@ function RecentKnowledgesTable ({ KnowledgeDatas } : RecentKnowledgesTableProps)
   const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
   const [displayOpen, setDisplayOpen] = useState<boolean>(false);
   const [knowledgeId, setknowledgeId] = useState<number>(0);
+  const [knowledgeDataParam, setKnowledgeDataParam] = useState<KnowledgeData>(KnowledgeDataDefault);
   const selectedBulkActions = selectedKnowledgeDatas.length > 0;
   const [page, setPage] = useState<number>(0);
   const [limit, setLimit] = useState<number>(5);
@@ -85,9 +86,9 @@ function RecentKnowledgesTable ({ KnowledgeDatas } : RecentKnowledgesTableProps)
     {id: 'failed',name: 'Failed'}
   ];
 
-  const handleClickEditOpen = (knowledgeId: number) => {
+  const handleClickEditOpen = (knowledgeDataParam: KnowledgeData) => {
     setEditOpen(true);
-    setknowledgeId(knowledgeId);
+    setKnowledgeDataParam(knowledgeDataParam);
   };
 
   const handleClickDeleteOpen = (knowledgeId: number) => {
@@ -313,7 +314,7 @@ function RecentKnowledgesTable ({ KnowledgeDatas } : RecentKnowledgesTableProps)
                         }}
                         color="inherit"
                         size="small"
-                        onClick={() => handleClickEditOpen(KnowledgeData.SK)}
+                        onClick={() => handleClickEditOpen(KnowledgeData)}
                       >
                         <EditTwoToneIcon fontSize="small" />
                       </IconButton>
@@ -344,9 +345,9 @@ function RecentKnowledgesTable ({ KnowledgeDatas } : RecentKnowledgesTableProps)
         onClose={handleClose}
       />
       <EditKnowledgeDialog
-        knowledgeId={knowledgeId}
         open={editOpen}
         onClose={handleClose}
+        knowledgeDataParam={knowledgeDataParam}
       />
       <DeleteKnowledgeDialog
         knowledgeId={knowledgeId}
