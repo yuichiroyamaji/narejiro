@@ -1,11 +1,8 @@
 import { useState, useEffect } from 'react';
 import {
-    API_URL, API_KEY,
-    Button, useTheme,
-    IconButton, CloseIcon,
-    Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions,
-    axios,
-    deleteKnowledge
+    graphqlApiCall, deleteKnowledgeData, graphqlApiResult,
+    Button, useTheme, IconButton, CloseIcon,
+    Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions
 } from '../index';
 
 interface DeleteKnowledgeDialogProps {
@@ -23,12 +20,10 @@ function DeleteKnowledgeDialog ({ open, onClose, knowledgeId }: DeleteKnowledgeD
     };
 
     const handleDelete = async(knowledgeId: number) => {
-      const res = await axios.post(
-        API_URL,
-        { query: deleteKnowledge(knowledgeId)},
-        { headers: {"x-api-key": API_KEY}}
-      );
-      console.log(res);
+      const res: any = await graphqlApiCall(deleteKnowledgeData(knowledgeId));
+      const result: boolean = graphqlApiResult(res.deleteNarejiroDevTable);
+      const alert_msg = result ? `【なれっじID : ${knowledgeId} 】を削除しました。` : `【なれっじID : ${knowledgeId} 】の削除に失敗しました。システム管理者に連絡してください。`;
+      alert(alert_msg);
     };
 
     return (

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import {
-    Box, Stack, Button, useTheme,
+    Box, Stack, Button, useTheme, graphqlApiCall, graphqlApiResult, listCat1s,
     FormControl, InputLabel, InputAdornment, OutlinedInput, TextField, MenuItem, IconButton, CloseIcon,
     Dialog, DialogTitle, DialogContent, DialogActions,
 } from '../index';
@@ -18,6 +18,12 @@ function CreateCategoryDialog ({ open, onClose }: CreateCategoryDialogProps) {
     const [cat2, setCat2] = useState<number>(0);
     const [cat3, setCat3] = useState<number>(0);
     const [catName, setCatName] = useState<string>();
+
+    const callApiListKnowledgeDatas = async() => {
+      const res: any = await graphqlApiCall(listCat1s);
+      const result: boolean = graphqlApiResult(res.listKnowledgeDatas.items);    
+      if(result){ };
+    };
     
     const catTypeSample = [
         {
@@ -35,6 +41,10 @@ function CreateCategoryDialog ({ open, onClose }: CreateCategoryDialogProps) {
       ];
     
     const catSample = [
+        {
+          value: '0',
+          label: '新規作成'
+        },
         {
           value: '1',
           label: 'Mall'
@@ -90,7 +100,7 @@ function CreateCategoryDialog ({ open, onClose }: CreateCategoryDialogProps) {
     return (
         <Dialog
             fullWidth
-            maxWidth="sm"
+            maxWidth="lg"
             onClose={handleSubClose}
             open={open}
         >
@@ -107,74 +117,134 @@ function CreateCategoryDialog ({ open, onClose }: CreateCategoryDialogProps) {
             >
             <CloseIcon />
             </IconButton>
-            <DialogContent dividers>
-                <Stack direction="row">
-                    <Box
-                        width="100%"
-                        component="form"
-                        sx={{
-                            '& .MuiTextField-root': { m: 1, width: '25ch' }
-                        }}
-                        noValidate
-                        autoComplete="off"
-                    >
-                        <Box>
-                            <TextField
-                                id="createCatCatType"
-                                select
-                                label="カテゴリータイプ"
-                                value={catType}
-                                onChange={handleCatTypeChange}
+                <DialogContent dividers>
+                    <Stack direction="row" sx={{pt:2, pr:1, pb:2, pl:1}}>
+                        <Stack sx={{mr:3, p:1, border: 1, borderColor:'#ccc', borderRadius:1}}>
+                            <Box sx={{ width:'12ch', color:'gray', position:'relative', top:-20, backgroundColor:'#fff' }}>
+                                カテゴリ（大）
+                            </Box>
+                            <Box
+                                width="100%"
+                                component="form"
+                                sx={{
+                                    '& .MuiTextField-root': { mb:2, width:'30ch' }
+                                }}
+                                noValidate
+                                autoComplete="off"
                             >
-                                {catTypeSample.map((option) => (
-                                <MenuItem key={option.value} value={option.value}>
-                                    {option.label}
-                                </MenuItem>
-                                ))}
-                            </TextField>
-                            <TextField
-                                id="createCatExistingCat"
-                                variant="filled"
-                                select
-                                label="既存カテゴリー確認"
-                                value={existingCat}
-                                // onChange={handleExistingCatChange}
-                                sx={{bgColor: "#ccc" }}
+                                <Box>
+                                    <TextField
+                                        id="createCatCatType"
+                                        select
+                                        label="新規作成 / 既存カテゴリ選択"
+                                        value={catType}
+                                        onChange={handleCatTypeChange}
+                                    >
+                                        {catSample.map((option) => (
+                                        <MenuItem key={option.value} value={option.value}>
+                                            {option.label}
+                                        </MenuItem>
+                                        ))}
+                                    </TextField>
+                                </Box>
+                                <Box>
+                                    <FormControl sx={{ width:'30ch' }}>
+                                        <InputLabel htmlFor="outlined-adornment-amount">登録カテゴリー名</InputLabel>
+                                        <OutlinedInput
+                                            id="createCatCatName"
+                                            startAdornment={<InputAdornment position="start">出荷実績連携</InputAdornment>}
+                                            label="カテゴリー名"
+                                            color="primary"
+                                        />
+                                    </FormControl>
+                                </Box>
+                            </Box>
+                        </Stack>                        
+                        <Stack sx={{mr:3, p:1, border: 1, borderColor:'#ccc', borderRadius:1}}>
+                            <Box sx={{ width:'12ch', color:'gray', position:'relative', top:-20, backgroundColor:'#fff' }}>
+                                カテゴリ（中）
+                            </Box>
+                            <Box
+                                width="100%"
+                                component="form"
+                                sx={{
+                                    '& .MuiTextField-root': { mb:2, width:'30ch' }
+                                }}
+                                noValidate
+                                autoComplete="off"
                             >
-                                {catSample.map((option) => (
-                                <MenuItem key={option.value} value={option.value} disabled>
-                                    {option.label}
-                                </MenuItem>
-                                ))}
-                            </TextField>
-                        </Box>
-                        <Box>
-                            <TextField
-                                id="createCatParentCat"
-                                select
-                                label="親カテゴリー"
-                                value={cat1}
-                                onChange={handleCat1Change}
+                                <Box>
+                                    <TextField
+                                        id="createCatCatType"
+                                        select
+                                        label="新規作成 / 既存カテゴリ選択"
+                                        value={catType}
+                                        onChange={handleCatTypeChange}
+                                    >
+                                        {catTypeSample.map((option) => (
+                                        <MenuItem key={option.value} value={option.value}>
+                                            {option.label}
+                                        </MenuItem>
+                                        ))}
+                                    </TextField>
+                                </Box>
+                                <Box>
+                                    <FormControl sx={{ width:'30ch' }}>
+                                        <InputLabel htmlFor="outlined-adornment-amount">登録カテゴリー名</InputLabel>
+                                        <OutlinedInput
+                                            id="createCatCatName"
+                                            startAdornment={<InputAdornment position="start">出荷実績連携</InputAdornment>}
+                                            label="カテゴリー名"
+                                            color="primary"
+                                        />
+                                    </FormControl>
+                                </Box>
+                            </Box>
+                        </Stack>
+                        
+                        <Stack sx={{p:1, border: 1, borderColor:'#ccc', borderRadius:1}}>
+                            <Box sx={{ width:'12ch', color:'gray', position:'relative', top:-20, backgroundColor:'#fff' }}>
+                                カテゴリ（小）
+                            </Box>
+                            <Box
+                                width="100%"
+                                component="form"
+                                sx={{
+                                    '& .MuiTextField-root': { mb:2, width:'30ch' }
+                                }}
+                                noValidate
+                                autoComplete="off"
                             >
-                                {catSample.map((option) => (
-                                <MenuItem key={option.value} value={option.value}>
-                                    {option.label}
-                                </MenuItem>
-                                ))}
-                            </TextField>
-                            <FormControl sx={{ m: 1 }}>
-                                <InputLabel htmlFor="outlined-adornment-amount">カテゴリー名</InputLabel>
-                                <OutlinedInput
-                                    id="createCatCatName"
-                                    startAdornment={<InputAdornment position="start">出荷実績連携</InputAdornment>}
-                                    label="カテゴリー名"
-                                    color="primary"
-                                />
-                            </FormControl>
-                        </Box>
-                    </Box>
-                </Stack>
-            </DialogContent>
+                                <Box>
+                                    <TextField
+                                        id="createCatCatType"
+                                        select
+                                        label="新規作成 / 既存カテゴリ選択"
+                                        value={catType}
+                                        onChange={handleCatTypeChange}
+                                    >
+                                        {catTypeSample.map((option) => (
+                                        <MenuItem key={option.value} value={option.value}>
+                                            {option.label}
+                                        </MenuItem>
+                                        ))}
+                                    </TextField>
+                                </Box>
+                                <Box>
+                                    <FormControl sx={{ width:'30ch' }}>
+                                        <InputLabel htmlFor="outlined-adornment-amount">登録カテゴリー名</InputLabel>
+                                        <OutlinedInput
+                                            id="createCatCatName"
+                                            startAdornment={<InputAdornment position="start">出荷実績連携</InputAdornment>}
+                                            label="カテゴリー名"
+                                            color="primary"
+                                        />
+                                    </FormControl>
+                                </Box>
+                            </Box>
+                        </Stack>
+                    </Stack>
+                </DialogContent>
             <DialogActions>
                 <Button variant="outlined" onClick={handleSubClose}>Cancel</Button>
                 <Button variant="contained" onClick={handleSubClose} autoFocus>Create</Button>

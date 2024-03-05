@@ -14,20 +14,11 @@ mutation CreateTodo(
   }
 `;
 
-export const deleteKnowledge = (knowledgeId: number) => /* GraphQL */`
-mutation deleteNarejiro {
-    deleteNarejiroDevTable(input: {PK: "KWL#data", SK: ${knowledgeId}}) {
-      PK
-      SK
-      cat1
-      cat2
-      cat3
-      title
-      content
-      createdAt
-      createdBy
-      updatedAt
-      updatedBy
-    }
+export const deleteKnowledgeData = (knowledgeId: number) => /* GraphQL */`
+mutation deleteNarejiroDevTable {
+  deleteNarejiroDevTable(input: {PK:"KWL#data", SK: ${knowledgeId}}) {
+    PK
+    SK
   }
+}
 `

@@ -1,8 +1,8 @@
-
 export type { KnowledgeData, KnowledgeDataStatus } from 'src/models/knowledges';
 export { KnowledgeDataDefault } from 'src/models/knowledges';
-export {listKnowledges} from 'src/graphql/queries';
-export {deleteKnowledge} from 'src/graphql/mutations';
+export {graphqlApiCall, graphqlApiResult} from 'src/graphql/apicall';
+export {listKnowledgeDatas, listCat1s} from 'src/graphql/queries';
+export {deleteKnowledgeData} from 'src/graphql/mutations';
 
 export {API_URL, API_KEY, DEFAULT_TEXT} from 'src/common/constants';
 
