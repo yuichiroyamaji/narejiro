@@ -1,17 +1,27 @@
 export type KnowledgeDataStatus = 'completed' | 'pending' | 'failed';
 
+type User = {
+	SK: number;
+	userName: string;
+};
+
+type Category = {
+	SK: number;
+	catName: string;
+};
+
 export interface KnowledgeData {
 	PK: string;
 	SK: number;
-	cat1: string;
-	cat2: string;
-	cat3: string;
+	cat1: Category;
+	cat2: Category;
+	cat3: Category;
 	title: string;
 	content: string;
 	createdAt: string;
-	createdBy: string;
+	createdBy: User;
 	updatedAt: string;
-	updatedBy: string;
+	updatedBy: User;
   status: KnowledgeDataStatus;
 }
 
@@ -65,15 +75,15 @@ export interface DeleteKnowledgeDataInput {
 export const KnowledgeDataDefault: KnowledgeData = {
 	PK: "",
 	SK: 0,
-	cat1: "",
-	cat2: "",
-	cat3: "",
+	cat1: {SK: 0, catName: ""},
+	cat2: {SK: 0, catName: ""},
+	cat3: {SK: 0, catName: ""},
 	title: "",
 	content: "",
 	createdAt: "",
-	createdBy: "",
+	createdBy: {SK: 0, userName: ""},
 	updatedAt: "",
-	updatedBy: "",
+	updatedBy: {SK: 0, userName: ""},
     status: "completed"
 };
 

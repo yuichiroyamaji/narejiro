@@ -246,7 +246,7 @@ function RecentKnowledgesTable ({ KnowledgeDatas } : RecentKnowledgesTableProps)
                       gutterBottom
                       noWrap
                     >
-                      {KnowledgeData.cat1}
+                      {KnowledgeData.cat1.catName}
                     </Typography>
                   </TableCell>
                   <TableCell>
@@ -256,7 +256,7 @@ function RecentKnowledgesTable ({ KnowledgeDatas } : RecentKnowledgesTableProps)
                       gutterBottom
                       noWrap
                     >
-                      {KnowledgeData.cat2}
+                      {KnowledgeData.cat2.catName}
                     </Typography>
                   </TableCell>
                   <TableCell>
@@ -266,7 +266,7 @@ function RecentKnowledgesTable ({ KnowledgeDatas } : RecentKnowledgesTableProps)
                       gutterBottom
                       noWrap
                     >
-                      {KnowledgeData.cat3}
+                      {KnowledgeData.cat3.catName}
                     </Typography>
                   </TableCell>
                   <TableCell>
@@ -293,7 +293,7 @@ function RecentKnowledgesTable ({ KnowledgeDatas } : RecentKnowledgesTableProps)
                       {KnowledgeData.createdAt}
                     </Typography>
                     <Typography variant="body2" color="text.secondary" noWrap>
-                      {KnowledgeData.createdBy}
+                      {KnowledgeData.createdBy.userName}
                     </Typography>
                   </TableCell>
                   <TableCell>
@@ -301,7 +301,7 @@ function RecentKnowledgesTable ({ KnowledgeDatas } : RecentKnowledgesTableProps)
                       {KnowledgeData.updatedAt}
                     </Typography>
                     <Typography variant="body2" color="text.secondary" noWrap>
-                      {KnowledgeData.updatedBy}
+                      {KnowledgeData.updatedBy.userName}
                     </Typography>
                   </TableCell>
                   <TableCell align="right">

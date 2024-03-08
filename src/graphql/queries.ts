@@ -4,15 +4,30 @@ query listNarejiroDevTables {
       items {
         PK
         SK
-        cat1
-        cat2
-        cat3
+        cat1 {
+          SK
+          catName
+        }
+        cat2 {
+          SK
+          catName
+        }
+        cat3 {
+          SK
+          catName
+        }
         title
         content
         createdAt
-        createdBy
+        createdBy {
+          SK
+          userName
+        }
         updatedAt
-        updatedBy
+        updatedBy {
+          SK
+          userName
+        }
     }
   }
 }
