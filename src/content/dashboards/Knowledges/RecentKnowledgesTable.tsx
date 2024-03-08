@@ -65,6 +65,7 @@ function RecentKnowledgesTable ({ KnowledgeDatas } : RecentKnowledgesTableProps)
   const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
   const [displayOpen, setDisplayOpen] = useState<boolean>(false);
   const [knowledgeId, setknowledgeId] = useState<number>(0);
+  const [knowledgeContent, setknowledgeContent] = useState<string>("");
   const [knowledgeDataParam, setKnowledgeDataParam] = useState<KnowledgeData>(KnowledgeDataDefault);
   const selectedBulkActions = selectedKnowledgeDatas.length > 0;
   const [page, setPage] = useState<number>(0);
@@ -96,9 +97,9 @@ function RecentKnowledgesTable ({ KnowledgeDatas } : RecentKnowledgesTableProps)
     setknowledgeId(knowledgeId);
   };
 
-  const handleClickDisplayOpen = (knowledgeId: number) => {
+  const handleClickDisplayOpen = (knowledgeContent: string) => {
     setDisplayOpen(true);
-    setknowledgeId(knowledgeId);
+    setknowledgeContent(knowledgeContent);
   };
 
   const handleClose = () => {
@@ -282,7 +283,7 @@ function RecentKnowledgesTable ({ KnowledgeDatas } : RecentKnowledgesTableProps)
                         color: theme.palette.primary.main,
                         textDecoration: 'underline'
                       }}
-                      onClick={() => handleClickDisplayOpen(KnowledgeData.SK)}
+                      onClick={() => handleClickDisplayOpen(KnowledgeData.content)}
                     >
                       {KnowledgeData.title}
                     </Typography>
@@ -340,7 +341,7 @@ function RecentKnowledgesTable ({ KnowledgeDatas } : RecentKnowledgesTableProps)
         </Table>
       </TableContainer>
       <DisplayKnowledgeDialog
-        knowledgeId={knowledgeId}
+        knowledgeContent={knowledgeContent}
         open={displayOpen}
         onClose={handleClose}
       />

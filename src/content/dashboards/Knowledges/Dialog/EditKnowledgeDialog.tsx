@@ -19,36 +19,45 @@ interface EditKnowledgeDialogProps {
 function EditKnowledgeDialog ({ open, onClose, knowledgeDataParam }: EditKnowledgeDialogProps) {
 
     const [createCatOpen, setCreateCatOpen] = useState<boolean>(false);
-    const [markdownValue, setMarkdownValue] = useState<string>(DEFAULT_TEXT.join('\n'));
+    const [markdownValue, setMarkdownValue] = useState<string>('');
     const [isDragActive, setIsDragActive] = useState<boolean>(false);
     const [cat1, setCat1] = useState<number>(0);
     const [cat2, setCat2] = useState<number>(0);
     const [cat3, setCat3] = useState<number>(0);
     const theme = useTheme();
 
+    // useEffect(() => {
+    //     console.log(knowledgeDataParam.content);
+    //     setMarkdownValue(knowledgeDataParam.content);
+    // }, [open]);
+
     const cat1s = [
       {
-        value: '1',
+        value: 0,
+        label: '未選択'
+      },
+      {
+        value: 1,
         label: 'Mall'
       },
       {
-        value: '2',
+        value: 2,
         label: 'Shopify'
       },
       {
-        value: '3',
+        value: 3,
         label: 'Amazon'
       },
       {
-        value: '4',
+        value: 4,
         label: 'Yahoo'
       },
       {
-        value: '5',
+        value: 5,
         label: 'Rakuten'
       },
       {
-        value: '6',
+        value: 6,
         label: 'EC-Cube'
       }
     ];
@@ -75,9 +84,9 @@ function EditKnowledgeDialog ({ open, onClose, knowledgeDataParam }: EditKnowled
 
     const handleCreateCatOpen = () => {
         setCreateCatOpen(true);
-    }
+    };
 
-    const handleMarkdownValueChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    const handleKnowledgeContentChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
         setMarkdownValue(event.target.value);
     };
 
@@ -233,7 +242,7 @@ function EditKnowledgeDialog ({ open, onClose, knowledgeDataParam }: EditKnowled
                                         <OutlinedInput
                                             id="editKnowledgeTitle"
                                             color="info"
-                                            startAdornment={<InputAdornment position="start">ShopifyのAPI呼び出し回数について</InputAdornment>}
+                                            startAdornment={<InputAdornment position="start">{knowledgeDataParam.title}</InputAdornment>}
                                             label="タイトル"
                                         />
                                     </FormControl>
@@ -251,9 +260,8 @@ function EditKnowledgeDialog ({ open, onClose, knowledgeDataParam }: EditKnowled
                                         variant="outlined"
                                         multiline
                                         rows={13}
-                                        maxRows={Infinity}
-                                        value={markdownValue}
-                                        onChange={handleMarkdownValueChange}
+                                        value={knowledgeDataParam.content}
+                                        onChange={handleKnowledgeContentChange}
                                         style = {{width: "100%"}}
                                         fullWidth
                                     />

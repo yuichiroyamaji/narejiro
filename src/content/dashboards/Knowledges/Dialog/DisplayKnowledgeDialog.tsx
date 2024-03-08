@@ -30,17 +30,21 @@ const DEFAULT_TEXT = [
 interface DisplayKnowledgeDialogProps {
   open: boolean;
   onClose: () => void;
-  knowledgeId: number;
+  knowledgeContent: string;
 }
 
-function DisplayKnowledgeDialog ({ open, onClose, knowledgeId }: DisplayKnowledgeDialogProps) {
+function DisplayKnowledgeDialog ({ open, onClose, knowledgeContent }: DisplayKnowledgeDialogProps) {
 
-    const [markdownValue, setMarkdownValue] = useState<string>(DEFAULT_TEXT.join('\n'));
+    const [markdownValue, setMarkdownValue] = useState<string>(knowledgeContent);
     const theme = useTheme();
 
     const handleClose = () => {
         onClose();
     };
+
+    useEffect(() => {
+        setMarkdownValue(knowledgeContent);
+    }, [knowledgeContent]);
 
     return (
         <Dialog

@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import {
-    Box, Stack, Button, useTheme, graphqlApiCall, graphqlApiResult, listCat1s,
+    Box, Stack, Button, useTheme, graphqlApiCall, graphqlApiResult,
     FormControl, InputLabel, InputAdornment, OutlinedInput, TextField, MenuItem, IconButton, CloseIcon,
-    Dialog, DialogTitle, DialogContent, DialogActions,
+    Dialog, DialogTitle, DialogContent, DialogActions, CAT_LIST
 } from '../index';
 
 interface CreateCategoryDialogProps {
@@ -12,77 +12,77 @@ interface CreateCategoryDialogProps {
 
 function CreateCategoryDialog ({ open, onClose }: CreateCategoryDialogProps) {
 
+    type catDataType = {
+        SK: number;
+        cat_type: number;
+        cat_name: string;
+        parent_cat_id: number;
+    };
+
     const [catType, setCatType] = useState<number>(0);
     const [existingCat, setExistingCat] = useState<number>(0);
     const [cat1, setCat1] = useState<number>(0);
     const [cat2, setCat2] = useState<number>(0);
     const [cat3, setCat3] = useState<number>(0);
+    const [cat1List, setCat1List] = useState<Array<catDataType>>([]);
+    const [cat2List, setCat2List] = useState<Array<catDataType>>([]);
+    const [cat3List, setCat3List] = useState<Array<catDataType>>([]);
+    const [cat1Disabled, setCat1Disabled] = useState<boolean>(false);
+    const [cat2Disabled, setCat2Disabled] = useState<boolean>(false);
+    const [cat3Disabled, setCat3Disabled] = useState<boolean>(false);
     const [catName, setCatName] = useState<string>();
 
-    const callApiListKnowledgeDatas = async() => {
-      const res: any = await graphqlApiCall(listCat1s);
-      const result: boolean = graphqlApiResult(res.listKnowledgeDatas.items);    
-      if(result){ };
-    };
-    
-    const catTypeSample = [
-        {
-          value: '1',
-          label: 'カテゴリー(大)'
-        },
-        {
-          value: '2',
-          label: 'カテゴリー(中)'
-        },
-        {
-          value: '3',
-          label: 'カテゴリー(小)'
+    useEffect(() => {
+        setCat1List(getCatListByCatType(1));
+        setCat2List(getEmptyCatLit());
+        setCat3List(getEmptyCatLit());
+    },[]);
+
+    useEffect(() => {
+        console.log("FUNCTION CALLED: useEffect() => cat1");
+        console.log(cat1);
+        if(cat1 === 0){
+            setCat1Disabled(false);
+            setCat2List(getEmptyCatLit());
+            setCat2Disabled(false);
+            setCat3List(getEmptyCatLit());
+            setCat3Disabled(false);
+        }else{
+            setCat1Disabled(true);
+            setCat2List(getCatListByParentCatId(cat1));
+            setCat3List(getEmptyCatLit());
         }
-      ];
-    
-    const catSample = [
-        {
-          value: '0',
-          label: '新規作成'
-        },
-        {
-          value: '1',
-          label: 'Mall'
-        },
-        {
-          value: '2',
-          label: 'Shopify'
-        },
-        {
-          value: '3',
-          label: 'Amazon'
-        },
-        {
-          value: '4',
-          label: 'Yahoo'
-        },
-        {
-          value: '5',
-          label: 'Rakuten'
-        },
-        {
-          value: '6',
-          label: 'EC-Cube'
+        setCat2(0);
+        setCat3(0);
+    }, [cat1]);
+
+    useEffect(() => {
+        console.log("FUNCTION CALLED: useEffect() => cat2");
+        console.log(cat2);
+        if(cat2 === 0){
+            setCat2Disabled(false);
+            setCat3List(getEmptyCatLit());
+        }else{
+            setCat2Disabled(true);
+            setCat3List(getCatListByParentCatId(cat2));
         }
-      ];
+        setCat3(0);
+    }, [cat2]);
+
+    useEffect(() => {
+        console.log("FUNCTION CALLED: useEffect() => cat3");
+        console.log(cat3);
+        if(cat3 === 0){
+            setCat3Disabled(false);
+        }else{
+            setCat3Disabled(true);
+        }
+    }, [cat3]);
 
     const theme = useTheme();
 
     const handleSubClose = () => {
         onClose();
-    };
-
-    const handleCatTypeChange = (event) => {
-        setCatType(event.target.value);
-    };
-
-    const handleExistingCatChange = (event) => {
-        setExistingCat(event.target.value);
     };
 
     const handleCat1Change = (event) => {
@@ -95,6 +95,22 @@ function CreateCategoryDialog ({ open, onClose }: CreateCategoryDialogProps) {
 
     const handleCat3Change = (event) => {
         setCat3(event.target.value);
+    };
+
+    const getEmptyCatLit = () => {
+        return CAT_LIST.filter((catList) => catList.SK === 0);
+    }
+
+    const getCatListByCatType = (catType: number) => {
+        return CAT_LIST.filter((catList) => {
+            return catList.cat_type === 0 || catList.cat_type === catType;
+        });
+    };
+
+    const getCatListByParentCatId = (SK: number) => {
+        return CAT_LIST.filter((catList) => {
+            return catList.cat_type === 0 || catList.parent_cat_id === SK;
+        });
     };
 
     return (
@@ -137,12 +153,12 @@ function CreateCategoryDialog ({ open, onClose }: CreateCategoryDialogProps) {
                                         id="createCatCatType"
                                         select
                                         label="新規作成 / 既存カテゴリ選択"
-                                        value={catType}
-                                        onChange={handleCatTypeChange}
+                                        value={cat1}
+                                        onChange={handleCat1Change}
                                     >
-                                        {catSample.map((option) => (
-                                        <MenuItem key={option.value} value={option.value}>
-                                            {option.label}
+                                        {cat1List.map((option) => (
+                                        <MenuItem key={option.SK} value={option.SK}>
+                                            {option.cat_name}
                                         </MenuItem>
                                         ))}
                                     </TextField>
@@ -152,9 +168,13 @@ function CreateCategoryDialog ({ open, onClose }: CreateCategoryDialogProps) {
                                         <InputLabel htmlFor="outlined-adornment-amount">登録カテゴリー名</InputLabel>
                                         <OutlinedInput
                                             id="createCatCatName"
-                                            startAdornment={<InputAdornment position="start">出荷実績連携</InputAdornment>}
+                                            startAdornment={<InputAdornment position="start"></InputAdornment>}
                                             label="カテゴリー名"
                                             color="primary"
+                                            disabled={cat1Disabled}
+                                            sx={{
+                                                '&.Mui-disabled': {opacity: 0.5, backgroundColor: 'gray'}
+                                            }}
                                         />
                                     </FormControl>
                                 </Box>
@@ -178,12 +198,12 @@ function CreateCategoryDialog ({ open, onClose }: CreateCategoryDialogProps) {
                                         id="createCatCatType"
                                         select
                                         label="新規作成 / 既存カテゴリ選択"
-                                        value={catType}
-                                        onChange={handleCatTypeChange}
+                                        value={cat2}
+                                        onChange={handleCat2Change}
                                     >
-                                        {catTypeSample.map((option) => (
-                                        <MenuItem key={option.value} value={option.value}>
-                                            {option.label}
+                                        {cat2List.map((option) => (
+                                        <MenuItem key={option.SK} value={option.SK}>
+                                            {option.cat_name}
                                         </MenuItem>
                                         ))}
                                     </TextField>
@@ -193,9 +213,13 @@ function CreateCategoryDialog ({ open, onClose }: CreateCategoryDialogProps) {
                                         <InputLabel htmlFor="outlined-adornment-amount">登録カテゴリー名</InputLabel>
                                         <OutlinedInput
                                             id="createCatCatName"
-                                            startAdornment={<InputAdornment position="start">出荷実績連携</InputAdornment>}
+                                            startAdornment={<InputAdornment position="start"></InputAdornment>}
                                             label="カテゴリー名"
                                             color="primary"
+                                            disabled={cat2Disabled}
+                                            sx={{
+                                                '&.Mui-disabled': {opacity: 0.5, backgroundColor: 'gray'}
+                                            }}
                                         />
                                     </FormControl>
                                 </Box>
@@ -220,12 +244,12 @@ function CreateCategoryDialog ({ open, onClose }: CreateCategoryDialogProps) {
                                         id="createCatCatType"
                                         select
                                         label="新規作成 / 既存カテゴリ選択"
-                                        value={catType}
-                                        onChange={handleCatTypeChange}
+                                        value={cat3}
+                                        onChange={handleCat3Change}
                                     >
-                                        {catTypeSample.map((option) => (
-                                        <MenuItem key={option.value} value={option.value}>
-                                            {option.label}
+                                        {cat3List.map((option) => (
+                                        <MenuItem key={option.SK} value={option.SK}>
+                                            {option.cat_name}
                                         </MenuItem>
                                         ))}
                                     </TextField>
@@ -235,9 +259,13 @@ function CreateCategoryDialog ({ open, onClose }: CreateCategoryDialogProps) {
                                         <InputLabel htmlFor="outlined-adornment-amount">登録カテゴリー名</InputLabel>
                                         <OutlinedInput
                                             id="createCatCatName"
-                                            startAdornment={<InputAdornment position="start">出荷実績連携</InputAdornment>}
+                                            startAdornment={<InputAdornment position="start"></InputAdornment>}
                                             label="カテゴリー名"
                                             color="primary"
+                                            disabled={cat3Disabled}
+                                            sx={{
+                                                '&.Mui-disabled': {opacity: 0.5, backgroundColor: 'gray'}
+                                            }}
                                         />
                                     </FormControl>
                                 </Box>

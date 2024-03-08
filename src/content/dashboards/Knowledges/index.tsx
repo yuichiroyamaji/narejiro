@@ -1,10 +1,10 @@
 export type { KnowledgeData, KnowledgeDataStatus } from 'src/models/knowledges';
 export { KnowledgeDataDefault } from 'src/models/knowledges';
 export {graphqlApiCall, graphqlApiResult} from 'src/graphql/apicall';
-export {listKnowledgeDatas, listCat1s} from 'src/graphql/queries';
+export {listKnowledgeDatas} from 'src/graphql/queries';
 export {deleteKnowledgeData} from 'src/graphql/mutations';
 
-export {API_URL, API_KEY, DEFAULT_TEXT} from 'src/common/constants';
+export {API_URL, API_KEY, DEFAULT_TEXT, CAT_LIST} from 'src/common/constants';
 
 export {default as PropTypes} from 'prop-types';
 export {default as SimpleMde} from 'react-simplemde-editor';

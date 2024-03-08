@@ -21,14 +21,14 @@ function DeleteKnowledgeDialog ({ open, onClose, knowledgeId }: DeleteKnowledgeD
 
     const handleDelete = async(knowledgeId: number) => {
       const res: any = await graphqlApiCall(deleteKnowledgeData(knowledgeId));
-      const result: boolean = graphqlApiResult(res.deleteNarejiroDevTable);
+      const result: boolean = graphqlApiResult(res.deleteKnowledgeData);
       const alert_msg = result ? `【なれっじID : ${knowledgeId} 】を削除しました。` : `【なれっじID : ${knowledgeId} 】の削除に失敗しました。システム管理者に連絡してください。`;
       alert(alert_msg);
     };
 
     return (
         <Dialog 
-            onClose={handleClose} 
+            onClose={handleClose}
             open={open}
         >
         <DialogTitle sx={{color: theme.palette.primary.main, fontWeight: "bold"}}>
