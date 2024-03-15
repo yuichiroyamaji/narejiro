@@ -81,10 +81,6 @@ function CreateCategoryDialog ({ open, onClose }: CreateCategoryDialogProps) {
 
     const theme = useTheme();
 
-    const handleSubClose = () => {
-        onClose();
-    };
-
     const handleCat1Change = (event) => {
         setCat1(event.target.value);
     };
@@ -95,6 +91,16 @@ function CreateCategoryDialog ({ open, onClose }: CreateCategoryDialogProps) {
 
     const handleCat3Change = (event) => {
         setCat3(event.target.value);
+    };
+
+    const handleSubClose = () => {
+        onClose();
+    };
+
+    const handleSubCreate = () => {
+        if(cat1 != 0 && cat2 != 0 && cat3 != 0){
+            alert("新規作成カテゴリがありません。(大)(中)(小)いずれかのカテゴリを新規作成してください。");
+        };
     };
 
     const getEmptyCatLit = () => {
@@ -275,7 +281,7 @@ function CreateCategoryDialog ({ open, onClose }: CreateCategoryDialogProps) {
                 </DialogContent>
             <DialogActions>
                 <Button variant="outlined" onClick={handleSubClose}>Cancel</Button>
-                <Button variant="contained" onClick={handleSubClose} autoFocus>Create</Button>
+                <Button variant="contained" onClick={handleSubCreate} autoFocus>Create</Button>
             </DialogActions>
         </Dialog>
     );

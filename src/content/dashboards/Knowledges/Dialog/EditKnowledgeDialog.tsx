@@ -1,11 +1,8 @@
 import { useState, useEffect, useMemo, ChangeEvent, DragEvent } from 'react';
 import {
-    API_URL, API_KEY, DEFAULT_TEXT, KnowledgeData,
-    Box, Grid, Stack, Button, useTheme,
-    FormControl, InputLabel, InputAdornment, OutlinedInput, TextField, MenuItem, IconButton, CloseIcon,
-    Dialog, DialogTitle, DialogContent, DialogActions,
-    SimpleMde, markdownit, DOMPurify,
-    CreateCategoryDialog
+    markdownit, DOMPurify, KnowledgeData, CreateCategoryDialog, FullscreenIcon, FullscreenExitIcon,
+    Box, Grid, Stack, Button, useTheme, Dialog, DialogTitle, DialogContent, DialogActions,
+    FormControl, InputLabel, InputAdornment, OutlinedInput, TextField, MenuItem, IconButton, CloseIcon
 } from '../index';
 import 'easymde/dist/easymde.min.css';
 // import { S3 } from 'aws-sdk';
@@ -18,18 +15,27 @@ interface EditKnowledgeDialogProps {
 
 function EditKnowledgeDialog ({ open, onClose, knowledgeDataParam }: EditKnowledgeDialogProps) {
 
+    const [windowHeight, setWindowHeight] = useState(window.innerHeight);
     const [createCatOpen, setCreateCatOpen] = useState<boolean>(false);
+    const [textFieldValue, setTextFieldValue] = useState<String>(knowledgeDataParam.content);
     const [markdownValue, setMarkdownValue] = useState<string>('');
+    const [isFullScreen, setIsFullScreen] = useState(false);
     const [isDragActive, setIsDragActive] = useState<boolean>(false);
     const [cat1, setCat1] = useState<number>(0);
     const [cat2, setCat2] = useState<number>(0);
     const [cat3, setCat3] = useState<number>(0);
     const theme = useTheme();
 
-    // useEffect(() => {
-    //     console.log(knowledgeDataParam.content);
-    //     setMarkdownValue(knowledgeDataParam.content);
-    // }, [open]);
+    useEffect(() => {
+        const handleResize = () => { setWindowHeight(window.innerHeight); };
+        window.addEventListener('resize', handleResize);
+        return () => { window.removeEventListener('resize', handleResize); };
+    }, []);
+
+    useEffect(() => {
+        setTextFieldValue(knowledgeDataParam.content);
+        setMarkdownValue(knowledgeDataParam.content);
+    }, [open]);
 
     const cat1s = [
       {
@@ -87,7 +93,12 @@ function EditKnowledgeDialog ({ open, onClose, knowledgeDataParam }: EditKnowled
     };
 
     const handleKnowledgeContentChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+        setTextFieldValue(event.target.value);
         setMarkdownValue(event.target.value);
+    };
+
+    const handleFullScreenToggle = () => {
+        setIsFullScreen(!isFullScreen);
     };
 
     const onDragEnter = (e: DragEvent<HTMLDivElement>) => {
@@ -156,6 +167,8 @@ function EditKnowledgeDialog ({ open, onClose, knowledgeDataParam }: EditKnowled
 
     return (
         <Dialog
+            className={isFullScreen ? 'full-screen-dialog' : ''}
+            fullScreen={isFullScreen}
             fullWidth
             maxWidth="lg"
             onClose={handleClose} 
@@ -163,31 +176,18 @@ function EditKnowledgeDialog ({ open, onClose, knowledgeDataParam }: EditKnowled
         >
             <Grid container>
                 <Grid item xs={6}>
-                    <DialogTitle sx={{color: theme.palette.primary.main, fontWeight: "bold"}}>なれっじ編集</DialogTitle>
+                    <DialogTitle sx={{color: theme.palette.primary.main, fontWeight: "bold"}}>なれっじ編集 【ID：{knowledgeDataParam.SK} 】</DialogTitle>
                     <DialogContent dividers>
                         <Stack direction="row">
                             <Box
                                 width="100%"
                                 component="form"
                                 sx={{
-                                    '& .MuiTextField-root': { m: 1, width: '25ch' }
+                                    '& .MuiTextField-root': { m: 1, width:'25ch'}
                                 }}
                                 noValidate
                                 autoComplete="off"
                             >
-                                <Box>
-                                    <TextField
-                                        required
-                                        id="editKnowledgeKnowledgeId"
-                                        label="なれっじID"
-                                        variant="filled"
-                                        value={knowledgeDataParam.SK}
-                                        InputProps={{
-                                            readOnly: true
-                                        }}
-                                        disabled
-                                    />
-                                </Box>
                                 <Box>
                                     <TextField
                                         id="editKnowledgeCat1"
@@ -259,8 +259,8 @@ function EditKnowledgeDialog ({ open, onClose, knowledgeDataParam }: EditKnowled
                                         placeholder="MultiLine with rows: 2 and rowsMax: 4"
                                         variant="outlined"
                                         multiline
-                                        rows={13}
-                                        value={knowledgeDataParam.content}
+                                        rows={isFullScreen ? windowHeight/35 : windowHeight/50}
+                                        value={textFieldValue}
                                         onChange={handleKnowledgeContentChange}
                                         style = {{width: "100%"}}
                                         fullWidth
@@ -274,8 +274,20 @@ function EditKnowledgeDialog ({ open, onClose, knowledgeDataParam }: EditKnowled
                         <Button variant="contained" onClick={handleClose} autoFocus>Edit</Button>
                     </DialogActions>
                 </Grid>
-                <Grid item xs={6} sx={{pl: 3, pt: 3, pr: 1, pb: 1, borderLeft: 1, borderColor: "#ccc" }}>
-                    <Box sx={{ height: 700, overflowY: "scroll" }}>
+                <Grid item xs={6} sx={{pl: 3, pt: 1, pr: 1, pb: 1, borderLeft: 1, borderColor: "#ccc" }}>
+                    <Box sx={{ overflowY: "scroll" }} style={{ height: isFullScreen ? windowHeight*0.98 : windowHeight*0.86 }}>
+                        <IconButton
+                        aria-label="fullScreen"
+                        onClick={handleFullScreenToggle}
+                        sx={{
+                            position: 'absolute',
+                            right: 40,
+                            top: 8,
+                            color: (theme) => theme.palette.grey[500],
+                        }}
+                        >
+                            {isFullScreen ? <FullscreenExitIcon /> : <FullscreenIcon />}
+                        </IconButton>
                         <IconButton
                         aria-label="close"
                         onClick={handleClose}
@@ -286,7 +298,7 @@ function EditKnowledgeDialog ({ open, onClose, knowledgeDataParam }: EditKnowled
                             color: (theme) => theme.palette.grey[500],
                         }}
                         >
-                        <CloseIcon />
+                            <CloseIcon />
                         </IconButton>
                         <div dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(markdownit().render(markdownValue))}}></div>
                     </Box>

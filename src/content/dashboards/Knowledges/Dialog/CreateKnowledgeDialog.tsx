@@ -1,11 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ChangeEvent, DragEvent } from 'react';
 import {
-    API_URL, API_KEY, DEFAULT_TEXT,
-    Box, Grid, Stack, Button, useTheme,
-    FormControl, InputLabel, InputAdornment, OutlinedInput, TextField, MenuItem, IconButton, CloseIcon,
-    Dialog, DialogTitle, DialogContent, DialogActions,
-    SimpleMde, markdownit, DOMPurify,
-    CreateCategoryDialog
+    DEFAULT_TEXT, Box, Grid, Stack, Button, useTheme, FormControl, InputLabel, InputAdornment, OutlinedInput, 
+    TextField, MenuItem, IconButton, CloseIcon, Dialog, DialogTitle, DialogContent, DialogActions,
+    SimpleMde, markdownit, DOMPurify, CreateCategoryDialog, FullscreenIcon, FullscreenExitIcon
 } from '../index';
 import 'easymde/dist/easymde.min.css';
 
@@ -16,40 +13,53 @@ interface CreateKnowledgeDialogProps {
 
 function CreateKnowledgeDialog ({ open, onClose }: CreateKnowledgeDialogProps) {
 
+    const [windowHeight, setWindowHeight] = useState(window.innerHeight);
     const [createCatOpen, setCreateCatOpen] = useState<boolean>(false);
+    const [textFieldValue, setTextFieldValue] = useState<String>(DEFAULT_TEXT.join('\n'));
     const [markdownValue, setMarkdownValue] = useState<string>(DEFAULT_TEXT.join('\n'));
+    const [isFullScreen, setIsFullScreen] = useState(false);
+    const [isDragActive, setIsDragActive] = useState<boolean>(false);
     const [cat1, setCat1] = useState<number>(0);
     const [cat2, setCat2] = useState<number>(0);
     const [cat3, setCat3] = useState<number>(0);
+    const theme = useTheme();
 
     const cat1s = [
       {
-        value: '1',
+        value: 0,
+        label: '未選択'
+      },
+      {
+        value: 1,
         label: 'Mall'
       },
       {
-        value: '2',
+        value: 2,
         label: 'Shopify'
       },
       {
-        value: '3',
+        value: 3,
         label: 'Amazon'
       },
       {
-        value: '4',
+        value: 4,
         label: 'Yahoo'
       },
       {
-        value: '5',
+        value: 5,
         label: 'Rakuten'
       },
       {
-        value: '6',
+        value: 6,
         label: 'EC-Cube'
       }
     ];
 
-    const theme = useTheme();
+    useEffect(() => {
+        const handleResize = () => { setWindowHeight(window.innerHeight); };
+        window.addEventListener('resize', handleResize);
+        return () => { window.removeEventListener('resize', handleResize); };
+    }, []);
 
     const handleClose = () => {
         onClose(false);
@@ -73,14 +83,44 @@ function CreateKnowledgeDialog ({ open, onClose }: CreateKnowledgeDialogProps) {
 
     const handleCreateCatOpen = () => {
         setCreateCatOpen(true);
-    }
-  
-    const handleMarkdownValueChange = (value: string) => {
-        setMarkdownValue(value);
+    };
+
+    const handleKnowledgeContentChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+        setTextFieldValue(event.target.value);
+        setMarkdownValue(event.target.value);
+    };
+
+    const handleFullScreenToggle = () => {
+        setIsFullScreen(!isFullScreen);
+    };
+
+    const onDragEnter = (e: DragEvent<HTMLDivElement>) => {
+      if (e.dataTransfer.items && e.dataTransfer.items.length > 0) {
+        setIsDragActive(true);
+      }
+    };
+
+    const onDragLeave = (e: DragEvent<HTMLDivElement>) => {
+      setIsDragActive(false);
+    };
+
+    const onDrop = (e: DragEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      setIsDragActive(false);
+      if (e.dataTransfer.files !== null && e.dataTransfer.files.length > 0) {
+        if (e.dataTransfer.files.length === 1) {
+          alert(e.dataTransfer.files[0].name);
+        } else {
+          alert("一度に貼り付け可能なファイル数は１つまでとなります");
+        }
+        e.dataTransfer.clearData();
+      }
     };
 
     return (
         <Dialog
+            className={isFullScreen ? 'full-screen-dialog' : ''}
+            fullScreen={isFullScreen}
             fullWidth
             maxWidth="lg"
             onClose={handleClose} 
@@ -158,7 +198,7 @@ function CreateKnowledgeDialog ({ open, onClose }: CreateKnowledgeDialogProps) {
                                         />
                                     </FormControl>
                                 </Box>
-                                <Box sx={{ mt: 1, mb: 1, ml: 1 }}>
+                                {/* <Box sx={{ mt: 1, mb: 1, ml: 1 }}>
                                     <IconButton
                                     aria-label="close"
                                     onClick={handleClose}
@@ -172,6 +212,25 @@ function CreateKnowledgeDialog ({ open, onClose }: CreateKnowledgeDialogProps) {
                                         <CloseIcon />
                                     </IconButton>
                                     <SimpleMde value={markdownValue} onChange={handleMarkdownValueChange}/>
+                                </Box> */}
+                                <Box
+                                    onDragEnter={onDragEnter}
+                                    onDragLeave={onDragLeave}
+                                    onDragOver={(e) => e.preventDefault()}
+                                    onDrop={onDrop}
+                                >
+                                    <TextField
+                                        id="editKnowledgeContent"
+                                        label="コンテンツ"
+                                        placeholder="MultiLine with rows: 2 and rowsMax: 4"
+                                        variant="outlined"
+                                        multiline
+                                        rows={isFullScreen ? windowHeight/35 : windowHeight/50}
+                                        value={textFieldValue}
+                                        onChange={handleKnowledgeContentChange}
+                                        style = {{width: "100%"}}
+                                        fullWidth
+                                    />
                                 </Box>
                             </Box>
                         </Stack>
@@ -181,8 +240,37 @@ function CreateKnowledgeDialog ({ open, onClose }: CreateKnowledgeDialogProps) {
                         <Button variant="contained" onClick={handleClose} autoFocus>Create</Button>
                     </DialogActions>
                 </Grid>
-                <Grid item xs={6} sx={{pl: 3, pt: 1, pr: 1, pb: 1, borderLeft: 1, borderColor: "#ccc" }}>
+                {/* <Grid item xs={6} sx={{pl: 3, pt: 1, pr: 1, pb: 1, borderLeft: 1, borderColor: "#ccc" }}>
                     <Box sx={{ height: 760, overflowY: "scroll" }}>
+                        <div dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(markdownit().render(markdownValue))}}></div>
+                    </Box>
+                </Grid> */}
+                <Grid item xs={6} sx={{pl: 3, pt: 1, pr: 1, pb: 1, borderLeft: 1, borderColor: "#ccc" }}>
+                    <Box sx={{ overflowY: "scroll" }} style={{ height: isFullScreen ? windowHeight*0.98 : windowHeight*0.86 }}>
+                        <IconButton
+                        aria-label="fullScreen"
+                        onClick={handleFullScreenToggle}
+                        sx={{
+                            position: 'absolute',
+                            right: 40,
+                            top: 8,
+                            color: (theme) => theme.palette.grey[500],
+                        }}
+                        >
+                            {isFullScreen ? <FullscreenExitIcon /> : <FullscreenIcon />}
+                        </IconButton>
+                        <IconButton
+                        aria-label="close"
+                        onClick={handleClose}
+                        sx={{
+                            position: 'absolute',
+                            right: 8,
+                            top: 8,
+                            color: (theme) => theme.palette.grey[500],
+                        }}
+                        >
+                            <CloseIcon />
+                        </IconButton>
                         <div dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(markdownit().render(markdownValue))}}></div>
                     </Box>
                 </Grid>

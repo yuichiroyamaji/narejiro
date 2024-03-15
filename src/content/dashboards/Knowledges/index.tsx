@@ -28,6 +28,8 @@ export {default as InputAdornment} from '@mui/material/InputAdornment';
 export {default as OutlinedInput} from '@mui/material/OutlinedInput';
 export {default as TextField} from '@mui/material/TextField';
 export {default as CloseIcon} from '@mui/icons-material/Close';
+export {default as FullscreenIcon} from '@mui/icons-material/Fullscreen';
+export {default as FullscreenExitIcon} from '@mui/icons-material/FullscreenExit';
 export {default as AddTwoToneIcon} from '@mui/icons-material/AddTwoTone';
 
 export {default as DialogTitle} from '@mui/material/DialogTitle';
