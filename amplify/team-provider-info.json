@@ -1,20 +1,15 @@
 {
   "dev": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-narejiro2-dev-213832-authRole",
-      "UnauthRoleArn": "arn:aws:iam::361454773891:role/amplify-narejiro2-dev-213832-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::361454773891:role/amplify-narejiro2-dev-213832-authRole",
+      "AuthRoleName": "amplify-narejiro-dev-163809-authRole",
+      "UnauthRoleArn": "arn:aws:iam::361454773891:role/amplify-narejiro-dev-163809-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::361454773891:role/amplify-narejiro-dev-163809-authRole",
       "Region": "ap-northeast-1",
-      "DeploymentBucketName": "amplify-narejiro2-dev-213832-deployment",
-      "UnauthRoleName": "amplify-narejiro2-dev-213832-unauthRole",
-      "StackName": "amplify-narejiro2-dev-213832",
-      "StackId": "arn:aws:cloudformation:ap-northeast-1:361454773891:stack/amplify-narejiro2-dev-213832/4f0589a0-c35a-11ee-bb26-0a5aff615299",
-      "AmplifyAppId": "d2cawepqpy5cto"
-    },
-    "categories": {
-      "api": {
-        "narejiro2": {}
-      }
+      "DeploymentBucketName": "amplify-narejiro-dev-163809-deployment",
+      "UnauthRoleName": "amplify-narejiro-dev-163809-unauthRole",
+      "StackName": "amplify-narejiro-dev-163809",
+      "StackId": "arn:aws:cloudformation:ap-northeast-1:361454773891:stack/amplify-narejiro-dev-163809/47fcf620-f70d-11ee-be2b-0e606554f081",
+      "AmplifyAppId": "d1ci253p377ru7"
     }
   }
 }
