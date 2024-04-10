@@ -10,6 +10,11 @@
       "StackName": "amplify-narejiro-dev-163809",
       "StackId": "arn:aws:cloudformation:ap-northeast-1:361454773891:stack/amplify-narejiro-dev-163809/47fcf620-f70d-11ee-be2b-0e606554f081",
       "AmplifyAppId": "d1ci253p377ru7"
+    },
+    "categories": {
+      "auth": {
+        "narejiroca2a6993": {}
+      }
     }
   }
 }
