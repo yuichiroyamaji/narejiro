@@ -7,6 +7,10 @@ import App from 'src/App';
 import { SidebarProvider } from 'src/contexts/SidebarContext';
 import * as serviceWorker from 'src/serviceWorker';
 
+import { Amplify } from 'aws-amplify';
+import config from 'src/aws-exports';
+Amplify.configure(config);
+
 ReactDOM.render(
   <HelmetProvider>
     <SidebarProvider>
