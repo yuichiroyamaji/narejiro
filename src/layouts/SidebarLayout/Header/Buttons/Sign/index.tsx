@@ -6,16 +6,13 @@ import {
   Tooltip,
 } from '@mui/material';
 
-import SignIn from './SignIn';
-import SignOut from './SignOut';
+import SignInDialog from './SignIn';
+import SignOutDialog from './SignOut';
 
 import { styled } from '@mui/material/styles';
 import LockIcon from '@mui/icons-material/Lock';
 import LockOpenTwoToneIcon from '@mui/icons-material/LockOpenTwoTone';
 
-import { signUp } from 'aws-amplify/auth';
-import { signOut } from 'aws-amplify/auth';
-import { fetchAuthSession } from 'aws-amplify/auth';
 import { getCurrentUser } from 'aws-amplify/auth';
 
 import { Amplify } from 'aws-amplify';
@@ -29,7 +26,7 @@ function HeaderSign() {
   const [signInOpen, setSignInOpen] = useState<boolean>(false);
   const [signOutOpen, setSignOutOpen] = useState<boolean>(false);
 
-  useEffect(() => {
+  useEffect(() => {  
     const currentAuthenticatedUser = async () => {
       try {
         const { username, userId, signInDetails } = await getCurrentUser();
@@ -59,55 +56,12 @@ function HeaderSign() {
   };
 
   const handleSignOutOpen = (): void => {
-    handleSignOut();
     setSignOutOpen(true);
   };
 
   const handleSignOutClose = (): void => {
     setSignOutOpen(false);
   };
-
-  type SignUpParameters = {
-    username: string;
-    password: string;
-    email: string;
-    phone_number: string;
-  };
-
-  async function handleSignUp({
-    username,
-    password,
-    email,
-    phone_number
-  }: SignUpParameters) {
-    try {
-      const { isSignUpComplete, userId, nextStep } = await signUp({
-        username,
-        password,
-        options: {
-          userAttributes: {
-            email,
-            phone_number
-          },
-          // optional
-          autoSignIn: true // or SignInOptions e.g { authFlowType: "USER_SRP_AUTH" }
-        }
-      });
-
-      console.log(userId);
-    } catch (error) {
-      console.log('error signing up:', error);
-    }
-  }
-
-  async function handleSignOut() {
-    try {
-      await signOut();
-      setIsSignedIn(false);
-    } catch (error) {
-      console.log('error signing out: ', error);
-    }
-  }
 
   return (
     <>
@@ -124,12 +78,11 @@ function HeaderSign() {
           </Button>
         </Tooltip>
       }
-      <SignIn
+      <SignInDialog
         open={signInOpen}
         onClose={handleSignInClose}
-        isSigned={isSignedIn}
       />
-      <SignOut
+      <SignOutDialog
         open={signOutOpen}
         onClose={handleSignOutClose}
       />

@@ -1,7 +1,4 @@
 import { useState, useEffect, useMemo, ChangeEvent, DragEvent } from 'react';
-import { useUserContext } from 'src/contexts/UserContext';
-import SuccessDialog from '../SuccessDialog';
-import SignUpDialog from '../SignUp';
 import {
     Avatar,
     Box,
@@ -20,79 +17,89 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { teal } from "@mui/material/colors";
-import { signIn, type SignInInput } from 'aws-amplify/auth';
+import { signUp } from 'aws-amplify/auth';
+import { confirmSignUp, type ConfirmSignUpInput } from 'aws-amplify/auth';
+import ConfirmSignUpDialog from './ConfirmSignUp';
 import {APP_NAME} from 'src/common/constants';
 
-interface SignInProps {
+interface SignUpProps {
     open: boolean;
     onClose: () => void;
 }
 
-function SignInDialog({ open, onClose }: SignInProps) {
-    const {isSignedIn, setIsSignedIn} = useUserContext();
-    const [username, setUsername] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
-    const [signInErr, setSignInErr] = useState<string>('');
-    const [successDialogOpen, setSuccessDialogOpen] = useState<boolean>(false);
-    const [signUpOpen, setSignUpOpen] = useState<boolean>(false);
+function SignUpDialog({ open, onClose }: SignUpProps) {
+    const [usernameParam, setUsernameParam] = useState('');
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('');
+    const [signUpErr, setSignUpErr] = useState('');
+    const [confirmSignUpOpen, setConfirmSignUpOpen] = useState<boolean>(false);
 
     const handleUsernameChange = (e) => {
-        setUsername(e.target.value);
+      setUsername(e.target.value);
+      setEmail(e.target.value);
     };
 
     const handlePasswordChange = (e) => {
-        setPassword(e.target.value);
-    };  
+      setPassword(e.target.value);
+    };
 
     const handleClose = () => {
-        setSignInErr('');
-        onClose();
-    };
-  
-    const handleSuccessDialogClose = (): void => {
-        setSuccessDialogOpen(false);
-        handleClose();
+      setSignUpErr('');
+      onClose();
     };
 
-    const handleSignUpOpen = (): void => {
-        setSignUpOpen(true);
-    };
-  
-    const handleSignUpClose = (): void => {
-        setSignUpOpen(false);
-        handleClose();
+    const handleConfirmSignUpClose = (): void => {
+      setConfirmSignUpOpen(false);
     };
 
-    const handleSignIn = async ({ username, password }: SignInInput) => {
-        console.log('【START】handleSignIn()');
+    type SignUpParameters = {
+      username: string;
+      password: string;
+      email: string;
+    //   phone_number: string;
+    };
+  
+    const handleSignUp = async ({
+      username,
+      password,
+      email,
+    //   phone_number
+    }: SignUpParameters) => {
+      console.log('【START】handleSignUp()');
       try {
-        console.log('[CALLING API] Cognito SignIn');
-        const { isSignedIn, nextStep } = await signIn({ username, password });
-        console.log(isSignedIn);
+        console.log('[CALLING API] Cognito SignUp');
+        const { isSignUpComplete, userId, nextStep } = await signUp({
+          username,
+          password,
+          options: {
+            userAttributes: {
+              email,
+            //   phone_number
+            },
+            // optional
+            autoSignIn: false // or SignInOptions e.g { authFlowType: "USER_SRP_AUTH" }
+          }
+        });
+        console.log(isSignUpComplete);
+        console.log(userId);
         console.log(nextStep);
         console.log('[API SUCCESS] API returned response successfully');
-        setSignInErr('');
-        setIsSignedIn(true);
-        setSuccessDialogOpen(true);
+        setConfirmSignUpOpen(true);
+        setUsernameParam(userId);
       } catch (error) {
         console.log('[API ERROR] Error messages returned from API');
         console.log(error);
         let errMsg = "";
         switch (error.name) {
-            case 'EmptySignInUsername':
+            case 'EmptySignUpUsername':
                 errMsg = "※メールアドレスが入力されていません。";
                 break;
-            case 'EmptySignInPassword':
+            case 'EmptySignUpPassword':
                 errMsg = "※パスワードが入力されていません。";
                 break;
-            case 'UserNotFoundException':
-                errMsg = "※入力されたメールアドレスのアカウントは存在しません。";
-                break;
-            case 'NotAuthorizedException':
-                errMsg = "※パスワードが間違っています。再度ご確認ください。";
-                break;
-            case 'UserAlreadyAuthenticatedException':
-                errMsg = "※対象のアカウントはすでにサインインされています。";
+            case 'UsernameExistsException':
+                errMsg = "※入力されたメールアドレスは既に登録されています";
                 break;
             default:
                 errMsg = "※処理中にエラーが発生しました。システム管理者にお問い合わせください。[ERROR] " + error.message.toString();
@@ -100,9 +107,9 @@ function SignInDialog({ open, onClose }: SignInProps) {
         };
         console.log('[API ERROR] Error messages converted for users');
         console.log(errMsg);
-        setSignInErr(errMsg);
+        setSignUpErr(errMsg);
       }
-    }
+    };
 
     return (
         <>
@@ -124,25 +131,24 @@ function SignInDialog({ open, onClose }: SignInProps) {
                             direction="column"
                             justifyContent="flex-start"
                             alignItems="center"
-                        >
-                            <Avatar sx={{ bgcolor: teal[400], mb: "30px", width: 55, height: 55 }}>
-                            <LockOutlinedIcon sx={{ fontSize: 35 }} />
+                        >                            
+                            <Avatar sx={{ bgcolor: teal[400], mb: "30px" }}>
+                            <LockOutlinedIcon />
                             </Avatar>
                             <Box sx={{ mb: "30px" }}>
                                 <Typography color="primary" component="span" sx={{ fontSize: "1.5em", fontWeight: "bold", mr: "5px" }}>
                                     {APP_NAME}
                                 </Typography>
                                 <Typography component="span" sx={{ fontSize: "1.5em", fontWeight: "bold" }}>
-                                    にサインイン
+                                    にサインアップ
                                 </Typography>
                             </Box>
-                            <Box sx={{ mb: "30px", fontSize: "1.1em" }}>
-                                {APP_NAME}のご利用ありがとうございます！
-                                投稿者管理のため、なれっじの投稿･更新にはサインインをお願いしています。
+                            <Box sx={{ mb: "20px", fontSize: "1.1em" }}>
+                                {APP_NAME}にアカウントを作成します。登録するEメールアドレスとパスワードを入力してください。
                             </Box>
                         </Grid>
                         <TextField
-                            label="メールアドレス"
+                            label="Eメールアドレス"
                             variant="standard"
                             sx={{ mb: "3%" }}
                             value={username}
@@ -158,35 +164,17 @@ function SignInDialog({ open, onClose }: SignInProps) {
                             onChange={handlePasswordChange}
                             fullWidth
                             required />
-                        {signInErr && (
+                        {signUpErr && (
                             <Box sx={{ mt: "3%", color: "red" }} >
-                                {signInErr}
+                                {signUpErr}
                             </Box>
                         )}
                         <Box mt={3}>
                             {/* <Button type="submit" color="primary" variant="contained" onClick={handleOnClick} fullWidth> */}                        
                             {/* <Button color="primary" onClick={() => handleSignIn({username: '1764fac8-9041-70bb-b79c-2087183f8394', password: '12345678'})}> */}
-                            <Button type="submit" color="primary" variant="contained" onClick={() => handleSignIn({username, password})} fullWidth>
-                            サインイン
+                            <Button type="submit" color="primary" variant="contained" onClick={() => handleSignUp({username, password, email})} fullWidth>
+                            サインアップ
                             </Button>
-                
-                            <Typography variant="caption">
-                            <Link href="#">パスワードを忘れましたか？</Link>
-                            </Typography>
-                            <Typography variant="caption" display="block" sx={{ mt: "10px" }}>
-                                アカウントを持っていますか？
-                                <Link 
-                                    href="#"
-                                    onClick={handleSignUpOpen}
-                                    sx={{ 
-                                        textDecoration: "underline", 
-                                        m: "5px",
-                                        p: "5px",
-                                        fontSize: "1.2em", 
-                                    }}>
-                                        アカウントを作成
-                                    </Link>
-                            </Typography>
                         </Box>
                         <IconButton
                         aria-label="close"
@@ -203,18 +191,14 @@ function SignInDialog({ open, onClose }: SignInProps) {
                     </Paper>
                 </Grid>
             </Dialog>
-            <SuccessDialog 
-                open={successDialogOpen}
-                onClose={handleSuccessDialogClose}
-                source="SignIn"
-            />
-            <SignUpDialog
-                open={signUpOpen}
-                onClose={handleSignUpClose}
+            <ConfirmSignUpDialog
+                open={confirmSignUpOpen}
+                onClose={handleConfirmSignUpClose}
+                username={usernameParam}
             />
         </>
     );
   };
 
-export default SignInDialog;
+export default SignUpDialog;
   

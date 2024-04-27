@@ -1,5 +1,6 @@
 // const API_URL = "https://wrfsrnb3mbdcpozxhklwonjaf4.appsync-api.ap-northeast-1.amazonaws.com/graphql"; //process.env.API_URL as string;
 // const API_KEY = "da2-kxj5lbhbwrfnncqkueuaemayqe"; //process.env.API_KEY as string;
+export const APP_NAME = "なれじろうWEB"
 export const API_URL = "https://4js3hfxbu5eqfh3mj3wqoyzosy.appsync-api.ap-northeast-1.amazonaws.com/graphql"; //process.env.API_URL as string;
 export const API_KEY = "da2-a3wirkvc6ncmnp62bkcc4go37u"; //process.env.API_KEY as string;
 export const DEFAULT_TEXT = [
