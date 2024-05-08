@@ -52,5 +52,43 @@ query listKnowledgeDatas {
       content
     }
   }
+}      
+  `
+//カテゴリ一覧取得
+export const listCategoryDatas = /* GraphQL */ `
+query listCategoryDatas {
+  listCategoryDatas {
+    nextToken
+    items {
+      SK
+      catName
+      catType
+      parentCatId
+    }
+  }
+}
+`;
+//ユーザデータ取得（Eメール）
+export const getUserDataByEmail = (email: string) => /* GraphQL */ `
+query getUserDataByEmail {
+  getUserDataByEmail(email: "${email}") {
+    PK
+    SK
+    cognitoUserId
+    userName
+    email
+  }
+}
+`;
+//ユーザデータ取得（CognitoユーザID）
+export const getUserDataByCognitoUserId = (cognitoUserId: string) => /* GraphQL */ `
+query getUserDataByCognitoUserId {
+  getUserDataByCognitoUserId(cognitoUserId: "${cognitoUserId}") {
+    PK
+    SK
+    cognitoUserId
+    userName
+    email
+  }
 }
 `;

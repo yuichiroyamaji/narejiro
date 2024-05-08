@@ -1,16 +1,25 @@
 import { useState, useEffect } from 'react';
-import { Grid, Button, AddTwoToneIcon, Typography, CreateKnowledgeDialog } from './index';
+import { useUserContext } from 'src/contexts/UserContext';
+import { Grid, Button, AddTwoToneIcon, Typography, CreateKnowledgeDialog, SignInDialog } from './index';
 
 const PageHeader = () => {
 
+  const {isSignedIn, setIsSignedIn} = useUserContext();
+
   const [createOpen, setCreateOpen] = useState(false);
+  const [signInOpen, setSignInOpen] = useState<boolean>(false);
 
   const handleClickCreateOpen = () => {
-    setCreateOpen(true);
+    if(isSignedIn) {
+      setCreateOpen(true);
+    }else{
+      setSignInOpen(true);
+    };
   };
 
-  const handleClose = (value) => {
+  const handleClose = () => {
     setCreateOpen(false);
+    setSignInOpen(false);
   };
 
   return (
@@ -38,6 +47,10 @@ const PageHeader = () => {
           onClose={handleClose}
         />
       </Grid>
+      <SignInDialog
+        open={signInOpen}
+        onClose={handleClose}
+      />
     </Grid>
   );
 }

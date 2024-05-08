@@ -28,16 +28,17 @@ interface SignUpProps {
 }
 
 function SignUpDialog({ open, onClose }: SignUpProps) {
-    const [usernameParam, setUsernameParam] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
     const [signUpErr, setSignUpErr] = useState('');
+    const [cognitoUserId, setCognitoUserId] = useState('');
     const [confirmSignUpOpen, setConfirmSignUpOpen] = useState<boolean>(false);
 
-    const handleUsernameChange = (e) => {
-      setUsername(e.target.value);
+    const handleEmailChange = (e) => {
       setEmail(e.target.value);
+      // CognitoにてEmailをユーザ名として認証しているため、Emailをユーザ名にセット
+      setUsername(e.target.value);
     };
 
     const handlePasswordChange = (e) => {
@@ -51,20 +52,19 @@ function SignUpDialog({ open, onClose }: SignUpProps) {
 
     const handleConfirmSignUpClose = (): void => {
       setConfirmSignUpOpen(false);
+      handleClose();
     };
 
     type SignUpParameters = {
       username: string;
       password: string;
       email: string;
-    //   phone_number: string;
     };
   
     const handleSignUp = async ({
       username,
       password,
       email,
-    //   phone_number
     }: SignUpParameters) => {
       console.log('【START】handleSignUp()');
       try {
@@ -75,9 +75,7 @@ function SignUpDialog({ open, onClose }: SignUpProps) {
           options: {
             userAttributes: {
               email,
-            //   phone_number
             },
-            // optional
             autoSignIn: false // or SignInOptions e.g { authFlowType: "USER_SRP_AUTH" }
           }
         });
@@ -86,7 +84,7 @@ function SignUpDialog({ open, onClose }: SignUpProps) {
         console.log(nextStep);
         console.log('[API SUCCESS] API returned response successfully');
         setConfirmSignUpOpen(true);
-        setUsernameParam(userId);
+        setCognitoUserId(userId);
       } catch (error) {
         console.log('[API ERROR] Error messages returned from API');
         console.log(error);
@@ -151,8 +149,8 @@ function SignUpDialog({ open, onClose }: SignUpProps) {
                             label="Eメールアドレス"
                             variant="standard"
                             sx={{ mb: "3%" }}
-                            value={username}
-                            onChange={handleUsernameChange}
+                            value={email}
+                            onChange={handleEmailChange}
                             fullWidth
                             required />
                         <TextField
@@ -188,13 +186,26 @@ function SignUpDialog({ open, onClose }: SignUpProps) {
                         >
                             <CloseIcon />
                         </IconButton>
+                        {/* <IconButton
+                        aria-label="close"
+                        onClick={() => setConfirmSignUpOpen(true)}
+                        sx={{
+                            position: 'absolute',
+                            right: 20,
+                            top: 8,
+                            color: "red",
+                        }}
+                        >
+                            <CloseIcon />
+                        </IconButton> */}
                     </Paper>
                 </Grid>
             </Dialog>
             <ConfirmSignUpDialog
                 open={confirmSignUpOpen}
                 onClose={handleConfirmSignUpClose}
-                username={usernameParam}
+                cognitoUserId={cognitoUserId}
+                email={email}
             />
         </>
     );

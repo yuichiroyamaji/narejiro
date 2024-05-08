@@ -1,5 +1,7 @@
 import { useRef, useState, useEffect, useContext } from 'react';
 import { useUserContext } from 'src/contexts/UserContext';
+import { graphqlApiCall, graphqlApiResult } from 'src/graphql/apicall';
+import { getUserDataByCognitoUserId } from 'src/graphql/queries';
 
 import {
   Button,
@@ -22,6 +24,7 @@ Amplify.configure(config);
 function HeaderSign() {
 
   const ref = useRef<any>(null);
+  const {appUsername, setAppUsername} = useUserContext();
   const {isSignedIn, setIsSignedIn} = useUserContext();
   const [signInOpen, setSignInOpen] = useState<boolean>(false);
   const [signOutOpen, setSignOutOpen] = useState<boolean>(false);
@@ -34,7 +37,10 @@ function HeaderSign() {
         console.log(`The userId: ${userId}`);
         console.log(`The signInDetails: ${signInDetails}`);
         setIsSignedIn(true);
-        console.log(isSignedIn);
+        console.log("isSignedIn: " + isSignedIn);
+        const localUsername = await callApiGetUserDataByCognitoUserId(userId);
+        console.log("localUsername: " + localUsername);
+        setAppUsername(localUsername);
       } catch (error) {
         console.log('error currentAuthenticatedUser', error);
         setIsSignedIn(false);
@@ -61,6 +67,14 @@ function HeaderSign() {
 
   const handleSignOutClose = (): void => {
     setSignOutOpen(false);
+  };
+
+  const callApiGetUserDataByCognitoUserId = async(cognitoUserId: string) => {
+      console.log('【START】callApiGetUserDataByCognitoUserId()');
+      const res: any = await graphqlApiCall(getUserDataByCognitoUserId(cognitoUserId));
+      const result: boolean = graphqlApiResult(res);
+      console.log('【END】callApiGetUserDataByCognitoUserId()');
+      return res.getUserDataByCognitoUserId.userName;
   };
 
   return (

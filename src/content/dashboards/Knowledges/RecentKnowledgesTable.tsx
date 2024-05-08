@@ -1,7 +1,8 @@
 import { ChangeEvent, useState } from 'react';
+import { useUserContext } from 'src/contexts/UserContext';
 import {
   PropTypes, BulkActions, Label, KnowledgeData, KnowledgeDataStatus, KnowledgeDataDefault,
-  EditKnowledgeDialog, DeleteKnowledgeDialog, DisplayKnowledgeDialog,
+  EditKnowledgeDialog, DeleteKnowledgeDialog, DisplayKnowledgeDialog, SignInDialog,
   Tooltip, Divider, Box,FormControl, InputLabel, Card, Checkbox, IconButton,
   Table, TableBody, TableCell, TableHead, TablePagination, TableRow, TableContainer,
   Select, MenuItem, Typography, useTheme, CardHeader, EditTwoToneIcon, DeleteTwoToneIcon
@@ -60,10 +61,13 @@ interface RecentKnowledgesTableProps {
 
 function RecentKnowledgesTable ({ KnowledgeDatas } : RecentKnowledgesTableProps) {
 
+  const {isSignedIn, setIsSignedIn} = useUserContext();
+
   const [selectedKnowledgeDatas, setSelectedKnowledgeDatas] = useState<number[]>([]);
   const [editOpen, setEditOpen] = useState<boolean>(false);
   const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
   const [displayOpen, setDisplayOpen] = useState<boolean>(false);
+  const [signInOpen, setSignInOpen] = useState<boolean>(false);
   const [knowledgeId, setknowledgeId] = useState<number>(0);
   const [knowledgeContent, setknowledgeContent] = useState<string>("");
   const [knowledgeDataParam, setKnowledgeDataParam] = useState<KnowledgeData>(KnowledgeDataDefault);
@@ -88,8 +92,12 @@ function RecentKnowledgesTable ({ KnowledgeDatas } : RecentKnowledgesTableProps)
   ];
 
   const handleClickEditOpen = (knowledgeDataParam: KnowledgeData) => {
-    setEditOpen(true);
-    setKnowledgeDataParam(knowledgeDataParam);
+    if(isSignedIn) {
+      setEditOpen(true);
+      setKnowledgeDataParam(knowledgeDataParam);
+    }else{
+      setSignInOpen(true);
+    };
   };
 
   const handleClickDeleteOpen = (knowledgeId: number) => {
@@ -102,10 +110,15 @@ function RecentKnowledgesTable ({ KnowledgeDatas } : RecentKnowledgesTableProps)
     setknowledgeContent(knowledgeContent);
   };
 
+  const handleSignInOpen = (): void => {
+    setSignInOpen(true);
+  };
+
   const handleClose = () => {
     setEditOpen(false);
     setDeleteOpen(false);
     setDisplayOpen(false);
+    setSignInOpen(false);
   };
 
   const handleStatusChange = (e: ChangeEvent<HTMLInputElement>): void => {
@@ -202,9 +215,9 @@ function RecentKnowledgesTable ({ KnowledgeDatas } : RecentKnowledgesTableProps)
               <TableCell>カテゴリ(中)</TableCell>
               <TableCell>カテゴリ(小)</TableCell>
               <TableCell>タイトル</TableCell>
-              <TableCell>投稿日</TableCell>
-              <TableCell>更新日</TableCell>
-              <TableCell>操作</TableCell>
+              <TableCell>投稿日<br />投稿者</TableCell>  
+              <TableCell>更新日<br />更新者</TableCell>
+              <TableCell>編集<br />削除</TableCell>
               {/* <TableCell align="right">actions</TableCell> */}
             </TableRow>
           </TableHead>
@@ -353,6 +366,10 @@ function RecentKnowledgesTable ({ KnowledgeDatas } : RecentKnowledgesTableProps)
       <DeleteKnowledgeDialog
         knowledgeId={knowledgeId}
         open={deleteOpen}
+        onClose={handleClose}
+      />
+      <SignInDialog
+        open={signInOpen}
         onClose={handleClose}
       />
       <Box p={2}>

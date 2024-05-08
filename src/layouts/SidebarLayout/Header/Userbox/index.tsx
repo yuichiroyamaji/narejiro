@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { useUserContext } from 'src/contexts/UserContext';
 
 import { NavLink } from 'react-router-dom';
 
@@ -60,19 +61,13 @@ const UserBoxDescription = styled(Typography)(
 `
 );
 
-async function handleSignOut() {
-  try {
-    await signOut();
-  } catch (error) {
-    console.log('error signing out: ', error);
-  }
-}
-
 function HeaderUserbox() {
+  const {appUsername, setAppUsername} = useUserContext();
+
   const user = {
-    name: 'Sakura Nakazawa',
+    name: appUsername,
     avatar: '/static/images/avatars/6.png',
-    jobtitle: 'Project Leader'
+    jobtitle: ''
   };
 
   const ref = useRef<any>(null);
@@ -84,6 +79,14 @@ function HeaderUserbox() {
 
   const handleClose = (): void => {
     setOpen(false);
+  };
+
+  async function handleSignOut() {
+    try {
+      await signOut();
+    } catch (error) {
+      console.log('error signing out: ', error);
+    }
   };
 
   return (

@@ -30,6 +30,7 @@ interface SignOutProps {
 
 function SignOutDialog({ open, onClose }: SignOutProps) {
     const {isSignedIn, setIsSignedIn} = useUserContext();
+    const {appUsername, setAppUsername} = useUserContext();
     const [successDialogOpen, setSuccessDialogOpen] = useState<boolean>(false);
 
     const handleClose = () => {
@@ -50,6 +51,7 @@ function SignOutDialog({ open, onClose }: SignOutProps) {
       try {
         await signOut();
         setIsSignedIn(false);
+        setAppUsername('GuestUser');
       } catch (error) {
         console.log('error signing out: ', error);
       }
@@ -81,10 +83,10 @@ function SignOutDialog({ open, onClose }: SignOutProps) {
                                 からサインアウト
                             </Typography>
                         </Box>
+                        <Box sx={{ fontSize: "1.1em" }}>
+                            {APP_NAME}からサインアウトします。よろしいですか？
+                        </Box>
                     </Grid>
-                    <Box sx={{ fontSize: "1.1em" }}>
-                        {APP_NAME}からサインアウトします。よろしいですか？
-                    </Box>
                     <IconButton
                     aria-label="close"
                     onClick={handleClose}

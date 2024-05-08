@@ -10,7 +10,7 @@ function HeaderButtons() {
       <Box sx={{ mx: 0.5 }} component="span">
         <HeaderNotifications />
         <HeaderSign />
-      </Box>
+      </Box>      
     </Box>
   );
 }

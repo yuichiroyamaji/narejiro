@@ -22,6 +22,9 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { teal } from "@mui/material/colors";
 import { signIn, type SignInInput } from 'aws-amplify/auth';
 import {APP_NAME} from 'src/common/constants';
+import { graphqlApiCall, graphqlApiResult } from 'src/graphql/apicall';
+import { getUserDataByEmail } from 'src/graphql/queries';
+import { string } from 'prop-types';
 
 interface SignInProps {
     open: boolean;
@@ -30,14 +33,17 @@ interface SignInProps {
 
 function SignInDialog({ open, onClose }: SignInProps) {
     const {isSignedIn, setIsSignedIn} = useUserContext();
+    const {appUsername, setAppUsername} = useUserContext();
+    const [localAppUsername, setLocalAppUsername] = useState<string>('');
+    const [email, setEmail] = useState<string>('');
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [signInErr, setSignInErr] = useState<string>('');
     const [successDialogOpen, setSuccessDialogOpen] = useState<boolean>(false);
     const [signUpOpen, setSignUpOpen] = useState<boolean>(false);
 
-    const handleUsernameChange = (e) => {
-        setUsername(e.target.value);
+    const handleEmailChange = (e) => {
+        setEmail(e.target.value);
     };
 
     const handlePasswordChange = (e) => {
@@ -60,20 +66,46 @@ function SignInDialog({ open, onClose }: SignInProps) {
   
     const handleSignUpClose = (): void => {
         setSignUpOpen(false);
-        handleClose();
     };
 
-    const handleSignIn = async ({ username, password }: SignInInput) => {
+    type FormInputType = {
+        email: string,
+        password: string
+    };
+
+    const handleSignIn = async ({ email, password }: FormInputType) => {
         console.log('【START】handleSignIn()');
+        const res: any = await callApiGetUserDataByEmail(email);
+        const username = res.cognitoUserId;
+        await congnitoSignIn({username, password});
+        await setAppUsername(res.userName);
+        console.log('【END】handleSignIn()');
+    };
+
+    const callApiGetUserDataByEmail = async(email: string) => {
+        console.log('【START】callApiGetUserDataByEmail()');
+        const res: any = await graphqlApiCall(getUserDataByEmail(email));
+        const result: boolean = await graphqlApiResult(res);
+        console.log('【END】callApiGetUserDataByEmail()');
+        return res.getUserDataByEmail;
+    };
+
+    const congnitoSignIn = async ({ username, password }: SignInInput) => {
+      console.log('【START】congnitoSignIn()');
       try {
         console.log('[CALLING API] Cognito SignIn');
         const { isSignedIn, nextStep } = await signIn({ username, password });
         console.log(isSignedIn);
         console.log(nextStep);
         console.log('[API SUCCESS] API returned response successfully');
-        setSignInErr('');
-        setIsSignedIn(true);
-        setSuccessDialogOpen(true);
+        if(isSignedIn){
+            setSignInErr('');
+            setIsSignedIn(true);
+            setSuccessDialogOpen(true);
+            console.log("appUsername: " + appUsername);
+        }else{
+            throw new Error("isSignedIn is not true");
+        };
       } catch (error) {
         console.log('[API ERROR] Error messages returned from API');
         console.log(error);
@@ -102,6 +134,7 @@ function SignInDialog({ open, onClose }: SignInProps) {
         console.log(errMsg);
         setSignInErr(errMsg);
       }
+      console.log('【END】congnitoSignIn()');
     }
 
     return (
@@ -142,11 +175,12 @@ function SignInDialog({ open, onClose }: SignInProps) {
                             </Box>
                         </Grid>
                         <TextField
+                            type="email"
                             label="メールアドレス"
                             variant="standard"
                             sx={{ mb: "3%" }}
-                            value={username}
-                            onChange={handleUsernameChange}
+                            value={email}
+                            onChange={handleEmailChange}
                             fullWidth
                             required />
                         <TextField
@@ -166,7 +200,7 @@ function SignInDialog({ open, onClose }: SignInProps) {
                         <Box mt={3}>
                             {/* <Button type="submit" color="primary" variant="contained" onClick={handleOnClick} fullWidth> */}                        
                             {/* <Button color="primary" onClick={() => handleSignIn({username: '1764fac8-9041-70bb-b79c-2087183f8394', password: '12345678'})}> */}
-                            <Button type="submit" color="primary" variant="contained" onClick={() => handleSignIn({username, password})} fullWidth>
+                            <Button type="submit" color="primary" variant="contained" onClick={() => handleSignIn({email, password})} fullWidth>
                             サインイン
                             </Button>
                 

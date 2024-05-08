@@ -33,7 +33,7 @@ function SuccessDialog({ open, onClose, source }: SuccessDialogProps) {
             break;
         case "SignIn":
             setTitle("にサインインしました！");
-            setMessage(`サインインありがとうございます！サインイン後は、なれっじの投稿･更新を行って頂けます。ご協力よろしくお願いします！`);
+            setMessage(`サインインありがとうございます！サインイン後は、なれっじの投稿･更新が可能です。投稿へのご協力よろしくお願いします！`);
             break;
         case "SignOut":
             setTitle("からサインアウトしました");
