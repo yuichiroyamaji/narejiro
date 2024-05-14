@@ -27,6 +27,7 @@ import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 import FindInPageTwoToneIcon from '@mui/icons-material/FindInPageTwoTone';
 
 import ChevronRightTwoToneIcon from '@mui/icons-material/ChevronRightTwoTone';
+import NowDevelopingDialog from 'src/content/pages/Status/NowDeveloping';
 
 const Transition = forwardRef(function Transition(
   props: TransitionProps & { children: ReactElement<any, any> },
@@ -67,6 +68,7 @@ const DialogTitleWrapper = styled(DialogTitle)(
 function HeaderSearch() {
   const [openSearchResults, setOpenSearchResults] = useState(false);
   const [searchValue, setSearchValue] = useState('');
+  const [nowDevelopingDialogOpen, setnowDevelopingDialogOpen] = useState<boolean>(false);
 
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setSearchValue(event.target.value);
@@ -78,6 +80,7 @@ function HeaderSearch() {
     } else {
       setOpenSearchResults(false);
     }
+    setnowDevelopingDialogOpen(true);
   };
 
   const [open, setOpen] = useState(false);
@@ -88,6 +91,7 @@ function HeaderSearch() {
 
   const handleClose = () => {
     setOpen(false);
+    setnowDevelopingDialogOpen(false);
   };
 
   return (
@@ -272,6 +276,10 @@ function HeaderSearch() {
           </DialogContent>
         )}
       </DialogWrapper>
+      <NowDevelopingDialog
+        open={nowDevelopingDialogOpen}
+        onClose={handleClose}
+      />
     </>
   );
 }

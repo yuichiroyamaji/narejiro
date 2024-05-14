@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useState, useContext } from 'react';
 
 import {
   ListSubheader,
@@ -31,6 +31,8 @@ import ChromeReaderModeTwoToneIcon from '@mui/icons-material/ChromeReaderModeTwo
 import WorkspacePremiumTwoToneIcon from '@mui/icons-material/WorkspacePremiumTwoTone';
 import CameraFrontTwoToneIcon from '@mui/icons-material/CameraFrontTwoTone';
 import DisplaySettingsTwoToneIcon from '@mui/icons-material/DisplaySettingsTwoTone';
+
+import NowDevelopingDialog from 'src/content/pages/Status/NowDeveloping';
 
 const MenuWrapper = styled(Box)(
   ({ theme }) => `
@@ -176,6 +178,15 @@ const SubMenuWrapper = styled(Box)(
 
 function SidebarMenu() {
   const { closeSidebar } = useContext(SidebarContext);
+  const [nowDevelopingDialogOpen, setnowDevelopingDialogOpen] = useState<boolean>(false);
+
+  const handleOpen = (): void => {
+    setnowDevelopingDialogOpen(true);
+  };
+
+  const handleClose = (): void => {
+    setnowDevelopingDialogOpen(false);
+  };
 
   return (
     <>
@@ -186,9 +197,10 @@ function SidebarMenu() {
               <ListItem component="div">
                 <Button
                   disableRipple
-                  component={RouterLink}
-                  onClick={closeSidebar}
-                  to="/overview"
+                  // component={RouterLink}
+                  // onClick={closeSidebar}
+                  // to="/overview"
+                  onClick={handleOpen}
                   startIcon={<DesignServicesTwoToneIcon />}
                 >
                   Overview
@@ -232,9 +244,10 @@ function SidebarMenu() {
               <ListItem component="div">
                 <Button
                   disableRipple
-                  component={RouterLink}
-                  onClick={closeSidebar}
-                  to="/dashboards"
+                  // component={RouterLink}
+                  // onClick={closeSidebar}
+                  // to="/dashboards"
+                  onClick={handleOpen}
                   startIcon={<BrightnessLowTwoToneIcon />}
                 >
                   ユーザー管理
@@ -243,9 +256,10 @@ function SidebarMenu() {
               <ListItem component="div">
                 <Button
                   disableRipple
-                  component={RouterLink}
-                  onClick={closeSidebar}
-                  to="/dashboards"
+                  // component={RouterLink}
+                  // onClick={closeSidebar}
+                  // to="/dashboards"
+                  onClick={handleOpen}
                   startIcon={<MmsTwoToneIcon />}
                 >
                   カテゴリ管理
@@ -254,9 +268,10 @@ function SidebarMenu() {
               <ListItem component="div">
                 <Button
                   disableRipple
-                  component={RouterLink}
-                  onClick={closeSidebar}
-                  to="/dashboards"
+                  // component={RouterLink}
+                  // onClick={closeSidebar}
+                  // to="/dashboards"
+                  onClick={handleOpen}
                   startIcon={<TableChartTwoToneIcon />}
                 >
                   フィルター管理
@@ -265,9 +280,10 @@ function SidebarMenu() {
               <ListItem component="div">
                 <Button
                   disableRipple
-                  component={RouterLink}
-                  onClick={closeSidebar}
-                  to="/dashboards"
+                  // component={RouterLink}
+                  // onClick={closeSidebar}
+                  // to="/dashboards"
+                  onClick={handleOpen}
                   startIcon={<BallotTwoToneIcon />}
                 >
                   ランキング管理
@@ -277,6 +293,10 @@ function SidebarMenu() {
           </SubMenuWrapper>
         </List>
       </MenuWrapper>
+      <NowDevelopingDialog
+        open={nowDevelopingDialogOpen}
+        onClose={handleClose}
+      />
     </>
   );
 }

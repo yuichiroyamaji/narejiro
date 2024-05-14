@@ -15,6 +15,7 @@ import NotificationsActiveTwoToneIcon from '@mui/icons-material/NotificationsAct
 import { styled } from '@mui/material/styles';
 
 import { formatDistance, subDays } from 'date-fns';
+import NowDevelopingDialog from 'src/content/pages/Status/NowDeveloping';
 
 const NotificationsBadge = styled(Badge)(
   ({ theme }) => `
@@ -43,13 +44,16 @@ const NotificationsBadge = styled(Badge)(
 function HeaderNotifications() {
   const ref = useRef<any>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
+  const [nowDevelopingDialogOpen, setnowDevelopingDialogOpen] = useState<boolean>(false);
 
   const handleOpen = (): void => {
     setOpen(true);
+    setnowDevelopingDialogOpen(true);
   };
 
   const handleClose = (): void => {
     setOpen(false);
+    setnowDevelopingDialogOpen(false);
   };
 
   return (
@@ -116,6 +120,10 @@ function HeaderNotifications() {
           </ListItem>
         </List>
       </Popover>
+      <NowDevelopingDialog
+        open={nowDevelopingDialogOpen}
+        onClose={handleClose}
+      />
     </>
   );
 }

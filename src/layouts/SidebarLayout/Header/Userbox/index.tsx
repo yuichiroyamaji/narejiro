@@ -25,6 +25,8 @@ import LockOpenTwoToneIcon from '@mui/icons-material/LockOpenTwoTone';
 import AccountTreeTwoToneIcon from '@mui/icons-material/AccountTreeTwoTone';
 
 import { signOut } from 'aws-amplify/auth';
+import SignOutDialog from 'src/layouts/SidebarLayout/Header/Buttons/Sign/SignOut';
+import NowDevelopingDialog from 'src/content/pages/Status/NowDeveloping';
 
 const UserBoxButton = styled(Button)(
   ({ theme }) => `
@@ -63,10 +65,13 @@ const UserBoxDescription = styled(Typography)(
 
 function HeaderUserbox() {
   const {appUsername, setAppUsername} = useUserContext();
+  const {isSignedIn, setIsSignedIn} = useUserContext();
+  const [nowDevelopingDialogOpen, setnowDevelopingDialogOpen] = useState<boolean>(false);
+  const [signOutOpen, setSignOutOpen] = useState<boolean>(false);
 
   const user = {
     name: appUsername,
-    avatar: '/static/images/avatars/6.png',
+    avatar: '/static/images/avatars/user_icon.png',
     jobtitle: ''
   };
 
@@ -79,6 +84,22 @@ function HeaderUserbox() {
 
   const handleClose = (): void => {
     setOpen(false);
+  };
+
+  const handleSignOutOpen = (): void => {
+    setSignOutOpen(true);
+  };
+
+  const handleSignOutClose = (): void => {
+    setSignOutOpen(false);
+  };
+
+  const handleNowDevelopingOpen = (): void => {
+    setnowDevelopingDialogOpen(true);
+  };
+
+  const handleNowDevelopingClose = (): void => {
+    setnowDevelopingDialogOpen(false);
   };
 
   async function handleSignOut() {
@@ -102,58 +123,72 @@ function HeaderUserbox() {
           </UserBoxText>
         </Hidden>
         <Hidden smDown>
-          <ExpandMoreTwoToneIcon sx={{ ml: 1 }} />
+          {isSignedIn ? (<ExpandMoreTwoToneIcon sx={{ ml: 1 }} /> ) : null }
         </Hidden>
       </UserBoxButton>
-      <Popover
-        anchorEl={ref.current}
-        onClose={handleClose}
-        open={isOpen}
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'right'
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right'
-        }}
-      >
-        <MenuUserBox sx={{ minWidth: 210 }} display="flex">
-          <Avatar variant="rounded" alt={user.name} src={user.avatar} />
-          <UserBoxText>
-            <UserBoxLabel variant="body1">{user.name}</UserBoxLabel>
-            <UserBoxDescription variant="body2">
-              {user.jobtitle}
-            </UserBoxDescription>
-          </UserBoxText>
-        </MenuUserBox>
-        <Divider sx={{ mb: 0 }} />
-        <List sx={{ p: 1 }} component="nav">
-          <ListItem button to="/management/profile/details" component={NavLink}>
-            <AccountBoxTwoToneIcon fontSize="small" />
-            <ListItemText primary="My Profile" />
-          </ListItem>
-          <ListItem button to="/dashboards/messenger" component={NavLink}>
-            <InboxTwoToneIcon fontSize="small" />
-            <ListItemText primary="Messenger" />
-          </ListItem>
-          <ListItem
-            button
-            to="/management/profile/settings"
-            component={NavLink}
-          >
-            <AccountTreeTwoToneIcon fontSize="small" />
-            <ListItemText primary="Account Settings" />
-          </ListItem>
-        </List>
-        <Divider />
-        <Box sx={{ m: 1 }}>
-          <Button color="primary" fullWidth onClick={handleSignOut}>
-            <LockOpenTwoToneIcon sx={{ mr: 1 }} />
-            Sign out
-          </Button>
-        </Box>
-      </Popover>
+      {isSignedIn ? (
+        <Popover
+          anchorEl={ref.current}
+          onClose={handleClose}
+          open={isOpen}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'right'
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right'
+          }}
+        >
+          <MenuUserBox sx={{ minWidth: 210 }} display="flex">
+            <Avatar variant="rounded" alt={user.name} src={user.avatar} />
+            <UserBoxText>
+              <UserBoxLabel variant="body1">{user.name}</UserBoxLabel>
+              <UserBoxDescription variant="body2">
+                {user.jobtitle}
+              </UserBoxDescription>
+            </UserBoxText>
+          </MenuUserBox>
+          <Divider sx={{ mb: 0 }} />
+          <List sx={{ p: 1 }} component="nav">
+            {/* <ListItem button to="/management/profile/details" component={NavLink}> */}
+            <ListItem button onClick={handleNowDevelopingOpen}>
+              <AccountBoxTwoToneIcon fontSize="small" />
+              <ListItemText primary="My Profile" />
+            </ListItem>
+            {/* <ListItem button to="/dashboards/messenger" component={NavLink}> */}
+            <ListItem button onClick={handleNowDevelopingOpen}>
+              <InboxTwoToneIcon fontSize="small" />
+              <ListItemText primary="Messenger" />
+            </ListItem>
+            {/* <ListItem
+              button
+              to="/management/profile/settings"
+              component={NavLink}
+              onClick={handleNowDevelopingOpen}
+            > */}
+            <ListItem button onClick={handleNowDevelopingOpen}>
+              <AccountTreeTwoToneIcon fontSize="small" />
+              <ListItemText primary="Account Settings" />
+            </ListItem>
+          </List>
+          <Divider />
+            <Box sx={{ m: 1 }}>
+              <Button color="primary" fullWidth onClick={handleSignOutOpen}>
+                <LockOpenTwoToneIcon sx={{ mr: 1 }} />
+                Sign out
+              </Button>
+            </Box>
+        </Popover>
+      ) : null}
+      <SignOutDialog
+        open={signOutOpen}
+        onClose={handleSignOutClose}
+      />
+      <NowDevelopingDialog
+        open={nowDevelopingDialogOpen}
+        onClose={handleNowDevelopingClose}
+      />
     </>
   );
 }

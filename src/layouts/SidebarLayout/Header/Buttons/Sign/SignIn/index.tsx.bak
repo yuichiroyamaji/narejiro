@@ -26,8 +26,6 @@ import { graphqlApiCall, graphqlApiResult } from 'src/graphql/apicall';
 import { getUserDataByEmail } from 'src/graphql/queries';
 import { string } from 'prop-types';
 
-import NowDevelopingDialog from 'src/content/pages/Status/NowDeveloping';
-
 interface SignInProps {
     open: boolean;
     onClose: () => void;
@@ -43,7 +41,6 @@ function SignInDialog({ open, onClose }: SignInProps) {
     const [signInErr, setSignInErr] = useState<string>('');
     const [successDialogOpen, setSuccessDialogOpen] = useState<boolean>(false);
     const [signUpOpen, setSignUpOpen] = useState<boolean>(false);
-    const [nowDevelopingDialogOpen, setnowDevelopingDialogOpen] = useState<boolean>(false);
 
     const handleEmailChange = (e) => {
         setEmail(e.target.value);
@@ -69,14 +66,6 @@ function SignInDialog({ open, onClose }: SignInProps) {
   
     const handleSignUpClose = (): void => {
         setSignUpOpen(false);
-    };
-
-    const handleNowDevelopingOpen = (): void => {
-        setnowDevelopingDialogOpen(true);
-    };
-  
-    const handleNowDevelopingClose = (): void => {
-        setnowDevelopingDialogOpen(false);
     };
 
     type FormInputType = {
@@ -216,7 +205,7 @@ function SignInDialog({ open, onClose }: SignInProps) {
                             </Button>
                 
                             <Typography variant="caption">
-                            <Link onClick={handleNowDevelopingOpen} href="#">パスワードを忘れましたか？</Link>
+                            <Link href="#">パスワードを忘れましたか？</Link>
                             </Typography>
                             <Typography variant="caption" display="block" sx={{ mt: "10px" }}>
                                 アカウントを持っていますか？
@@ -256,10 +245,6 @@ function SignInDialog({ open, onClose }: SignInProps) {
             <SignUpDialog
                 open={signUpOpen}
                 onClose={handleSignUpClose}
-            />
-            <NowDevelopingDialog
-              open={nowDevelopingDialogOpen}
-              onClose={handleNowDevelopingClose}
             />
         </>
     );
