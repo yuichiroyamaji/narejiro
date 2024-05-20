@@ -1,22 +1,22 @@
 import { useState, useEffect } from 'react';
 import {
   Card, graphqlApiCall, graphqlApiResult,
-  RecentKnowledgesTable, KnowledgeData, listKnowledgeDatas
+  RecentKnowledgesTable, KnowledgeDataType, listKnowledgeData
 } from './index';
 
 function RecentKnowledges() {
-  const [data, setData] = useState<KnowledgeData[]>();
-  
-  const callApiListKnowledgeDatas = async() => {
-    const res: any = await graphqlApiCall(listKnowledgeDatas);
-    const result: boolean = graphqlApiResult(res.listNarejiroDevTables.items);    
-    if(result){ setData(res.listNarejiroDevTables.items); };
-  };
+  const [data, setData] = useState<KnowledgeDataType[]>();
+  const KnowledgeDatas: KnowledgeDataType[] = data;
 
   useEffect(() => {
     callApiListKnowledgeDatas();
   },[]);
-  const KnowledgeDatas: KnowledgeData[] = data;
+  
+  const callApiListKnowledgeDatas = async() => {
+    const res: any = await graphqlApiCall(listKnowledgeData);
+    const result: boolean = graphqlApiResult(res.listNarejiroDevTables.items);    
+    if(result){ setData(res.listNarejiroDevTables.items); };
+  };
 
   return (
     <Card>

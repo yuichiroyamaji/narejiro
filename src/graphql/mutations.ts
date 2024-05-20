@@ -1,3 +1,6 @@
+import { CreateKnowledgeDataInputType, UpdateKnowledgeDataInputType } from 'src/models/knowledges';
+import {  } from 'src/models/categories';
+
 //なれっじデータ作成
 export const createKnowledgeData =  (title: string, content: string) => /* GraphQL */`
 mutation createKnowledgeData {
@@ -9,13 +12,35 @@ mutation createKnowledgeData {
 `;
 
 //なれっじデータ更新
-export const updateKnowledgeData =  (knowledgeId: number,title: String,content:String) => /* GraphQL */`
-mutation updateKnowledgeData {
-  updateKnowledgeData(input: {PK:"KWL#data", SK: ${knowledgeId}, title: "${title}",content: "${content}"}) {
+export const updateKnowledgeData =  (input: UpdateKnowledgeDataInputType) => /* GraphQL */`
+mutation updateNarejiroDevTable {
+  updateNarejiroDevTable(input: {PK:"KWL#data", SK:${input.SK}, cat1:${input.cat1}, cat2:${input.cat2}, cat3:${input.cat3}, title:"${input.title}", content:"${input.content}", updatedBy:${input.updatedBy}}) {
     PK
     SK
+    cat1 {
+      SK
+      catName
+    }
+    cat2 {
+      SK
+      catName
+    }
+    cat3 {
+      SK
+      catName
+    }
     title
     content
+    updatedAt
+    updatedBy {
+      SK
+      userName
+    }
+    createdAt
+    createdBy {
+      SK
+      userName
+    }
   }
 }
 `;

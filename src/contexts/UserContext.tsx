@@ -3,6 +3,8 @@ import { useState, createContext, useContext, ReactNode } from 'react';
 type UserContextType = {
   isSignedIn: boolean;
   setIsSignedIn: React.Dispatch<React.SetStateAction<boolean>>;
+  appUserId: number;
+  setAppUserId: React.Dispatch<React.SetStateAction<number>>;
   appUsername: string;
   setAppUsername: React.Dispatch<React.SetStateAction<string>>;
 };
@@ -34,10 +36,13 @@ type UserProviderProps = {
 export function UserProvider({ children }: UserProviderProps) {
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
   const [appUsername, setAppUsername] = useState<string>('GuestUser');
+  const [appUserId, setAppUserId] = useState<number>(0);
 
   const value: UserContextType = {
     isSignedIn,
     setIsSignedIn,
+    appUserId,
+    setAppUserId,
     appUsername,
     setAppUsername,
   };

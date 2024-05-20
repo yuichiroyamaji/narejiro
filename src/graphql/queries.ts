@@ -1,4 +1,5 @@
-export const listKnowledgeDatas = /* GraphQL */ `
+//なれっじ一覧データ取得
+export const listKnowledgeData = /* GraphQL */ `
 query listNarejiroDevTables {
     listNarejiroDevTables(filter: {PK: {eq: "KWL#data"}}) {
       items {
@@ -33,41 +34,31 @@ query listNarejiroDevTables {
 }
 `;
 
-export const listCat1s = /* GraphQL */ `
-query listKnowledgeDatas {
-  listKnowledgeDatas {
-    items {
-      PK
-      SK
-      cat1
-      cat2
-      cat3
-      created_at
-      created_by
-      scan_index
-      updated_at
-      updated_by
-      last_id
-      title
-      content
-    }
-  }
-}      
-  `
-//カテゴリ一覧取得
-export const listCategoryDatas = /* GraphQL */ `
-query listCategoryDatas {
-  listCategoryDatas {
-    nextToken
-    items {
-      SK
-      catName
-      catType
-      parentCatId
+//カテゴリ一覧データ取得
+export const listCategoryData = /* GraphQL */ `
+query listNarejiroDevTables {
+    listNarejiroDevTables(filter: {PK: {eq: "CAT#data"}}) {
+      items {
+        PK
+        SK
+        catType
+        catName
+        parentCatId
+        createdAt
+        createdBy {
+          SK
+          userName
+        }
+        updatedAt
+        updatedBy {
+          SK
+          userName
+        }
     }
   }
 }
 `;
+
 //ユーザデータ取得（Eメール）
 export const getUserDataByEmail = (email: string) => /* GraphQL */ `
 query getUserDataByEmail {
@@ -80,6 +71,7 @@ query getUserDataByEmail {
   }
 }
 `;
+
 //ユーザデータ取得（CognitoユーザID）
 export const getUserDataByCognitoUserId = (cognitoUserId: string) => /* GraphQL */ `
 query getUserDataByCognitoUserId {

@@ -1,7 +1,7 @@
 import { ChangeEvent, useState } from 'react';
 import { useUserContext } from 'src/contexts/UserContext';
 import {
-  PropTypes, BulkActions, Label, KnowledgeData, KnowledgeDataStatus, KnowledgeDataDefault,
+  PropTypes, BulkActions, Label, KnowledgeDataType, KnowledgeDataStatus, KnowledgeDataDefault,
   EditKnowledgeDialog, DeleteKnowledgeDialog, DisplayKnowledgeDialog, SignInDialog,
   Tooltip, Divider, Box,FormControl, InputLabel, Card, Checkbox, IconButton,
   Table, TableBody, TableCell, TableHead, TablePagination, TableRow, TableContainer,
@@ -32,9 +32,9 @@ type Filters = {
 };
 
 const applyFilters = (
-  KnowledgeDatas: KnowledgeData[],
+  KnowledgeDatas: KnowledgeDataType[],
   filters: Filters
-): KnowledgeData[] => {
+): KnowledgeDataType[] => {
   return KnowledgeDatas.filter((KnowledgeData) => {
     let matches = true;
 
@@ -47,16 +47,16 @@ const applyFilters = (
 };
 
 const applyPagination = (
-  KnowledgeDatas: KnowledgeData[],
+  KnowledgeDatas: KnowledgeDataType[],
   page: number,
   limit: number
-): KnowledgeData[] => {
+): KnowledgeDataType[] => {
   return KnowledgeDatas.slice(page * limit, page * limit + limit);
 };
 
 interface RecentKnowledgesTableProps {
   className?: string;
-  KnowledgeDatas: KnowledgeData[];
+  KnowledgeDatas: KnowledgeDataType[];
 }
 
 function RecentKnowledgesTable ({ KnowledgeDatas } : RecentKnowledgesTableProps) {
@@ -70,7 +70,7 @@ function RecentKnowledgesTable ({ KnowledgeDatas } : RecentKnowledgesTableProps)
   const [signInOpen, setSignInOpen] = useState<boolean>(false);
   const [knowledgeId, setknowledgeId] = useState<number>(0);
   const [knowledgeContent, setknowledgeContent] = useState<string>("");
-  const [knowledgeDataParam, setKnowledgeDataParam] = useState<KnowledgeData>(KnowledgeDataDefault);
+  const [knowledgeDataParam, setKnowledgeDataParam] = useState<KnowledgeDataType>(KnowledgeDataDefault);
   const selectedBulkActions = selectedKnowledgeDatas.length > 0;
   const [page, setPage] = useState<number>(0);
   const [limit, setLimit] = useState<number>(5);
@@ -91,7 +91,7 @@ function RecentKnowledgesTable ({ KnowledgeDatas } : RecentKnowledgesTableProps)
     {id: 'failed',name: 'Failed'}
   ];
 
-  const handleClickEditOpen = (knowledgeDataParam: KnowledgeData) => {
+  const handleClickEditOpen = (knowledgeDataParam: KnowledgeDataType) => {
     if(isSignedIn) {
       setEditOpen(true);
       setKnowledgeDataParam(knowledgeDataParam);

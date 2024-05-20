@@ -52,8 +52,6 @@ function CreateCategoryDialog ({ open, onClose }: CreateCategoryDialogProps) {
             setCat2List(getCatListByParentCatId(cat1));
             setCat3List(getEmptyCatLit());
         }
-        setCat2(0);
-        setCat3(0);
     }, [cat1]);
 
     useEffect(() => {
@@ -66,7 +64,6 @@ function CreateCategoryDialog ({ open, onClose }: CreateCategoryDialogProps) {
             setCat2Disabled(true);
             setCat3List(getCatListByParentCatId(cat2));
         }
-        setCat3(0);
     }, [cat2]);
 
     useEffect(() => {
@@ -83,10 +80,13 @@ function CreateCategoryDialog ({ open, onClose }: CreateCategoryDialogProps) {
 
     const handleCat1Change = (event) => {
         setCat1(event.target.value);
+        setCat2(0);
+        setCat3(0);
     };
 
     const handleCat2Change = (event) => {
         setCat2(event.target.value);
+        setCat3(0);
     };
 
     const handleCat3Change = (event) => {

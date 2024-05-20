@@ -1,78 +1,55 @@
 export type KnowledgeDataStatus = 'completed' | 'pending' | 'failed';
 
-type User = {
+type UserType = {
 	SK: number;
 	userName: string;
 };
 
-type Category = {
+type CategoryType = {
 	SK: number;
 	catName: string;
 };
 
-export interface KnowledgeData {
+export interface KnowledgeDataType {
 	PK: string;
 	SK: number;
-	cat1: Category;
-	cat2: Category;
-	cat3: Category;
+	cat1: CategoryType;
+	cat2: CategoryType;
+	cat3: CategoryType;
 	title: string;
 	content: string;
 	createdAt: string;
-	createdBy: User;
+	createdBy: UserType;
 	updatedAt: string;
-	updatedBy: User;
-  status: KnowledgeDataStatus;
+	updatedBy: UserType;
+	status: KnowledgeDataStatus;
 }
 
-export interface CreateKnowledgeDataInput {
-	PK: string;
+export interface CreateKnowledgeDataInputType {
+	cat1: number;
+	cat2: number;
+	cat3: number;
+	title: string;
+	content: string;
+	createdBy: number;
+}
+
+export interface UpdateKnowledgeDataInputType {
 	SK: number;
 	cat1: number;
 	cat2: number;
 	cat3: number;
 	title: string;
 	content: string;
-	ref_mtrl_path: string;
-	ref_mtrl_name: string;
-	ref_red_url: string;
-	ref_link_url: string;
-	ref_attch_url: string;
-	note: string;
-	created_at: string;
-	created_by: number;
-	updated_at: string;
-	updated_by: number;
-  status: KnowledgeDataStatus;
+	updatedBy: number;
 }
 
-export interface UpdateKnowledgeDataInput {
-	PK: string;
-	SK: number;
-	cat1: number;
-	cat2: number;
-	cat3: number;
-	title: string;
-	content: string;
-	ref_mtrl_path: string;
-	ref_mtrl_name: string;
-	ref_red_url: string;
-	ref_link_url: string;
-	ref_attch_url: string;
-	note: string;
-	created_at: string;
-	created_by: number;
-	updated_at: string;
-	updated_by: number;
-  status: KnowledgeDataStatus;
-}
-
-export interface DeleteKnowledgeDataInput {
+export interface DeleteKnowledgeDataInputType {
 	PK: string;
 	SK: number;
 }
 
-export const KnowledgeDataDefault: KnowledgeData = {
+export const KnowledgeDataDefault: KnowledgeDataType = {
 	PK: "",
 	SK: 0,
 	cat1: {SK: 0, catName: ""},

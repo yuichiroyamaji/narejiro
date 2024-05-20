@@ -1,8 +1,9 @@
 import { useState, useEffect, useMemo, ChangeEvent, DragEvent } from 'react';
 import {
-    markdownit, DOMPurify, KnowledgeData, CreateCategoryDialog, FullscreenIcon, FullscreenExitIcon,
+    markdownit, DOMPurify, KnowledgeDataType, CreateCategoryDialog, FullscreenIcon, FullscreenExitIcon,
     Box, Grid, Stack, Button, useTheme, Dialog, DialogTitle, DialogContent, DialogActions,
-    FormControl, InputLabel, InputAdornment, OutlinedInput, TextField, MenuItem, IconButton, CloseIcon
+    FormControl, InputLabel, InputAdornment, OutlinedInput, TextField, MenuItem, IconButton, CloseIcon, useUserContext, SuccessDialog,
+    graphqlApiCall, graphqlApiResult, listCategoryData, CategoryDataType, CategoryDataDefault, updateKnowledgeData, UpdateKnowledgeDataInputType
 } from '../index';
 import 'easymde/dist/easymde.min.css';
 // import { S3 } from 'aws-sdk';
@@ -10,63 +11,112 @@ import 'easymde/dist/easymde.min.css';
 interface EditKnowledgeDialogProps {
     open: boolean;
     onClose: () => void;
-    knowledgeDataParam: KnowledgeData;
+    knowledgeDataParam: KnowledgeDataType;
 }
 
 function EditKnowledgeDialog ({ open, onClose, knowledgeDataParam }: EditKnowledgeDialogProps) {
 
+    type catDataType = {
+        SK: number;
+        catType: number;
+        catName: string;
+        parentCatId: number;
+    };
+
+    const {appUserId, setAppUserId} = useUserContext();
     const [windowHeight, setWindowHeight] = useState(window.innerHeight);
     const [createCatOpen, setCreateCatOpen] = useState<boolean>(false);
-    const [textFieldValue, setTextFieldValue] = useState<String>(knowledgeDataParam.content);
+    const [successDialogOpen, setSuccessDialogOpen] = useState<boolean>(false);
+    const [successDialogMsg, setSuccessDialogMsg] = useState<string>('');
     const [markdownValue, setMarkdownValue] = useState<string>('');
     const [isFullScreen, setIsFullScreen] = useState(false);
     const [isDragActive, setIsDragActive] = useState<boolean>(false);
+    const [catList, setCatList] = useState<CategoryDataType[]>(CategoryDataDefault);
     const [cat1, setCat1] = useState<number>(0);
     const [cat2, setCat2] = useState<number>(0);
     const [cat3, setCat3] = useState<number>(0);
+    const [title, setTitle] = useState<string>('');
+    const [content, setContent] = useState<string>('');
     const theme = useTheme();
+    const [cat1List, setCat1List] = useState<Array<catDataType>>([]);
+    const [cat2List, setCat2List] = useState<Array<catDataType>>([]);
+    const [cat3List, setCat3List] = useState<Array<catDataType>>([]);
 
     useEffect(() => {
+        callApiListCategoryDatas();
         const handleResize = () => { setWindowHeight(window.innerHeight); };
         window.addEventListener('resize', handleResize);
         return () => { window.removeEventListener('resize', handleResize); };
     }, []);
 
     useEffect(() => {
-        setTextFieldValue(knowledgeDataParam.content);
+        setCat1(knowledgeDataParam.cat1.SK);
+        setCat2(knowledgeDataParam.cat2.SK);
+        setCat3(knowledgeDataParam.cat3.SK);
+        setCat1List(getCatListByCatType(1));
+        setCat2List(getCatListByCatType(2));
+        setCat3List(getCatListByCatType(3));
+        setTitle(knowledgeDataParam.title);
+        setContent(knowledgeDataParam.content);
         setMarkdownValue(knowledgeDataParam.content);
+        setSuccessDialogMsg("なれっじ 【ID：" + knowledgeDataParam.SK + " 】の内容を更新しました！");
     }, [open]);
 
-    const cat1s = [
-      {
-        value: 0,
-        label: '未選択'
-      },
-      {
-        value: 1,
-        label: 'Mall'
-      },
-      {
-        value: 2,
-        label: 'Shopify'
-      },
-      {
-        value: 3,
-        label: 'Amazon'
-      },
-      {
-        value: 4,
-        label: 'Yahoo'
-      },
-      {
-        value: 5,
-        label: 'Rakuten'
-      },
-      {
-        value: 6,
-        label: 'EC-Cube'
-      }
-    ];
+    useEffect(() => {
+        console.log("FUNCTION CALLED: useEffect() => cat1");
+        console.log(cat1);
+        if(cat1 === 0){
+            setCat2List(getEmptyCatLit());
+            setCat3List(getEmptyCatLit());
+        }else{
+            setCat2List(getCatListByParentCatId(cat1));
+            setCat3List(getEmptyCatLit());
+        }
+    }, [cat1]);
+
+    useEffect(() => {
+        console.log("FUNCTION CALLED: useEffect() => cat2");
+        console.log(cat2);
+        if(cat2 === 0){
+            setCat3List(getEmptyCatLit());
+        }else{
+            setCat3List(getCatListByParentCatId(cat2));
+        }
+    }, [cat2]);
+
+    const handleSubCreate = () => {
+        if(cat1 != 0 && cat2 != 0 && cat3 != 0){
+            alert("新規作成カテゴリがありません。(大)(中)(小)いずれかのカテゴリを新規作成してください。");
+        };
+    };
+
+    const getEmptyCatLit = () => {
+        return catList.filter((catList) => catList.SK === 0);
+    }
+
+    const getCatListByCatType = (catType: number) => {
+        return catList.filter((catList) => {
+            return catList.catType === 0 || catList.catType === catType;
+        });
+    };
+
+    const getCatListByParentCatId = (SK: number) => {
+        return catList.filter((catList) => {
+            return catList.catType === 0 || catList.parentCatId === SK;
+        });
+    };
+
+    const callApiListCategoryDatas = async() => {
+      const res: any = await graphqlApiCall(listCategoryData);
+      const result: boolean = graphqlApiResult(res.listNarejiroDevTables.items);
+      if(result){ setCatList(res.listNarejiroDevTables.items); };
+    };
+
+    const callApiUpdateKnowledge = async(updateKnowledgeDataInput: UpdateKnowledgeDataInputType) => {
+      const res: any = await graphqlApiCall(updateKnowledgeData(updateKnowledgeDataInput));
+      const result: boolean = graphqlApiResult(res.updateNarejiroDevTable);
+      if(result){ setSuccessDialogOpen(true); };
+    };
 
     const handleClose = () => {
         onClose();
@@ -78,27 +128,53 @@ function EditKnowledgeDialog ({ open, onClose, knowledgeDataParam }: EditKnowled
 
     const handleCat1Change = (event) => {
         setCat1(event.target.value);
+        setCat2(0);
+        setCat3(0);
     };
 
     const handleCat2Change = (event) => {
         setCat2(event.target.value);
+        setCat3(0);
     };
 
     const handleCat3Change = (event) => {
         setCat3(event.target.value);
     };
 
+    const handleTitleChange = (event) => {
+        setTitle(event.target.value);
+    };
+
     const handleCreateCatOpen = () => {
         setCreateCatOpen(true);
     };
 
-    const handleKnowledgeContentChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-        setTextFieldValue(event.target.value);
+    const handleSuccessDialogClose = () => {
+        setSuccessDialogOpen(false);
+        onClose();
+        window.location.reload();
+    };
+
+    const handleContentChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+        setContent(event.target.value);
         setMarkdownValue(event.target.value);
     };
 
     const handleFullScreenToggle = () => {
         setIsFullScreen(!isFullScreen);
+    };
+
+    const handleEditBtn = () => {
+        const updateKnowledgeDataInput = {
+            SK: knowledgeDataParam.SK,
+            cat1: cat1,
+            cat2: cat2,
+            cat3: cat3,
+            title: title,
+            content: content,
+            updatedBy: appUserId
+        };
+        callApiUpdateKnowledge(updateKnowledgeDataInput);
     };
 
     const onDragEnter = (e: DragEvent<HTMLDivElement>) => {
@@ -196,10 +272,12 @@ function EditKnowledgeDialog ({ open, onClose, knowledgeDataParam }: EditKnowled
                                         value={cat1}
                                         onChange={handleCat1Change}
                                     >
-                                        {cat1s.map((option) => (
-                                        <MenuItem key={option.value} value={option.value}>
-                                            {option.label}
-                                        </MenuItem>
+                                        {cat1List
+                                        // .filter((cat) => cat.catType === 1)
+                                        .map((cat) => (
+                                            <MenuItem key={cat.SK} value={cat.SK}>
+                                            {cat.catName}
+                                            </MenuItem>
                                         ))}
                                     </TextField>
                                     <TextField
@@ -209,10 +287,12 @@ function EditKnowledgeDialog ({ open, onClose, knowledgeDataParam }: EditKnowled
                                         value={cat2}
                                         onChange={handleCat2Change}
                                     >
-                                        {cat1s.map((option) => (
-                                        <MenuItem key={option.value} value={option.value}>
-                                            {option.label}
-                                        </MenuItem>
+                                        {cat2List
+                                        // .filter((cat) => cat.catType === 2)
+                                        .map((cat) => (
+                                            <MenuItem key={cat.SK} value={cat.SK}>
+                                            {cat.catName}
+                                            </MenuItem>
                                         ))}
                                     </TextField>
                                     <TextField
@@ -222,10 +302,12 @@ function EditKnowledgeDialog ({ open, onClose, knowledgeDataParam }: EditKnowled
                                         value={cat3}
                                         onChange={handleCat3Change}
                                     >
-                                        {cat1s.map((option) => (
-                                        <MenuItem key={option.value} value={option.value}>
-                                            {option.label}
-                                        </MenuItem>
+                                        {cat3List
+                                        // .filter((cat) => cat.catType === 3)
+                                        .map((cat) => (
+                                            <MenuItem key={cat.SK} value={cat.SK}>
+                                            {cat.catName}
+                                            </MenuItem>
                                         ))}
                                     </TextField>
                                     <Button
@@ -242,8 +324,10 @@ function EditKnowledgeDialog ({ open, onClose, knowledgeDataParam }: EditKnowled
                                         <OutlinedInput
                                             id="editKnowledgeTitle"
                                             color="info"
-                                            startAdornment={<InputAdornment position="start">{knowledgeDataParam.title}</InputAdornment>}
+                                            // startAdornment={<InputAdornment position="start">{knowledgeDataParam.title}</InputAdornment>}
                                             label="タイトル"
+                                            value={title}
+                                            onChange={handleTitleChange}
                                         />
                                     </FormControl>
                                 </Box>
@@ -260,8 +344,8 @@ function EditKnowledgeDialog ({ open, onClose, knowledgeDataParam }: EditKnowled
                                         variant="outlined"
                                         multiline
                                         rows={isFullScreen ? windowHeight/35 : windowHeight/50}
-                                        value={textFieldValue}
-                                        onChange={handleKnowledgeContentChange}
+                                        value={content}
+                                        onChange={handleContentChange}
                                         style = {{width: "100%"}}
                                         fullWidth
                                     />
@@ -271,7 +355,7 @@ function EditKnowledgeDialog ({ open, onClose, knowledgeDataParam }: EditKnowled
                     </DialogContent>
                     <DialogActions>
                         <Button variant="outlined" onClick={handleClose}>Cancel</Button>
-                        <Button variant="contained" onClick={handleClose} autoFocus>Edit</Button>
+                        <Button variant="contained" onClick={handleEditBtn} autoFocus>Edit</Button>
                     </DialogActions>
                 </Grid>
                 <Grid item xs={6} sx={{pl: 3, pt: 1, pr: 1, pb: 1, borderLeft: 1, borderColor: "#ccc" }}>
@@ -307,6 +391,12 @@ function EditKnowledgeDialog ({ open, onClose, knowledgeDataParam }: EditKnowled
             <CreateCategoryDialog
                 open={createCatOpen}
                 onClose={handleSubClose}
+            />
+            <SuccessDialog
+                open={successDialogOpen}
+                onClose={handleSuccessDialogClose}
+                title="なれっじ更新成功"
+                message={successDialogMsg}
             />
         </Dialog>
     );

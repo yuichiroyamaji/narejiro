@@ -35,6 +35,7 @@ interface SignInProps {
 
 function SignInDialog({ open, onClose }: SignInProps) {
     const {isSignedIn, setIsSignedIn} = useUserContext();
+    const {appUserId, setAppUserId} = useUserContext();
     const {appUsername, setAppUsername} = useUserContext();
     const [localAppUsername, setLocalAppUsername] = useState<string>('');
     const [email, setEmail] = useState<string>('');
@@ -89,7 +90,8 @@ function SignInDialog({ open, onClose }: SignInProps) {
         const res: any = await callApiGetUserDataByEmail(email);
         const username = res.cognitoUserId;
         await congnitoSignIn({username, password});
-        await setAppUsername(res.userName);
+        setAppUserId(res.SK);
+        setAppUsername(res.userName);
         console.log('【END】handleSignIn()');
     };
 
@@ -113,6 +115,7 @@ function SignInDialog({ open, onClose }: SignInProps) {
             setSignInErr('');
             setIsSignedIn(true);
             setSuccessDialogOpen(true);
+            console.log("appUserId: " + appUserId);
             console.log("appUsername: " + appUsername);
         }else{
             throw new Error("isSignedIn is not true");

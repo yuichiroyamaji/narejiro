@@ -24,8 +24,9 @@ Amplify.configure(config);
 function HeaderSign() {
 
   const ref = useRef<any>(null);
-  const {appUsername, setAppUsername} = useUserContext();
   const {isSignedIn, setIsSignedIn} = useUserContext();
+  const {appUserId, setAppUserId} = useUserContext();
+  const {appUsername, setAppUsername} = useUserContext();
   const [signInOpen, setSignInOpen] = useState<boolean>(false);
   const [signOutOpen, setSignOutOpen] = useState<boolean>(false);
 
@@ -38,9 +39,9 @@ function HeaderSign() {
         console.log(`The signInDetails: ${signInDetails}`);
         setIsSignedIn(true);
         console.log("isSignedIn: " + isSignedIn);
-        const localUsername = await callApiGetUserDataByCognitoUserId(userId);
-        console.log("localUsername: " + localUsername);
-        setAppUsername(localUsername);
+        const res = await callApiGetUserDataByCognitoUserId(userId);
+        setAppUserId(res.SK);
+        setAppUsername(res.userName);
       } catch (error) {
         console.log('error currentAuthenticatedUser', error);
         setIsSignedIn(false);
@@ -52,6 +53,14 @@ function HeaderSign() {
   useEffect(() => {
     console.log("[StateChangeDetected] isSignedIn : " + isSignedIn);
   }, [isSignedIn]);
+
+  useEffect(() => {
+    console.log("appUserId: " + appUserId);
+  }, [appUserId]);
+
+  useEffect(() => {
+    console.log("appUsername: " + appUsername);
+  }, [appUsername]);
 
   const handleSignInOpen = (): void => {
     setSignInOpen(true);
@@ -74,7 +83,7 @@ function HeaderSign() {
       const res: any = await graphqlApiCall(getUserDataByCognitoUserId(cognitoUserId));
       const result: boolean = graphqlApiResult(res);
       console.log('【END】callApiGetUserDataByCognitoUserId()');
-      return res.getUserDataByCognitoUserId.userName;
+      return res.getUserDataByCognitoUserId;
   };
 
   return (
