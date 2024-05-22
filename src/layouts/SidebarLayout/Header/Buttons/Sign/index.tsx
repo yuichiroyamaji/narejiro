@@ -33,15 +33,19 @@ function HeaderSign() {
   useEffect(() => {  
     const currentAuthenticatedUser = async () => {
       try {
-        const { username, userId, signInDetails } = await getCurrentUser();
-        console.log(`The username: ${username}`);
-        console.log(`The userId: ${userId}`);
-        console.log(`The signInDetails: ${signInDetails}`);
-        setIsSignedIn(true);
-        console.log("isSignedIn: " + isSignedIn);
-        const res = await callApiGetUserDataByCognitoUserId(userId);
-        setAppUserId(res.SK);
-        setAppUsername(res.userName);
+        const localStorageSessionKeys = Object.keys(localStorage).filter(key => key.startsWith('CognitoIdentityServiceProvider'));
+        if(localStorageSessionKeys.length > 0){
+          const { username, userId, signInDetails } = await getCurrentUser();
+          if(username){
+            console.log(`username: ${username}`);
+            console.log(`userId: ${userId}`);
+            setIsSignedIn(true);
+            console.log("isSignedIn: " + isSignedIn);
+            const res = await callApiGetUserDataByCognitoUserId(userId);
+            setAppUserId(res.SK);
+            setAppUsername(res.userName);
+          }
+        }
       } catch (error) {
         console.log('error currentAuthenticatedUser', error);
         setIsSignedIn(false);
