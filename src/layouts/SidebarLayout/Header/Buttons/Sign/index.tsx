@@ -40,7 +40,6 @@ function HeaderSign() {
             console.log(`username: ${username}`);
             console.log(`userId: ${userId}`);
             setIsSignedIn(true);
-            console.log("isSignedIn: " + isSignedIn);
             const res = await callApiGetUserDataByCognitoUserId(userId);
             setAppUserId(res.SK);
             setAppUsername(res.userName);

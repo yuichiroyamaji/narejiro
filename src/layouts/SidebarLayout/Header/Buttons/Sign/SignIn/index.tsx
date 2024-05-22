@@ -88,11 +88,15 @@ function SignInDialog({ open, onClose }: SignInProps) {
     const handleSignIn = async ({ email, password }: FormInputType) => {
         console.log('【START】handleSignIn()');
         const res: any = await callApiGetUserDataByEmail(email);
-        const username = res.cognitoUserId;
-        await congnitoSignIn({username, password});
-        setAppUserId(res.SK);
-        setAppUsername(res.userName);
-        console.log('【END】handleSignIn()');
+        if(res){
+            const username = res.cognitoUserId;
+            await congnitoSignIn({username, password});
+            setAppUserId(res.SK);
+            setAppUsername(res.userName);
+            console.log('【END】handleSignIn()');
+        }else{
+            setSignInErr("※入力されたメールアドレスのアカウントは存在しません。");
+        }
     };
 
     const callApiGetUserDataByEmail = async(email: string) => {
