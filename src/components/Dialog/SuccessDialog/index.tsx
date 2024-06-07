@@ -71,7 +71,8 @@ function SuccessDialog({ open, onClose, title, message }: SuccessDialogProps) {
                             </Typography>
                         </Box>
                         <Box sx={{ mb: "10px", fontSize: "1.1em" }}>
-                            {message}
+                            {/* {message} */}
+                            <div dangerouslySetInnerHTML={{ __html: message }}></div>
                         </Box>
                     </Grid>
                     <IconButton

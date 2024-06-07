@@ -3,6 +3,8 @@
 export const APP_NAME = "なれじろうWEB"
 export const API_URL = "https://4js3hfxbu5eqfh3mj3wqoyzosy.appsync-api.ap-northeast-1.amazonaws.com/graphql"; //process.env.API_URL as string;
 export const API_KEY = "da2-a3wirkvc6ncmnp62bkcc4go37u"; //process.env.API_KEY as string;
+export const NEW_REGIST_CAT_ID = 0;
+export const UNSELECTED_CAT_ID = 999;
 export const DEFAULT_TEXT = [
     '# h1: 文頭に「シャープ + スペース」',
     '---',

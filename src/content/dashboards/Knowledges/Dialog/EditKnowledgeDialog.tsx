@@ -16,13 +16,6 @@ interface EditKnowledgeDialogProps {
 
 function EditKnowledgeDialog ({ open, onClose, knowledgeDataParam }: EditKnowledgeDialogProps) {
 
-    type catDataType = {
-        SK: number;
-        catType: number;
-        catName: string;
-        parentCatId: number;
-    };
-
     const {appUserId, setAppUserId} = useUserContext();
     const [windowHeight, setWindowHeight] = useState(window.innerHeight);
     const [createCatOpen, setCreateCatOpen] = useState<boolean>(false);
@@ -38,9 +31,9 @@ function EditKnowledgeDialog ({ open, onClose, knowledgeDataParam }: EditKnowled
     const [title, setTitle] = useState<string>('');
     const [content, setContent] = useState<string>('');
     const theme = useTheme();
-    const [cat1List, setCat1List] = useState<Array<catDataType>>([]);
-    const [cat2List, setCat2List] = useState<Array<catDataType>>([]);
-    const [cat3List, setCat3List] = useState<Array<catDataType>>([]);
+    const [cat1List, setCat1List] = useState<Array<CategoryDataType>>([]);
+    const [cat2List, setCat2List] = useState<Array<CategoryDataType>>([]);
+    const [cat3List, setCat3List] = useState<Array<CategoryDataType>>([]);
 
     useEffect(() => {
         callApiListCategoryDatas();
@@ -391,6 +384,7 @@ function EditKnowledgeDialog ({ open, onClose, knowledgeDataParam }: EditKnowled
             <CreateCategoryDialog
                 open={createCatOpen}
                 onClose={handleSubClose}
+                catList={catList}
             />
             <SuccessDialog
                 open={successDialogOpen}

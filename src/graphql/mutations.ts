@@ -1,5 +1,5 @@
 import { CreateKnowledgeDataInputType, UpdateKnowledgeDataInputType } from 'src/models/knowledges';
-import {  } from 'src/models/categories';
+import { CreateCategoryDataInputType } from 'src/models/categories';
 
 //なれっじデータ作成
 export const createKnowledgeData =  (title: string, content: string) => /* GraphQL */`
@@ -51,6 +51,29 @@ mutation deleteNarejiroDevTable {
   deleteNarejiroDevTable(input: {PK:"KWL#data", SK: ${knowledgeId}}) {
     PK
     SK
+  }
+}
+`;
+
+//カテゴリデータ作成
+export const createCategoryData = (input: CreateCategoryDataInputType) => /* GraphQL */`
+mutation createCategoryData {
+  createNarejiroDevTable(input: {PK:"CAT#data", catType:${input.catType}, catName:"${input.catName}", parentCatId:${input.parentCatId}, createdBy:${input.createdBy}}) {
+    PK
+    SK
+    catType
+    catName
+    parentCatId
+    updatedAt
+    updatedBy {
+      SK
+      userName
+    }
+    createdAt
+    createdBy {
+      SK
+      userName
+    }
   }
 }
 `;

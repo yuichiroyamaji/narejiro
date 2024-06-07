@@ -2,7 +2,7 @@ import { useState, useEffect, ChangeEvent, DragEvent } from 'react';
 import {
     DEFAULT_TEXT, Box, Grid, Stack, Button, useTheme, FormControl, InputLabel, InputAdornment, OutlinedInput, 
     TextField, MenuItem, IconButton, CloseIcon, Dialog, DialogTitle, DialogContent, DialogActions,
-    SimpleMde, markdownit, DOMPurify, CreateCategoryDialog, FullscreenIcon, FullscreenExitIcon
+    SimpleMde, markdownit, DOMPurify, CreateCategoryDialog, CategoryDataType, CategoryDataDefault, FullscreenIcon, FullscreenExitIcon
 } from '../index';
 import 'easymde/dist/easymde.min.css';
 
@@ -19,6 +19,7 @@ function CreateKnowledgeDialog ({ open, onClose }: CreateKnowledgeDialogProps) {
     const [markdownValue, setMarkdownValue] = useState<string>(DEFAULT_TEXT.join('\n'));
     const [isFullScreen, setIsFullScreen] = useState(false);
     const [isDragActive, setIsDragActive] = useState<boolean>(false);
+    const [catList, setCatList] = useState<CategoryDataType[]>(CategoryDataDefault);
     const [cat1, setCat1] = useState<number>(0);
     const [cat2, setCat2] = useState<number>(0);
     const [cat3, setCat3] = useState<number>(0);
@@ -278,6 +279,7 @@ function CreateKnowledgeDialog ({ open, onClose }: CreateKnowledgeDialogProps) {
             <CreateCategoryDialog
                 open={createCatOpen}
                 onClose={handleSubClose}
+                catList={catList}
             />
         </Dialog>
     );

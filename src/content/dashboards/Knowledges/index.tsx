@@ -1,5 +1,5 @@
 export type { KnowledgeDataType, KnowledgeDataStatus, UpdateKnowledgeDataInputType } from 'src/models/knowledges';
-export type { CategoryDataType } from 'src/models/categories';
+export type { CategoryDataType, CreateCategoryDataInputType } from 'src/models/categories';
 
 export { useUserContext } from 'src/contexts/UserContext';
 export { default as SuccessDialog } from 'src/components/Dialog/SuccessDialog';
@@ -7,8 +7,8 @@ export { KnowledgeDataDefault } from 'src/models/knowledges';
 export { CategoryDataDefault } from 'src/models/categories';
 export {graphqlApiCall, graphqlApiResult} from 'src/graphql/apicall';
 export {listKnowledgeData, listCategoryData} from 'src/graphql/queries';
-export {createKnowledgeData, updateKnowledgeData, deleteKnowledgeData} from 'src/graphql/mutations';
-export {API_URL, API_KEY, DEFAULT_TEXT, CAT_LIST} from 'src/common/constants';
+export {createKnowledgeData, updateKnowledgeData, createCategoryData, deleteKnowledgeData} from 'src/graphql/mutations';
+export {API_URL, API_KEY, DEFAULT_TEXT, CAT_LIST, NEW_REGIST_CAT_ID, UNSELECTED_CAT_ID} from 'src/common/constants';
 
 export {default as PropTypes} from 'prop-types';
 export {default as SimpleMde} from 'react-simplemde-editor';

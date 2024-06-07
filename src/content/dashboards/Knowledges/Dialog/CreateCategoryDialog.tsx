@@ -1,65 +1,68 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
-    Box, Stack, Button, useTheme, graphqlApiCall, graphqlApiResult,
-    FormControl, InputLabel, InputAdornment, OutlinedInput, TextField, MenuItem, IconButton, CloseIcon,
-    Dialog, DialogTitle, DialogContent, DialogActions, CAT_LIST
+    Box, Stack, Button, useTheme, graphqlApiCall, graphqlApiResult, SuccessDialog,
+    FormControl, InputLabel, InputAdornment, OutlinedInput, TextField, MenuItem, IconButton, CloseIcon, useUserContext,
+    Dialog, DialogTitle, DialogContent, DialogActions, CategoryDataType, createCategoryData, CreateCategoryDataInputType,
+    NEW_REGIST_CAT_ID, UNSELECTED_CAT_ID
 } from '../index';
 
 interface CreateCategoryDialogProps {
     open: boolean;
     onClose: () => void;
+    catList: CategoryDataType[];
 }
 
-function CreateCategoryDialog ({ open, onClose }: CreateCategoryDialogProps) {
+function CreateCategoryDialog ({ open, onClose, catList }: CreateCategoryDialogProps) {
 
-    type catDataType = {
-        SK: number;
-        cat_type: number;
-        cat_name: string;
-        parent_cat_id: number;
-    };
-
-    const [catType, setCatType] = useState<number>(0);
-    const [existingCat, setExistingCat] = useState<number>(0);
-    const [cat1, setCat1] = useState<number>(0);
-    const [cat2, setCat2] = useState<number>(0);
-    const [cat3, setCat3] = useState<number>(0);
-    const [cat1List, setCat1List] = useState<Array<catDataType>>([]);
-    const [cat2List, setCat2List] = useState<Array<catDataType>>([]);
-    const [cat3List, setCat3List] = useState<Array<catDataType>>([]);
+    const {appUserId, setAppUserId} = useUserContext();
+    const [cat1, setCat1] = useState<number>(NEW_REGIST_CAT_ID);
+    const [cat2, setCat2] = useState<number>(NEW_REGIST_CAT_ID);
+    const [cat3, setCat3] = useState<number>(NEW_REGIST_CAT_ID);
+    const cat1Ref = useRef<number>(NEW_REGIST_CAT_ID);
+    const cat2Ref = useRef<number>(NEW_REGIST_CAT_ID);
+    const cat3Ref = useRef<number>(NEW_REGIST_CAT_ID);
+    const [cat1Name, setcat1Name] = useState<string>('');
+    const [cat2Name, setcat2Name] = useState<string>('');
+    const [cat3Name, setcat3Name] = useState<string>('');
+    const [cat1List, setCat1List] = useState<Array<CategoryDataType>>([]);
+    const [cat2List, setCat2List] = useState<Array<CategoryDataType>>([]);
+    const [cat3List, setCat3List] = useState<Array<CategoryDataType>>([]);
     const [cat1Disabled, setCat1Disabled] = useState<boolean>(false);
     const [cat2Disabled, setCat2Disabled] = useState<boolean>(false);
     const [cat3Disabled, setCat3Disabled] = useState<boolean>(false);
-    const [catName, setCatName] = useState<string>();
+    const [successDialogOpen, setSuccessDialogOpen] = useState<boolean>(false);
+    const [successDialogMsg, setSuccessDialogMsg] = useState<string>('');
 
     useEffect(() => {
         setCat1List(getCatListByCatType(1));
-        setCat2List(getEmptyCatLit());
-        setCat3List(getEmptyCatLit());
+        setCat2List(getEmptyCatList());
+        setCat3List(getEmptyCatList());
     },[]);
 
     useEffect(() => {
         console.log("FUNCTION CALLED: useEffect() => cat1");
         console.log(cat1);
-        if(cat1 === 0){
+        cat1Ref.current = cat1;
+        if(cat1 === NEW_REGIST_CAT_ID){
             setCat1Disabled(false);
-            setCat2List(getEmptyCatLit());
+            setCat2List(getEmptyCatList());
             setCat2Disabled(false);
-            setCat3List(getEmptyCatLit());
+            setCat3List(getEmptyCatList());
             setCat3Disabled(false);
         }else{
             setCat1Disabled(true);
             setCat2List(getCatListByParentCatId(cat1));
-            setCat3List(getEmptyCatLit());
+            setCat3List(getEmptyCatList());
         }
     }, [cat1]);
 
     useEffect(() => {
         console.log("FUNCTION CALLED: useEffect() => cat2");
         console.log(cat2);
-        if(cat2 === 0){
+        cat2Ref.current = cat2;
+        if(cat2 === NEW_REGIST_CAT_ID){
             setCat2Disabled(false);
-            setCat3List(getEmptyCatLit());
+            setCat3List(getEmptyCatList());
         }else{
             setCat2Disabled(true);
             setCat3List(getCatListByParentCatId(cat2));
@@ -69,7 +72,8 @@ function CreateCategoryDialog ({ open, onClose }: CreateCategoryDialogProps) {
     useEffect(() => {
         console.log("FUNCTION CALLED: useEffect() => cat3");
         console.log(cat3);
-        if(cat3 === 0){
+        cat3Ref.current = cat3;
+        if(cat3 === NEW_REGIST_CAT_ID){
             setCat3Disabled(false);
         }else{
             setCat3Disabled(true);
@@ -78,44 +82,135 @@ function CreateCategoryDialog ({ open, onClose }: CreateCategoryDialogProps) {
 
     const theme = useTheme();
 
+    const callApiCreateCategory = async(createCategoryDataInput: CreateCategoryDataInputType) => {
+      const res: any = await graphqlApiCall(createCategoryData(createCategoryDataInput));
+      const result: boolean = await graphqlApiResult(res.createNarejiroDevTable);
+      if(result){await resetCategory(res.createNarejiroDevTable.catType, res.createNarejiroDevTable.SK);};
+      return res.createNarejiroDevTable.SK;
+    };
+
+    const resetCategory = (catType: number, SK: number) => {
+        switch (catType) {
+            case 1:
+                setCat1(SK);
+                break;
+            case 2:
+                setCat2(SK);
+                break;
+            case 3:
+                setCat3(SK);
+                break;
+        }
+    };
+
     const handleCat1Change = (event) => {
         setCat1(event.target.value);
-        setCat2(0);
-        setCat3(0);
+        setCat2(NEW_REGIST_CAT_ID);
+        setCat3(NEW_REGIST_CAT_ID);
     };
 
     const handleCat2Change = (event) => {
         setCat2(event.target.value);
-        setCat3(0);
+        setCat3(NEW_REGIST_CAT_ID);
     };
 
     const handleCat3Change = (event) => {
         setCat3(event.target.value);
     };
 
+    const handlecat1NameChange = (event) => {
+        setcat1Name(event.target.value);
+    };
+
+    const handlecat2NameChange = (event) => {
+        setcat2Name(event.target.value);
+    };
+
+    const handlecat3NameChange = (event) => {
+        setcat3Name(event.target.value);
+    };
+
     const handleSubClose = () => {
         onClose();
     };
 
-    const handleSubCreate = () => {
-        if(cat1 != 0 && cat2 != 0 && cat3 != 0){
+    const handleSubCreate = async() => {
+        if(cat1 != NEW_REGIST_CAT_ID && cat2 != NEW_REGIST_CAT_ID && cat3 != NEW_REGIST_CAT_ID){
             alert("新規作成カテゴリがありません。(大)(中)(小)いずれかのカテゴリを新規作成してください。");
+        }else if(cat1 === NEW_REGIST_CAT_ID && !cat1Name){
+            alert("カテゴリ(大)の新規カテゴリ名が入力されていません");
+        }else if(cat2 === NEW_REGIST_CAT_ID && !cat2Name){
+            alert("カテゴリ(中)の新規カテゴリ名が入力されていません");
+        }else if(cat3 === NEW_REGIST_CAT_ID && !cat3Name){
+            alert("カテゴリ(小)の新規カテゴリ名が入力されていません");
+        }else if(cat2 === NEW_REGIST_CAT_ID && cat1 === UNSELECTED_CAT_ID){
+            alert("カテゴリ(中)を登録にはカテゴリ(大)の指定が必要です");
+        }else if(cat3 === NEW_REGIST_CAT_ID && cat2 === UNSELECTED_CAT_ID){
+            alert("カテゴリ(小)を登録にはカテゴリ(中)の指定が必要です");
+        }else{
+            let newCatId: number = NEW_REGIST_CAT_ID;
+            let msg: string = "以下のカテゴリが作成されました。<br/>";
+            const commonProps = {
+                PK: "CAT#data",
+                createdBy: appUserId
+            };
+            if(cat1 === NEW_REGIST_CAT_ID && cat1Name){
+                const createCategoryDataInput = {
+                    ...commonProps,
+                    catType: 1,
+                    catName: cat1Name,
+                    parentCatId: 0,
+                };
+                newCatId = await callApiCreateCategory(createCategoryDataInput);
+                cat1Ref.current = newCatId;
+                msg += "<br/> ・カテゴリ(大) : " + cat1Name;
+            };
+            if(cat2 === NEW_REGIST_CAT_ID && cat2Name){
+                const createCategoryDataInput = {
+                    ...commonProps,
+                    catType: 2,
+                    catName: cat2Name,
+                    parentCatId: cat1Ref.current,
+                };
+                newCatId = await callApiCreateCategory(createCategoryDataInput);
+                cat2Ref.current = newCatId;
+                msg += "<br/> ・カテゴリ(中) : " + cat2Name;
+            };
+            if(cat3 === NEW_REGIST_CAT_ID && cat3Name){
+                const createCategoryDataInput = {
+                    ...commonProps,
+                    catType: 3,
+                    catName: cat3Name,
+                    parentCatId: cat2Ref.current,
+                };
+                newCatId = await callApiCreateCategory(createCategoryDataInput);
+                cat3Ref.current = newCatId;
+                msg += "<br/> ・カテゴリ(小) : " + cat3Name;
+            };
+            if(newCatId != NEW_REGIST_CAT_ID){
+                setSuccessDialogMsg(msg);
+                setSuccessDialogOpen(true);
+            };
         };
     };
 
-    const getEmptyCatLit = () => {
-        return CAT_LIST.filter((catList) => catList.SK === 0);
+    const handleSuccessDialogClose = () => {
+        setSuccessDialogOpen(false);
+    };
+
+    const getEmptyCatList = () => {
+        return catList.filter((catData) => catData.catType === NEW_REGIST_CAT_ID);
     }
 
     const getCatListByCatType = (catType: number) => {
-        return CAT_LIST.filter((catList) => {
-            return catList.cat_type === 0 || catList.cat_type === catType;
+        return catList.filter((catData) => {
+            return catData.catType === NEW_REGIST_CAT_ID || catData.catType === catType;
         });
     };
 
     const getCatListByParentCatId = (SK: number) => {
-        return CAT_LIST.filter((catList) => {
-            return catList.cat_type === 0 || catList.parent_cat_id === SK;
+        return catList.filter((catData) => {
+            return catData.catType === NEW_REGIST_CAT_ID || catData.parentCatId === UNSELECTED_CAT_ID || catData.parentCatId === SK;
         });
     };
 
@@ -164,7 +259,7 @@ function CreateCategoryDialog ({ open, onClose }: CreateCategoryDialogProps) {
                                     >
                                         {cat1List.map((option) => (
                                         <MenuItem key={option.SK} value={option.SK}>
-                                            {option.cat_name}
+                                            {option.catName}
                                         </MenuItem>
                                         ))}
                                     </TextField>
@@ -177,6 +272,8 @@ function CreateCategoryDialog ({ open, onClose }: CreateCategoryDialogProps) {
                                             startAdornment={<InputAdornment position="start"></InputAdornment>}
                                             label="カテゴリー名"
                                             color="primary"
+                                            value={cat1Name}
+                                            onChange={handlecat1NameChange}
                                             disabled={cat1Disabled}
                                             sx={{
                                                 '&.Mui-disabled': {opacity: 0.5, backgroundColor: 'gray'}
@@ -209,7 +306,7 @@ function CreateCategoryDialog ({ open, onClose }: CreateCategoryDialogProps) {
                                     >
                                         {cat2List.map((option) => (
                                         <MenuItem key={option.SK} value={option.SK}>
-                                            {option.cat_name}
+                                            {option.catName}
                                         </MenuItem>
                                         ))}
                                     </TextField>
@@ -222,6 +319,8 @@ function CreateCategoryDialog ({ open, onClose }: CreateCategoryDialogProps) {
                                             startAdornment={<InputAdornment position="start"></InputAdornment>}
                                             label="カテゴリー名"
                                             color="primary"
+                                            value={cat2Name}
+                                            onChange={handlecat2NameChange}
                                             disabled={cat2Disabled}
                                             sx={{
                                                 '&.Mui-disabled': {opacity: 0.5, backgroundColor: 'gray'}
@@ -255,7 +354,7 @@ function CreateCategoryDialog ({ open, onClose }: CreateCategoryDialogProps) {
                                     >
                                         {cat3List.map((option) => (
                                         <MenuItem key={option.SK} value={option.SK}>
-                                            {option.cat_name}
+                                            {option.catName}
                                         </MenuItem>
                                         ))}
                                     </TextField>
@@ -268,6 +367,8 @@ function CreateCategoryDialog ({ open, onClose }: CreateCategoryDialogProps) {
                                             startAdornment={<InputAdornment position="start"></InputAdornment>}
                                             label="カテゴリー名"
                                             color="primary"
+                                            value={cat3Name}
+                                            onChange={handlecat3NameChange}
                                             disabled={cat3Disabled}
                                             sx={{
                                                 '&.Mui-disabled': {opacity: 0.5, backgroundColor: 'gray'}
@@ -283,6 +384,12 @@ function CreateCategoryDialog ({ open, onClose }: CreateCategoryDialogProps) {
                 <Button variant="outlined" onClick={handleSubClose}>Cancel</Button>
                 <Button variant="contained" onClick={handleSubCreate} autoFocus>Create</Button>
             </DialogActions>
+            <SuccessDialog
+                open={successDialogOpen}
+                onClose={handleSuccessDialogClose}
+                title="カテゴリ新規作成成功"
+                message={successDialogMsg}
+            />
         </Dialog>
     );
 }

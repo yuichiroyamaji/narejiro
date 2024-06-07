@@ -21,8 +21,7 @@ export interface CreateCategoryDataInputType {
 	catType: number;
 	catName: string;
 	parentCatId: number;
-	srchCnt: number;
-	created_by: number;
+	createdBy: number;
 };
 
 export interface UpdateCategoryDataInputType {
