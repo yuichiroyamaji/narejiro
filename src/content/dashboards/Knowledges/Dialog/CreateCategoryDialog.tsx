@@ -6,13 +6,22 @@ import {
     NEW_REGIST_CAT_ID, UNSELECTED_CAT_ID
 } from '../index';
 
+type newCatFromCreateCatDialogType = {
+    newCat1: number;
+    newCat2: number;
+    newCat3: number;
+};
+//React.MutableRefObject<number>
+type handleCatUpdateType = (newCatFromCreateCatDialog: newCatFromCreateCatDialogType) => void;
+
 interface CreateCategoryDialogProps {
     open: boolean;
     onClose: () => void;
     catList: CategoryDataType[];
+    handleCatUpdate: handleCatUpdateType;
 }
 
-function CreateCategoryDialog ({ open, onClose, catList }: CreateCategoryDialogProps) {
+function CreateCategoryDialog ({ open, onClose, catList, handleCatUpdate }: CreateCategoryDialogProps) {
 
     const {appUserId, setAppUserId} = useUserContext();
     const [cat1, setCat1] = useState<number>(NEW_REGIST_CAT_ID);
@@ -21,9 +30,9 @@ function CreateCategoryDialog ({ open, onClose, catList }: CreateCategoryDialogP
     const cat1Ref = useRef<number>(NEW_REGIST_CAT_ID);
     const cat2Ref = useRef<number>(NEW_REGIST_CAT_ID);
     const cat3Ref = useRef<number>(NEW_REGIST_CAT_ID);
-    const [cat1Name, setcat1Name] = useState<string>('');
-    const [cat2Name, setcat2Name] = useState<string>('');
-    const [cat3Name, setcat3Name] = useState<string>('');
+    const [cat1Name, setCat1Name] = useState<string>('');
+    const [cat2Name, setCat2Name] = useState<string>('');
+    const [cat3Name, setCat3Name] = useState<string>('');
     const [cat1List, setCat1List] = useState<Array<CategoryDataType>>([]);
     const [cat2List, setCat2List] = useState<Array<CategoryDataType>>([]);
     const [cat3List, setCat3List] = useState<Array<CategoryDataType>>([]);
@@ -85,7 +94,7 @@ function CreateCategoryDialog ({ open, onClose, catList }: CreateCategoryDialogP
     const callApiCreateCategory = async(createCategoryDataInput: CreateCategoryDataInputType) => {
       const res: any = await graphqlApiCall(createCategoryData(createCategoryDataInput));
       const result: boolean = await graphqlApiResult(res.createNarejiroDevTable);
-      if(result){await resetCategory(res.createNarejiroDevTable.catType, res.createNarejiroDevTable.SK);};
+    //   if(result){await resetCategory(res.createNarejiroDevTable.catType, res.createNarejiroDevTable.SK);};
       return res.createNarejiroDevTable.SK;
     };
 
@@ -119,18 +128,19 @@ function CreateCategoryDialog ({ open, onClose, catList }: CreateCategoryDialogP
     };
 
     const handlecat1NameChange = (event) => {
-        setcat1Name(event.target.value);
+        setCat1Name(event.target.value);
     };
 
     const handlecat2NameChange = (event) => {
-        setcat2Name(event.target.value);
+        setCat2Name(event.target.value);
     };
 
     const handlecat3NameChange = (event) => {
-        setcat3Name(event.target.value);
+        setCat3Name(event.target.value);
     };
 
     const handleSubClose = () => {
+        clearCategory();
         onClose();
     };
 
@@ -191,11 +201,19 @@ function CreateCategoryDialog ({ open, onClose, catList }: CreateCategoryDialogP
                 setSuccessDialogMsg(msg);
                 setSuccessDialogOpen(true);
             };
+            const newCatFromCreateCatDialog = {
+                newCat1: cat1Ref.current,
+                newCat2: cat2Ref.current,
+                newCat3: cat3Ref.current,
+            };
+            handleCatUpdate(newCatFromCreateCatDialog);
+            clearCategory();
         };
     };
 
     const handleSuccessDialogClose = () => {
         setSuccessDialogOpen(false);
+        onClose();
     };
 
     const getEmptyCatList = () => {
@@ -212,6 +230,15 @@ function CreateCategoryDialog ({ open, onClose, catList }: CreateCategoryDialogP
         return catList.filter((catData) => {
             return catData.catType === NEW_REGIST_CAT_ID || catData.parentCatId === UNSELECTED_CAT_ID || catData.parentCatId === SK;
         });
+    };
+
+    const clearCategory = () => {
+        setCat1(NEW_REGIST_CAT_ID);
+        setCat2(NEW_REGIST_CAT_ID);
+        setCat3(NEW_REGIST_CAT_ID);
+        setCat1Name('');
+        setCat2Name('');
+        setCat3Name('');
     };
 
     return (

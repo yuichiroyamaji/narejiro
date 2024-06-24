@@ -2,7 +2,8 @@ import { useState, useEffect, ChangeEvent, DragEvent } from 'react';
 import {
     DEFAULT_TEXT, Box, Grid, Stack, Button, useTheme, FormControl, InputLabel, InputAdornment, OutlinedInput, 
     TextField, MenuItem, IconButton, CloseIcon, Dialog, DialogTitle, DialogContent, DialogActions,
-    SimpleMde, markdownit, DOMPurify, CreateCategoryDialog, CategoryDataType, CategoryDataDefault, FullscreenIcon, FullscreenExitIcon
+    SimpleMde, markdownit, DOMPurify, CreateCategoryDialog, CategoryDataType, CategoryDataDefault, FullscreenIcon, FullscreenExitIcon,
+    graphqlApiCall, graphqlApiResult, listCategoryData 
 } from '../index';
 import 'easymde/dist/easymde.min.css';
 
@@ -57,6 +58,7 @@ function CreateKnowledgeDialog ({ open, onClose }: CreateKnowledgeDialogProps) {
     ];
 
     useEffect(() => {
+        callApiListCategoryDatas();
         const handleResize = () => { setWindowHeight(window.innerHeight); };
         window.addEventListener('resize', handleResize);
         return () => { window.removeEventListener('resize', handleResize); };
@@ -93,6 +95,25 @@ function CreateKnowledgeDialog ({ open, onClose }: CreateKnowledgeDialogProps) {
 
     const handleFullScreenToggle = () => {
         setIsFullScreen(!isFullScreen);
+    };
+
+    type newCatFromCreateCatDialogType = {
+        newCat1: number;
+        newCat2: number;
+        newCat3: number;
+    };
+
+    const handleCatUpdate = (newCatFromCreateCatDialog: newCatFromCreateCatDialogType) => {
+        callApiListCategoryDatas();
+        setCat1(newCatFromCreateCatDialog.newCat1);
+        setCat2(newCatFromCreateCatDialog.newCat2);
+        setCat3(newCatFromCreateCatDialog.newCat3);
+    };
+
+    const callApiListCategoryDatas = async() => {
+      const res: any = await graphqlApiCall(listCategoryData);
+      const result: boolean = graphqlApiResult(res.listNarejiroDevTables.items);
+      if(result){ setCatList(res.listNarejiroDevTables.items); };
     };
 
     const onDragEnter = (e: DragEvent<HTMLDivElement>) => {
@@ -280,6 +301,7 @@ function CreateKnowledgeDialog ({ open, onClose }: CreateKnowledgeDialogProps) {
                 open={createCatOpen}
                 onClose={handleSubClose}
                 catList={catList}
+                handleCatUpdate={handleCatUpdate}
             />
         </Dialog>
     );
