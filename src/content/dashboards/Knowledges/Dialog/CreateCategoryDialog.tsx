@@ -49,7 +49,7 @@ function CreateCategoryDialog ({ open, onClose, catList, handleCatUpdate }: Crea
     },[]);
 
     useEffect(() => {
-        console.log("FUNCTION CALLED: useEffect() => cat1");
+        console.log("useEffect TRIGGERED => cat1");
         console.log(cat1);
         cat1Ref.current = cat1;
         if(cat1 === NEW_REGIST_CAT_ID){
@@ -66,7 +66,7 @@ function CreateCategoryDialog ({ open, onClose, catList, handleCatUpdate }: Crea
     }, [cat1]);
 
     useEffect(() => {
-        console.log("FUNCTION CALLED: useEffect() => cat2");
+        console.log("useEffect TRIGGERED => cat2");
         console.log(cat2);
         cat2Ref.current = cat2;
         if(cat2 === NEW_REGIST_CAT_ID){
@@ -79,7 +79,7 @@ function CreateCategoryDialog ({ open, onClose, catList, handleCatUpdate }: Crea
     }, [cat2]);
 
     useEffect(() => {
-        console.log("FUNCTION CALLED: useEffect() => cat3");
+        console.log("useEffect TRIGGERED => cat3");
         console.log(cat3);
         cat3Ref.current = cat3;
         if(cat3 === NEW_REGIST_CAT_ID){

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useMemo, ChangeEvent, DragEvent } from 'react';
 import {
     markdownit, DOMPurify, KnowledgeDataType, CreateCategoryDialog, FullscreenIcon, FullscreenExitIcon,
-    Box, Grid, Stack, Button, useTheme, Dialog, DialogTitle, DialogContent, DialogActions,
+    Box, Grid, Stack, Button, useTheme, Dialog, DialogTitle, DialogContent, DialogActions, UNSELECTED_CAT_ID, SCREEN, API, LOAD,
     FormControl, InputLabel, InputAdornment, OutlinedInput, TextField, MenuItem, IconButton, CloseIcon, useUserContext, SuccessDialog,
     graphqlApiCall, graphqlApiResult, listCategoryData, CategoryDataType, CategoryDataDefault, updateKnowledgeData, UpdateKnowledgeDataInputType
 } from '../index';
@@ -25,7 +25,6 @@ function EditKnowledgeDialog ({ open, onClose, knowledgeDataParam }: EditKnowled
     const [isFullScreen, setIsFullScreen] = useState(false);
     const [isDragActive, setIsDragActive] = useState<boolean>(false);
     const [catList, setCatList] = useState<CategoryDataType[]>(CategoryDataDefault);
-    const catListRef = useRef(CategoryDataDefault);
     const [cat1, setCat1] = useState<number>(0);
     const [cat2, setCat2] = useState<number>(0);
     const [cat3, setCat3] = useState<number>(0);
@@ -35,6 +34,11 @@ function EditKnowledgeDialog ({ open, onClose, knowledgeDataParam }: EditKnowled
     const [cat1List, setCat1List] = useState<Array<CategoryDataType>>([]);
     const [cat2List, setCat2List] = useState<Array<CategoryDataType>>([]);
     const [cat3List, setCat3List] = useState<Array<CategoryDataType>>([]);
+    const cat1Ref = useRef<number>(0);
+    const cat2Ref = useRef<number>(0);
+    const cat3Ref = useRef<number>(0);
+    const catListRef = useRef<CategoryDataType[]>(CategoryDataDefault);
+    const operationRoute = useRef(LOAD);
 
     useEffect(() => {
         console.log("useEffect TRIGGERED => []");
@@ -46,6 +50,7 @@ function EditKnowledgeDialog ({ open, onClose, knowledgeDataParam }: EditKnowled
 
     useEffect(() => {
         console.log("useEffect TRIGGERED => open");
+        operationRoute.current = SCREEN;
         setCat1List(getCatListByCatType(1));
         setCat1(knowledgeDataParam.cat1.SK);
         setCat2(knowledgeDataParam.cat2.SK);
@@ -59,49 +64,68 @@ function EditKnowledgeDialog ({ open, onClose, knowledgeDataParam }: EditKnowled
     useEffect(() => {
         console.log("useEffect TRIGGERED => cat1");
         console.log(cat1);
-        if(cat1 === 0){
-            setCat2List(getEmptyCatList());
-            setCat3List(getEmptyCatList());
-        }else{
-            setCat2List(getCatListByParentCatId(cat1));
-            setCat3List(getEmptyCatList());
-        }
+        if(operationRoute.current === SCREEN){
+            if(cat1 === UNSELECTED_CAT_ID){
+                setCat2List(getEmptyCatList());
+                setCat3List(getEmptyCatList());
+            }else{
+                setCat2List(getCatListByParentCatId(cat1));
+                setCat3List(getEmptyCatList());
+            }
+        };
     }, [cat1]);
 
     useEffect(() => {
         console.log("useEffect TRIGGERED => cat2");
         console.log(cat2);
-        if(cat2 === 0){
-            setCat3List(getEmptyCatList());
-        }else{
-            setCat3List(getCatListByParentCatId(cat2));
-        }
+        if(operationRoute.current === SCREEN){
+            if(cat2 === UNSELECTED_CAT_ID){
+                setCat3List(getEmptyCatList());
+            }else{
+                setCat3List(getCatListByParentCatId(cat2));
+            }
+        };
     }, [cat2]);
+
+    useEffect(() => {
+        console.log("useEffect TRIGGERED => cat3");
+        console.log(cat3);
+    }, [cat3]);
 
     useEffect(() => {
         console.log("useEffect TRIGGERED => catList");
         catListRef.current = catList;
     }, [catList]);
 
-    const handleSubCreate = () => {
-        if(cat1 != 0 && cat2 != 0 && cat3 != 0){
-            alert("新規作成カテゴリがありません。(大)(中)(小)いずれかのカテゴリを新規作成してください。");
-        };
-    };
+    useEffect(() => {
+        console.log("useEffect TRIGGERED => cat1List");
+        console.log(cat1List);
+    }, [cat1List]);
+
+    useEffect(() => {
+        console.log("useEffect TRIGGERED => cat2List");
+        console.log(cat2List);
+    }, [cat2List]);
+
+    useEffect(() => {
+        console.log("useEffect TRIGGERED => cat3List");
+        console.log(cat3List);
+    }, [cat3List]);
 
     const getEmptyCatList = () => {
-        return catListRef.current.filter((catList) => catList.SK === 0);
+        // return [];
+        return catList.filter((catList) => catList.SK === UNSELECTED_CAT_ID);
     }
 
     const getCatListByCatType = (catType: number) => {
         return catListRef.current.filter((catList) => {
-            return catList.catType === catType;
+            return catList.catType === catType || catList.SK === UNSELECTED_CAT_ID;
         });
     };
 
     const getCatListByParentCatId = (SK: number) => {
         return catListRef.current.filter((catList) => {
-            return catList.parentCatId === SK;
+            return catList.parentCatId === SK || catList.SK === UNSELECTED_CAT_ID;
         });
     };
 
@@ -111,7 +135,12 @@ function EditKnowledgeDialog ({ open, onClose, knowledgeDataParam }: EditKnowled
       if(result){
         setCatList(res.listNarejiroDevTables.items);
         catListRef.current = res.listNarejiroDevTables.items;
-        setCat1List(getCatListByCatType(1));
+        // Set values for initial LOAD (cat*List required to set cat*)
+        if(cat1List.length === 0){
+            setCat1List(getCatListByCatType(1));
+            setCat2List(getCatListByCatType(2));
+            setCat3List(getCatListByCatType(3));
+        };
       };
     };
 
@@ -130,17 +159,20 @@ function EditKnowledgeDialog ({ open, onClose, knowledgeDataParam }: EditKnowled
     };
 
     const handleCat1Change = (event) => {
+        operationRoute.current = SCREEN;
+        setCat3(UNSELECTED_CAT_ID);
+        setCat2(UNSELECTED_CAT_ID);
         setCat1(event.target.value);
-        setCat2(0);
-        setCat3(0);
     };
 
     const handleCat2Change = (event) => {
+        operationRoute.current = SCREEN;
+        setCat3(UNSELECTED_CAT_ID);
         setCat2(event.target.value);
-        setCat3(0);
     };
 
     const handleCat3Change = (event) => {
+        operationRoute.current = SCREEN;
         setCat3(event.target.value);
     };
 
@@ -187,10 +219,35 @@ function EditKnowledgeDialog ({ open, onClose, knowledgeDataParam }: EditKnowled
     };
 
     const handleCatUpdate = async(newCatFromCreateCatDialog: newCatFromCreateCatDialogType) => {
+        operationRoute.current = API;
         await callApiListCategoryDatas();
+        setCat2(UNSELECTED_CAT_ID);
+        setCat3(UNSELECTED_CAT_ID);
+        setCat1List(getCatListByCatType(1));
+        setCat2List(getCatListByParentCatId(newCatFromCreateCatDialog.newCat1));
+        setCat3List(getCatListByParentCatId(newCatFromCreateCatDialog.newCat2));
         setCat1(newCatFromCreateCatDialog.newCat1);
         setCat2(newCatFromCreateCatDialog.newCat2);
         setCat3(newCatFromCreateCatDialog.newCat3);
+        // const promises = [
+        //     new Promise<void>((resolve) => {
+        //         cat1Ref.current = newCatFromCreateCatDialog.newCat1;
+        //         setCat1(newCatFromCreateCatDialog.newCat1);
+        //         resolve();
+        //     }),
+        //     new Promise<void>((resolve) => {
+        //         cat2Ref.current = newCatFromCreateCatDialog.newCat2;
+        //         setCat2(newCatFromCreateCatDialog.newCat2);
+        //         resolve();
+        //     }),
+        //     new Promise<void>((resolve) => {
+        //         cat3Ref.current = newCatFromCreateCatDialog.newCat3;
+        //         setCat3(newCatFromCreateCatDialog.newCat3);
+        //         // if(cat3List.length != 0){setCat3(newCatFromCreateCatDialog.newCat3);};
+        //         resolve();
+        //     }),
+        // ];
+        // await Promise.all(promises);
     };
 
     const onDragEnter = (e: DragEvent<HTMLDivElement>) => {
