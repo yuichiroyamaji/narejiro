@@ -46,7 +46,7 @@ function CreateCategoryDialog ({ open, onClose, catList, handleCatUpdate }: Crea
         setCat1List(getCatListByCatType(1));
         setCat2List(getEmptyCatList());
         setCat3List(getEmptyCatList());
-    },[]);
+    },[open]);
 
     useEffect(() => {
         console.log("useEffect TRIGGERED => cat1");
