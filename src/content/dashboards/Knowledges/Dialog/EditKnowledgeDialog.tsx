@@ -50,15 +50,17 @@ function EditKnowledgeDialog ({ open, onClose, knowledgeDataParam }: EditKnowled
 
     useEffect(() => {
         console.log("useEffect TRIGGERED => open");
-        operationRoute.current = SCREEN;
-        setCat1List(getCatListByCatType(1));
-        setCat1(knowledgeDataParam.cat1.SK);
-        setCat2(knowledgeDataParam.cat2.SK);
-        setCat3(knowledgeDataParam.cat3.SK);
-        setTitle(knowledgeDataParam.title);
-        setContent(knowledgeDataParam.content);
-        setMarkdownValue(knowledgeDataParam.content);
-        setSuccessDialogMsg("なれっじ 【ID：" + knowledgeDataParam.SK + " 】の内容を更新しました！");
+        if(open){
+            operationRoute.current = SCREEN;
+            setCat1List(getCatListByCatType(1));
+            setCat1(knowledgeDataParam.cat1.SK);
+            setCat2(knowledgeDataParam.cat2.SK);
+            setCat3(knowledgeDataParam.cat3.SK);
+            setTitle(knowledgeDataParam.title);
+            setContent(knowledgeDataParam.content);
+            setMarkdownValue(knowledgeDataParam.content);
+            setSuccessDialogMsg("なれっじ 【ID：" + knowledgeDataParam.SK + " 】の内容を更新しました！");
+        };
     }, [open]);
 
     useEffect(() => {
