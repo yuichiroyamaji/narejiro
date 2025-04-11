@@ -26,11 +26,11 @@ const PageHeader = () => {
     <Grid container justifyContent="space-between" alignItems="center">
       <Grid item>
         <Typography variant="h3" component="h3" gutterBottom>
-          なれじろうWEB版
+          なれじろう
         </Typography>
         <Typography variant="subtitle2">
           {/* {user.name}, these are your recent knowledges */}
-          ECHub OMSに関する知見を中心としたなれっじ共有ツール
+          社内なれっじ共有ツール
         </Typography>
       </Grid>
       <Grid item>

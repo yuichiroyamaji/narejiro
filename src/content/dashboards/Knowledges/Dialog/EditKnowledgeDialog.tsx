@@ -34,9 +34,6 @@ function EditKnowledgeDialog ({ open, onClose, knowledgeDataParam }: EditKnowled
     const [cat1List, setCat1List] = useState<Array<CategoryDataType>>([]);
     const [cat2List, setCat2List] = useState<Array<CategoryDataType>>([]);
     const [cat3List, setCat3List] = useState<Array<CategoryDataType>>([]);
-    const cat1Ref = useRef<number>(0);
-    const cat2Ref = useRef<number>(0);
-    const cat3Ref = useRef<number>(0);
     const catListRef = useRef<CategoryDataType[]>(CategoryDataDefault);
     const operationRoute = useRef(LOAD);
 
@@ -52,14 +49,7 @@ function EditKnowledgeDialog ({ open, onClose, knowledgeDataParam }: EditKnowled
         console.log("useEffect TRIGGERED => open");
         if(open){
             operationRoute.current = SCREEN;
-            setCat1List(getCatListByCatType(1));
-            setCat1(knowledgeDataParam.cat1.SK);
-            setCat2(knowledgeDataParam.cat2.SK);
-            setCat3(knowledgeDataParam.cat3.SK);
-            setTitle(knowledgeDataParam.title);
-            setContent(knowledgeDataParam.content);
-            setMarkdownValue(knowledgeDataParam.content);
-            setSuccessDialogMsg("なれっじ 【ID：" + knowledgeDataParam.SK + " 】の内容を更新しました！");
+            initializeDialog();
         };
     }, [open]);
 
@@ -67,13 +57,7 @@ function EditKnowledgeDialog ({ open, onClose, knowledgeDataParam }: EditKnowled
         console.log("useEffect TRIGGERED => cat1");
         console.log(cat1);
         if(operationRoute.current === SCREEN){
-            if(cat1 === UNSELECTED_CAT_ID){
-                setCat2List(getEmptyCatList());
-                setCat3List(getEmptyCatList());
-            }else{
-                setCat2List(getCatListByParentCatId(cat1));
-                setCat3List(getEmptyCatList());
-            }
+            updateCategoryLists(cat1, setCat2List, setCat3List);
         };
     }, [cat1]);
 
@@ -81,11 +65,7 @@ function EditKnowledgeDialog ({ open, onClose, knowledgeDataParam }: EditKnowled
         console.log("useEffect TRIGGERED => cat2");
         console.log(cat2);
         if(operationRoute.current === SCREEN){
-            if(cat2 === UNSELECTED_CAT_ID){
-                setCat3List(getEmptyCatList());
-            }else{
-                setCat3List(getCatListByParentCatId(cat2));
-            }
+            updateCategoryLists(cat2, setCat3List);
         };
     }, [cat2]);
 
@@ -113,6 +93,27 @@ function EditKnowledgeDialog ({ open, onClose, knowledgeDataParam }: EditKnowled
         console.log("useEffect TRIGGERED => cat3List");
         console.log(cat3List);
     }, [cat3List]);
+
+    const initializeDialog = () => {
+        setCat1List(getCatListByCatType(1));
+        setCat1(knowledgeDataParam.cat1.SK);
+        setCat2(knowledgeDataParam.cat2.SK);
+        setCat3(knowledgeDataParam.cat3.SK);
+        setTitle(knowledgeDataParam.title);
+        setContent(knowledgeDataParam.content);
+        setMarkdownValue(knowledgeDataParam.content);
+        setSuccessDialogMsg("なれっじ 【ID：" + knowledgeDataParam.SK + " 】の内容を更新しました！");
+    };
+
+    const updateCategoryLists = (categoryId: number, setList1: Function, setList2?: Function) => {
+        if (categoryId === UNSELECTED_CAT_ID) {
+            setList1(getEmptyCatList());
+            if (setList2) setList2(getEmptyCatList());
+        } else {
+            setList1(getCatListByParentCatId(categoryId));
+            if (setList2) setList2(getEmptyCatList());
+        }
+    };
 
     const getEmptyCatList = () => {
         // return [];
@@ -160,22 +161,10 @@ function EditKnowledgeDialog ({ open, onClose, knowledgeDataParam }: EditKnowled
         setCreateCatOpen(false);
     };
 
-    const handleCat1Change = (event) => {
+    const handleCatChange = (setter: Function, resetters: Function[]) => (event: ChangeEvent<HTMLInputElement>) => {
         operationRoute.current = SCREEN;
-        setCat3(UNSELECTED_CAT_ID);
-        setCat2(UNSELECTED_CAT_ID);
-        setCat1(event.target.value);
-    };
-
-    const handleCat2Change = (event) => {
-        operationRoute.current = SCREEN;
-        setCat3(UNSELECTED_CAT_ID);
-        setCat2(event.target.value);
-    };
-
-    const handleCat3Change = (event) => {
-        operationRoute.current = SCREEN;
-        setCat3(event.target.value);
+        resetters.forEach(reset => reset(UNSELECTED_CAT_ID));
+        setter(event.target.value);
     };
 
     const handleTitleChange = (event) => {
@@ -202,6 +191,14 @@ function EditKnowledgeDialog ({ open, onClose, knowledgeDataParam }: EditKnowled
     };
 
     const handleEditBtn = () => {
+        if (!title.trim()) {
+            alert("タイトルを入力してください。");
+            return;
+        }
+        if (!content.trim()) {
+            alert("コンテンツを入力してください。");
+            return;
+        }
         const updateKnowledgeDataInput = {
             SK: knowledgeDataParam.SK,
             cat1: cat1,
@@ -345,7 +342,7 @@ function EditKnowledgeDialog ({ open, onClose, knowledgeDataParam }: EditKnowled
                                         select
                                         label="カテゴリー(大)"
                                         value={cat1}
-                                        onChange={handleCat1Change}
+                                        onChange={handleCatChange(setCat1, [setCat2, setCat3])}
                                     >
                                         {cat1List
                                         // .filter((cat) => cat.catType === 1)
@@ -360,7 +357,7 @@ function EditKnowledgeDialog ({ open, onClose, knowledgeDataParam }: EditKnowled
                                         select
                                         label="カテゴリー(中)"
                                         value={cat2}
-                                        onChange={handleCat2Change}
+                                        onChange={handleCatChange(setCat2, [setCat3])}
                                     >
                                         {cat2List
                                         // .filter((cat) => cat.catType === 2)
@@ -375,7 +372,7 @@ function EditKnowledgeDialog ({ open, onClose, knowledgeDataParam }: EditKnowled
                                         select
                                         label="カテゴリー(小)"
                                         value={cat3}
-                                        onChange={handleCat3Change}
+                                        onChange={handleCatChange(setCat3, [])}
                                     >
                                         {cat3List
                                         // .filter((cat) => cat.catType === 3)

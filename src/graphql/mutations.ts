@@ -2,11 +2,11 @@ import { CreateKnowledgeDataInputType, UpdateKnowledgeDataInputType } from 'src/
 import { CreateCategoryDataInputType } from 'src/models/categories';
 
 //なれっじデータ作成
-export const createKnowledgeData =  (title: string, content: string) => /* GraphQL */`
-mutation createKnowledgeData {
-  createKnowledgeData(input: {PK:"KWL#data", title: "${title}", content: "${content}"}) {
+export const createKnowledgeData =  (input: CreateKnowledgeDataInputType) => /* GraphQL */`
+mutation createNarejiroDevTable {
+  createNarejiroDevTable(input: {PK:"KWL#data", cat1:${input.cat1}, cat2:${input.cat2}, cat3:${input.cat3}, title:"${input.title}", content:"${input.content}", createdBy:${input.createdBy}}) {
+    SK
     title
-    content
   }
 }
 `;
