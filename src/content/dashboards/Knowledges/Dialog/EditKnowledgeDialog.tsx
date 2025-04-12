@@ -102,7 +102,6 @@ function EditKnowledgeDialog ({ open, onClose, knowledgeDataParam }: EditKnowled
         setTitle(knowledgeDataParam.title);
         setContent(knowledgeDataParam.content);
         setMarkdownValue(knowledgeDataParam.content);
-        setSuccessDialogMsg("なれっじ 【ID：" + knowledgeDataParam.SK + " 】の内容を更新しました！");
     };
 
     const updateCategoryLists = (categoryId: number, setList1: Function, setList2?: Function) => {
@@ -148,9 +147,19 @@ function EditKnowledgeDialog ({ open, onClose, knowledgeDataParam }: EditKnowled
     };
 
     const callApiUpdateKnowledge = async(updateKnowledgeDataInput: UpdateKnowledgeDataInputType) => {
-      const res: any = await graphqlApiCall(updateKnowledgeData(updateKnowledgeDataInput));
-      const result: boolean = graphqlApiResult(res.updateNarejiroDevTable);
-      if(result){ setSuccessDialogOpen(true); };
+        try {
+          const res: any = await graphqlApiCall(updateKnowledgeData(updateKnowledgeDataInput));
+          const result: boolean = graphqlApiResult(res.updateNarejiroDevTable);
+          if(result){
+              setSuccessDialogMsg("なれっじ 「【ID：" + res.updateNarejiroDevTable.SK + " 】" + res.updateNarejiroDevTable.title + "」の内容を更新しました！");
+              setSuccessDialogOpen(true);
+          }else{
+              alert("Failed to update knowledge.");
+          };
+        } catch (error) {
+            console.error('Error updating knowledge:', error);
+            alert("An error occurred while updating knowledge.");
+        }
     };
 
     const handleClose = () => {

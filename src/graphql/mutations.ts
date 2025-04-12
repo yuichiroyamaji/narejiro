@@ -1,4 +1,4 @@
-import { CreateKnowledgeDataInputType, UpdateKnowledgeDataInputType } from 'src/models/knowledges';
+import { CreateKnowledgeDataInputType, UpdateKnowledgeDataInputType, DeleteKnowledgeDataInputType } from 'src/models/knowledges';
 import { CreateCategoryDataInputType } from 'src/models/categories';
 
 //なれっじデータ作成
@@ -46,11 +46,11 @@ mutation updateNarejiroDevTable {
 `;
 
 //なれっじデータ削除
-export const deleteKnowledgeData = (knowledgeId: number) => /* GraphQL */`
+export const deleteKnowledgeData = (input: DeleteKnowledgeDataInputType) => /* GraphQL */`
 mutation deleteNarejiroDevTable {
-  deleteNarejiroDevTable(input: {PK:"KWL#data", SK: ${knowledgeId}}) {
-    PK
+  deleteNarejiroDevTable(input: {PK:"KWL#data", SK: ${input.SK}}) {
     SK
+    title
   }
 }
 `;

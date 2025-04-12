@@ -45,7 +45,6 @@ export interface UpdateKnowledgeDataInputType {
 }
 
 export interface DeleteKnowledgeDataInputType {
-	PK: string;
 	SK: number;
 }
 

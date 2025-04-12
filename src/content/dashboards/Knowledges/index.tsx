@@ -1,4 +1,4 @@
-export type { KnowledgeDataType, KnowledgeDataStatus, UpdateKnowledgeDataInputType, CreateKnowledgeDataInputType } from 'src/models/knowledges';
+export type { KnowledgeDataType, KnowledgeDataStatus, UpdateKnowledgeDataInputType, CreateKnowledgeDataInputType, DeleteKnowledgeDataInputType } from 'src/models/knowledges';
 export type { CategoryDataType, CreateCategoryDataInputType } from 'src/models/categories';
 
 export { useUserContext } from 'src/contexts/UserContext';
