@@ -101,8 +101,12 @@ function RecentKnowledgesTable ({ KnowledgeDatas } : RecentKnowledgesTableProps)
   };
 
   const handleClickDeleteOpen = (knowledgeId: number) => {
-    setDeleteOpen(true);
-    setknowledgeId(knowledgeId);
+    if(isSignedIn) {
+      setDeleteOpen(true);
+      setknowledgeId(knowledgeId);
+    }else{
+      setSignInOpen(true);
+  };
   };
 
   const handleClickDisplayOpen = (knowledgeContent: string) => {
@@ -178,7 +182,7 @@ function RecentKnowledgesTable ({ KnowledgeDatas } : RecentKnowledgesTableProps)
           action={
             <Box width={150}>
               <FormControl fullWidth variant="outlined">
-                <InputLabel>Status</InputLabel>
+                {/* <InputLabel>Status</InputLabel>
                 <Select
                   value={filters.status || 'all'}
                   onChange={handleStatusChange}
@@ -190,7 +194,7 @@ function RecentKnowledgesTable ({ KnowledgeDatas } : RecentKnowledgesTableProps)
                       {statusOption.name}
                     </MenuItem>
                   ))}
-                </Select>
+                </Select> */}
               </FormControl>
             </Box>
           }

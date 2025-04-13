@@ -4,6 +4,7 @@ import {
   Box, Menu, IconButton, Button, ListItemText, ListItem, List, Typography
 } from '@mui/material';
 import { DeleteTwoToneIcon, MoreVertTwoToneIcon } from './index';
+import NowDevelopingDialog from 'src/content/pages/Status/NowDeveloping';
 
 const ButtonError = styled(Button)(
   ({ theme }) => `
@@ -19,6 +20,8 @@ const ButtonError = styled(Button)(
 function BulkActions() {
   const [onMenuOpen, menuOpen] = useState<boolean>(false);
   const moreRef = useRef<HTMLButtonElement | null>(null);
+  const [isOpen, setOpen] = useState<boolean>(false);
+  const [nowDevelopingDialogOpen, setnowDevelopingDialogOpen] = useState<boolean>(false);
 
   const openMenu = (): void => {
     menuOpen(true);
@@ -26,6 +29,16 @@ function BulkActions() {
 
   const closeMenu = (): void => {
     menuOpen(false);
+  };
+
+  const handleOpen = (): void => {
+    setOpen(true);
+    setnowDevelopingDialogOpen(true);
+  };
+
+  const handleClose = (): void => {
+    setOpen(false);
+    setnowDevelopingDialogOpen(false);
   };
 
   return (
@@ -39,6 +52,7 @@ function BulkActions() {
             sx={{ ml: 1 }}
             startIcon={<DeleteTwoToneIcon />}
             variant="contained"
+            onClick={handleOpen}
           >
             Delete
           </ButtonError>
@@ -76,6 +90,10 @@ function BulkActions() {
           </ListItem>
         </List>
       </Menu>
+      <NowDevelopingDialog
+        open={nowDevelopingDialogOpen}
+        onClose={handleClose}
+      />
     </>
   );
 }

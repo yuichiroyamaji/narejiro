@@ -48,7 +48,7 @@ function HeaderNotifications() {
 
   const handleOpen = (): void => {
     setOpen(true);
-    setnowDevelopingDialogOpen(true);
+    // setnowDevelopingDialogOpen(true);
   };
 
   const handleClose = (): void => {

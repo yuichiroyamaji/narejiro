@@ -80,7 +80,7 @@ function HeaderSearch() {
     } else {
       setOpenSearchResults(false);
     }
-    setnowDevelopingDialogOpen(true);
+    // setnowDevelopingDialogOpen(true);
   };
 
   const [open, setOpen] = useState(false);

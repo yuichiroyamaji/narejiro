@@ -4,7 +4,7 @@ import { CreateCategoryDataInputType } from 'src/models/categories';
 //なれっじデータ作成
 export const createKnowledgeData =  (input: CreateKnowledgeDataInputType) => /* GraphQL */`
 mutation createNarejiroDevTable {
-  createNarejiroDevTable(input: {PK:"KWL#data", cat1:${input.cat1}, cat2:${input.cat2}, cat3:${input.cat3}, title:"${input.title}", content:"${input.content}", createdBy:${input.createdBy}}) {
+  createNarejiroDevTable(input: {PK:"KWL#data", cat1:${input.cat1}, cat2:${input.cat2}, cat3:${input.cat3}, title:"${input.title}", content:"""${input.content}""", createdBy:${input.createdBy}}) {
     SK
     title
   }
@@ -14,7 +14,7 @@ mutation createNarejiroDevTable {
 //なれっじデータ更新
 export const updateKnowledgeData =  (input: UpdateKnowledgeDataInputType) => /* GraphQL */`
 mutation updateNarejiroDevTable {
-  updateNarejiroDevTable(input: {PK:"KWL#data", SK:${input.SK}, cat1:${input.cat1}, cat2:${input.cat2}, cat3:${input.cat3}, title:"${input.title}", content:"${input.content}", updatedBy:${input.updatedBy}}) {
+  updateNarejiroDevTable(input: {PK:"KWL#data", SK:${input.SK}, cat1:${input.cat1}, cat2:${input.cat2}, cat3:${input.cat3}, title:"${input.title}", content:"""${input.content}""", updatedBy:${input.updatedBy}}) {
     PK
     SK
     cat1 {

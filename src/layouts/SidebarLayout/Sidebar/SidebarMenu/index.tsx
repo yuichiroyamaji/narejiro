@@ -200,8 +200,9 @@ function SidebarMenu() {
                   // component={RouterLink}
                   // onClick={closeSidebar}
                   // to="/overview"
-                  onClick={handleOpen}
+                  // onClick={handleOpen}
                   startIcon={<DesignServicesTwoToneIcon />}
+                  style={{ color: 'dimgray' }}
                 >
                   Overview
                 </Button>
@@ -247,8 +248,9 @@ function SidebarMenu() {
                   // component={RouterLink}
                   // onClick={closeSidebar}
                   // to="/dashboards"
-                  onClick={handleOpen}
+                  // onClick={handleOpen}
                   startIcon={<BrightnessLowTwoToneIcon />}
+                  style={{ color: 'dimgray' }}
                 >
                   ユーザー管理
                 </Button>
@@ -259,8 +261,9 @@ function SidebarMenu() {
                   // component={RouterLink}
                   // onClick={closeSidebar}
                   // to="/dashboards"
-                  onClick={handleOpen}
+                  // onClick={handleOpen}
                   startIcon={<MmsTwoToneIcon />}
+                  style={{ color: 'dimgray' }}
                 >
                   カテゴリ管理
                 </Button>
@@ -271,8 +274,9 @@ function SidebarMenu() {
                   // component={RouterLink}
                   // onClick={closeSidebar}
                   // to="/dashboards"
-                  onClick={handleOpen}
+                  // onClick={handleOpen}
                   startIcon={<TableChartTwoToneIcon />}
+                  style={{ color: 'dimgray' }}
                 >
                   フィルター管理
                 </Button>
@@ -283,8 +287,9 @@ function SidebarMenu() {
                   // component={RouterLink}
                   // onClick={closeSidebar}
                   // to="/dashboards"
-                  onClick={handleOpen}
+                  // onClick={handleOpen}
                   startIcon={<BallotTwoToneIcon />}
+                  style={{ color: 'dimgray' }}
                 >
                   ランキング管理
                 </Button>

@@ -205,13 +205,12 @@ function CreateKnowledgeDialog ({ open, onClose }: CreateKnowledgeDialogProps) {
             alert("コンテンツを入力してください。");
             return;
         }
-        const sanitizedContent = escapeSpecialCharacters(content);
         const createKnowledgeDataInput: CreateKnowledgeDataInputType = {            
             cat1: cat1,
             cat2: cat2,
             cat3: cat3,
             title: title,
-            content: sanitizedContent,
+            content: content,
             createdBy: appUserId
         };
         callApiCreateKnowledge(createKnowledgeDataInput);
@@ -431,19 +430,6 @@ function CreateKnowledgeDialog ({ open, onClose }: CreateKnowledgeDialogProps) {
             />
         </Dialog>
     );
-}
-
-function escapeSpecialCharacters(text: string): string {
-    console.log(text);
-    return text
-        // .replace(/\\/g, '\\\\')  // Escape backslashes
-        // .replace(/"/g, '\\"')    // Escape double quotes
-        // .replace(/#/g, '\\#')    // Escape hash symbols
-        // .replace(/_/g, '\\_')    // Escape underscores
-        // .replace(/\r\n/g, '\\n') // Convert Windows newlines to \n
-        // .replace(/\n/g, '\\n')   // Escape newlines
-        // .replace(/\r/g, '\\n')  // Convert carriage returns to \n
-        .replace('\n', ''); 
 }
 
 export default CreateKnowledgeDialog;
