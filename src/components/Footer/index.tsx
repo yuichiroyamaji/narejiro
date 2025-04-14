@@ -18,7 +18,7 @@ function Footer() {
       >
         <Box>
           <Typography variant="subtitle1">
-            &copy; 2024 - Narejiro Web Version
+            &copy; 2025 - Narejiro Web
           </Typography>
         </Box>
         <Typography
@@ -33,7 +33,7 @@ function Footer() {
             target="_blank"
             rel="noopener noreferrer"
           > */}
-            TCI ECX BackSystem Young Team
+            Yamaji, Yuichiro
           {/* </Link> */}
         </Typography>
       </Box>
