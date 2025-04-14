@@ -96,9 +96,9 @@ function CreateKnowledgeDialog ({ open, onClose }: CreateKnowledgeDialogProps) {
         setCat1List(getCatListByCatType(1));
         setCat2List(getEmptyCatList());
         setCat3List(getEmptyCatList());
-        setCat1(0);
-        setCat2(0);
-        setCat3(0);
+        setCat1(UNSELECTED_CAT_ID);
+        setCat2(UNSELECTED_CAT_ID);
+        setCat3(UNSELECTED_CAT_ID);
     };
 
     const updateCategoryLists = (categoryId: number, setList1: Function, setList2?: Function) => {
@@ -222,17 +222,11 @@ function CreateKnowledgeDialog ({ open, onClose }: CreateKnowledgeDialogProps) {
         newCat3: number;
     };
 
-    const handleCatUpdate = async(newCatFromCreateCatDialog: newCatFromCreateCatDialogType) => {
-        operationRoute.current = API;
-        await callApiListCategoryDatas();
-        setCat2(UNSELECTED_CAT_ID);
-        setCat3(UNSELECTED_CAT_ID);
-        setCat1List(getCatListByCatType(1));
-        setCat2List(getCatListByParentCatId(newCatFromCreateCatDialog.newCat1));
-        setCat3List(getCatListByParentCatId(newCatFromCreateCatDialog.newCat2));
+    const handleCatUpdate = (newCatFromCreateCatDialog: newCatFromCreateCatDialogType) => {
         setCat1(newCatFromCreateCatDialog.newCat1);
         setCat2(newCatFromCreateCatDialog.newCat2);
         setCat3(newCatFromCreateCatDialog.newCat3);
+        callApiListCategoryDatas(); // Refresh category lists if needed
     };
 
     // const callApiListCategoryDatas = async() => {

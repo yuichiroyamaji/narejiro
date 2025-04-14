@@ -46,16 +46,57 @@ function CreateCategoryDialog({ open, onClose, catList, handleCatUpdate }: Creat
     }, [open]);
 
     useEffect(() => {
-        updateCategoryLists(cat1, setCat2List, setCat3List, setCat1Disabled);
+        console.log("FUNCTION CALLED: useEffect() => cat1");
+        console.log(cat1);
+        if(cat1 === NEW_REGIST_CAT_ID){
+            setCat1Disabled(false);
+            setCat2List(getEmptyCatList());
+            setCat2Disabled(false);
+            setCat3List(getEmptyCatList());
+            setCat3Disabled(false);
+        }else{
+            setCat1Disabled(true);
+            setCat2List(getCatListByParentCatId(cat1));
+            setCat3List(getEmptyCatList());
+        }
+        setCat2(0);
+        setCat3(0);
     }, [cat1]);
 
     useEffect(() => {
-        updateCategoryLists(cat2, setCat3List, undefined, setCat2Disabled);
+        console.log("FUNCTION CALLED: useEffect() => cat2");
+        console.log(cat2);
+        if(cat2 === NEW_REGIST_CAT_ID){
+            setCat2Disabled(false);
+            setCat3List(getEmptyCatList());
+        }else{
+            setCat2Disabled(true);
+            setCat3List(getCatListByParentCatId(cat2));
+        }
+        setCat3(0);
     }, [cat2]);
 
     useEffect(() => {
-        setCat3Disabled(cat3 !== NEW_REGIST_CAT_ID);
+        console.log("FUNCTION CALLED: useEffect() => cat3");
+        console.log(cat3);
+        if(cat3 === NEW_REGIST_CAT_ID){
+            setCat3Disabled(false);
+        }else{
+            setCat3Disabled(true);
+        }
     }, [cat3]);
+
+    // useEffect(() => {
+    //     updateCategoryLists(cat1, setCat2List, setCat3List, setCat1Disabled);
+    // }, [cat1]);
+
+    // useEffect(() => {
+    //     updateCategoryLists(cat2, setCat3List, undefined, setCat2Disabled);
+    // }, [cat2]);
+
+    // useEffect(() => {
+    //     setCat3Disabled(cat3 !== NEW_REGIST_CAT_ID);
+    // }, [cat3]);
 
     const initializeDialog = () => {
         setCat1List(getCatListByCatType(1));
@@ -64,23 +105,23 @@ function CreateCategoryDialog({ open, onClose, catList, handleCatUpdate }: Creat
         clearCategory();
     };
 
-    const updateCategoryLists = (categoryId: number, setList1: Function, setList2?: Function, setDisabled?: Function) => {
-        if (categoryId === NEW_REGIST_CAT_ID) {
-            setList1(getEmptyCatList());
-            if (setList2) setList2(getEmptyCatList());
-            if (setDisabled) setDisabled(false);
-        } else {
-            setList1(getCatListByParentCatId(categoryId));
-            if (setList2) setList2(getEmptyCatList());
-            if (setDisabled) setDisabled(true);
-        }
-    };
+    // const updateCategoryLists = (categoryId: number, setList1: Function, setList2?: Function, setDisabled?: Function) => {
+    //     if (categoryId === NEW_REGIST_CAT_ID || categoryId === UNSELECTED_CAT_ID) {
+    //         setList1(getEmptyCatList());
+    //         if (setList2) setList2(getEmptyCatList());
+    //         if (setDisabled) setDisabled(false);
+    //     } else {
+    //         setList1(getCatListByParentCatId(categoryId));
+    //         if (setList2) setList2(getEmptyCatList());
+    //         if (setDisabled) setDisabled(true);
+    //     }
+    // };
 
-    const getEmptyCatList = () => catList.filter(cat => cat.SK === UNSELECTED_CAT_ID);
+    const getEmptyCatList = () => catList.filter(cat => cat.catType === NEW_REGIST_CAT_ID || cat.SK === UNSELECTED_CAT_ID);
 
-    const getCatListByCatType = (catType: number) => catList.filter(cat => cat.catType === catType || cat.SK === UNSELECTED_CAT_ID);
+    const getCatListByCatType = (catType: number) => catList.filter(cat => cat.catType === NEW_REGIST_CAT_ID || cat.catType === catType || cat.SK === UNSELECTED_CAT_ID);
 
-    const getCatListByParentCatId = (SK: number) => catList.filter(cat => cat.parentCatId === SK || cat.SK === UNSELECTED_CAT_ID);
+    const getCatListByParentCatId = (SK: number) => catList.filter(cat => cat.catType === NEW_REGIST_CAT_ID || cat.parentCatId === SK || cat.SK === UNSELECTED_CAT_ID);
 
     const callApiCreateCategory = async (createCategoryDataInput: CreateCategoryDataInputType) => {
         const res: any = await graphqlApiCall(createCategoryData(createCategoryDataInput));
